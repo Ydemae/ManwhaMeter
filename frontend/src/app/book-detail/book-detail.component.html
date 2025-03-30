@@ -1,0 +1,47 @@
+<div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+    <h4 class="alert-heading">{{ this.errTitle }}</h4>
+    {{ this.errMessage }}
+</div>
+<div class="margin-top d-flex justify-content-center">
+    <ng-template #NotFetched>
+        <div class="alert alert-dismissible alert-secondary">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            Data is being fetched from the server, please wait.
+        </div>
+    </ng-template>
+
+    <div *ngIf="this.dataWasFetched else NotFetched" class="content-wrapper">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 d-flex justify-content-center">
+                <img src="{{this.apiUrl}}/images/{{this.book?.image_path}}" alt="image" class="detailImage">
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <div class="d-flex">
+                    <h1>{{this.book?.name}}</h1>
+                </div>
+                <div class="margin-bot">
+                    <span class="badge tiny-margin-right" *ngFor="let tag of book?.tags; let i = index" [ngClass]="{ 'bg-primary': i<3, 'bg-secondary': i>=3 }">{{tag.label}}</span>
+                </div>
+                <span class="badge bg-success">{{book?.bookType?.label}}</span>
+                <span class="badge bg-success">{{book?.status?.label}}</span>
+
+                <p>{{ this.book?.description }}</p>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot">
+            <button type="button" class="btn btn-primary" (click)="this.openCreateRatingModal()">Rate this book</button>
+        </div>
+        <div class="book-rating-container row">
+            <div class="col-sm-12 col-md-3 d-flex justify-content-center">
+                <h3>Book Ratings</h3>
+            </div>
+            <div class="col-sm-12 col-md-9 ">
+                <app-comment-list [ratingsList]="this.book?.ratings!"></app-comment-list>
+            </div>
+        </div>
+    </div>
+    <ng-template #ratingModal>
+        <app-rating-modal (closeModalEmitter)="this.closeRatingModal()" (submitDataEmitter)="this.createRating($event)" [modalTitle]="modalOperation"></app-rating-modal>
+    </ng-template>
+</div>

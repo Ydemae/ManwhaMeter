@@ -1,0 +1,62 @@
+<div class="margin-top margin-bot content-wrapper">
+    <div class="accordion" id="filterAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            Search filter
+            </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#filterAccordion">
+                <div class="accordion-body row d-flex text-center justify-content-center">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="margin-bot">
+                            <input type="text" id="bookname" name="bookname" class="form-control" placeholder="bookname" [(ngModel)]="this.filtersValues.name" (input)="onBookNameChange()">
+                        </div>
+
+                        <h4>Book status</h4>
+                        <div class="btn-group margin-bot" role="group" aria-label="Basic radio toggle button group">
+                            <ng-container *ngFor="let status of statusList; let i = index">
+                                <input type="radio" name="statusradio" class="btn-check" [id]="'statusradio;' + status" autocomplete="off" (change)="onSelectedStatusChange($event)">
+                                <label class="btn btn-primary" [for]="'statusradio;' + status">
+                                    {{ status }}
+                                </label>
+                            </ng-container>
+                        </div>
+
+                        <h4>Book type</h4>
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <ng-container *ngFor="let bookType of bookTypeList; let i = index">
+                                <input type="radio" name="bootyperadio" class="btn-check" [id]="'bootyperadio;' + bookType" autocomplete="off" (change)="onSelectedBookTypeChange($event)">
+                                <label class="btn btn-primary" [for]="'bootyperadio;' + bookType">
+                                    {{ bookType }}
+                                </label>
+                            </ng-container>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 col-md-6">
+                        <div class="margin-top">
+                            <label for="tagselect">
+                              Tags
+                            </label>
+                            <ng-select
+                            [items]="this.tagsList"
+                            [multiple]="true"
+                            [searchable]="true"
+                            [(ngModel)]="filtersValues.tags"
+                            bindLabel="label"
+                            bindValue="id"
+                            (change)="onSelectedTagsChange()"
+                            class="form-control"
+                            id="tagselect">
+                            </ng-select>
+                          </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

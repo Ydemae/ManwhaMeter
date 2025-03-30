@@ -1,0 +1,61 @@
+<div class="content-wrapper margin-top">
+    <input type="text" class="col-9 form-control" name="bookname" placeholder="bookname" autocomplete="off" [(ngModel)]="name" maxlength="80" (change)="onNameChange()">
+    <small *ngIf="this.nameError != ''" class="form-text text-danger">{{this.nameError}}</small>
+
+    <textarea class="col-9 form-control margin-top" name="bookdescription" placeholder="description" autocomplete="off" [(ngModel)]="description" maxlength="1000" (change)="onDescriptionChange()"></textarea>
+    <small class="form-text text-muted">Limited to 1000 chars.</small>
+    <small *ngIf="this.descriptionError != ''" class="form-text text-danger">{{this.descriptionError}}</small>
+
+    <div class="margin-top">
+      <label for="tag-select">
+        Tags
+      </label>
+      <ng-select
+      [items]="this.allTagsList"
+      [multiple]="true"
+      [searchable]="true"
+      [(ngModel)]="selectedTags"
+      bindLabel="label"
+      bindValue="id"
+      class="form-control"
+      id="tag-select"
+      (change)="onSelectedTagsChange()">
+      </ng-select>
+      <small class="form-text text-muted">Only the first 4 tags will be displayed on the book lists, put them in by order of importance.</small>
+      <small *ngIf="this.selectedTagsError != ''" class="form-text text-danger">{{this.selectedTagsError}}</small>
+    </div>
+
+    <div>
+      <label for="statusSelect" class="form-label mt-4">Book status</label>
+      <select class="form-select" id="statusSelect" [(ngModel)]="this.status">
+        <ng-container *ngFor="let status of allBookStatus">
+          <option value="{{status}}">{{status}}</option>
+        </ng-container>
+      </select>
+      <small *ngIf="this.statusError != ''" class="form-text text-danger">{{this.statusError}}</small>
+    </div>
+
+    <div>
+      <label for="typeSelect" class="form-label mt-4">Book type</label>
+      <select class="form-select" id="typeSelect" [(ngModel)]="this.bookType">
+        <ng-container *ngFor="let type of allBookTypes">
+          <option value="{{type}}">{{type}}</option>
+        </ng-container>
+      </select>
+      <small *ngIf="this.bookTypeError != ''" class="form-text text-danger">{{this.bookTypeError}}</small>
+    </div>
+
+    <div class="margin-top col" style="margin-left: .8rem;">
+      <label for="imageUpload" class="row">
+        Image
+      </label>
+      <input type="file" (change)="onImageUpload($event)" id="imageUpload" accept="image/*" class="row">
+      <img *ngIf="base64Image" [src]="base64Image" alt="Preview" width="200">
+      <small *ngIf="this.imageError != ''" class="form-text text-danger">{{this.imageError}}</small>
+    </div>
+
+    <div class="margin-top text-center">
+      <button type="button" class="btn btn-primary margin-right" (click)="onSubmit()">{{ this.submitLabel }}</button>
+      <button type="button" class="btn btn-danger margin-left" (click)="onCancel()">Cancel</button>
+    </div>
+</div>

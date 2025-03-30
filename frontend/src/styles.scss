@@ -1,0 +1,115 @@
+/* You can add global styles to this file, and also import other style files */
+
+$primary: #B45309;
+$secondary: #5A3E2B;
+$danger: #8C1C13;
+$warning : #D97706;
+$body-bg: #1C1B18;
+$body-color: #fff;
+
+@use "bootstrap/scss/bootstrap" with (
+  $primary: $primary,
+  $secondary: $secondary,
+  $danger: $danger,
+  $warning: $warning,
+  $body-bg: $body-bg,
+  $body-color: $body-color
+);
+
+body{
+    overflow-x: hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+.show {
+    display: block !important;
+}
+
+.noCursor:hover{
+    cursor:default;
+}
+.cardImg{
+    border: 3px solid black;
+    max-width: 60%;
+    max-height: 150px;
+}
+
+.checkedStar{
+    color: #F5FC50;
+}
+.uncheckedStar{
+    color: white;
+}
+.uncheckedStar:hover{
+    color: #FBFFC0;
+}
+
+.img-button{
+    cursor: pointer;
+}
+
+.margin-left{
+    margin-left: 1rem;
+}
+
+.margin-right{
+    margin-right: 1rem;
+}
+
+.margin-top{
+    margin-top: 1rem;
+}
+
+.margin-bot{
+    margin-bottom: 1rem;
+}
+
+.content-wrapper{
+    margin: 1em auto;
+    max-width: 1200px;
+    width: 95%;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+
+// For the ng-select
+
+ng-select .ng-dropdown-panel {
+    padding-left: 5px;
+    padding-right: 5px;
+    width: auto;
+    margin-top: 0.5rem;
+    background-color: #333 !important;
+}
+
+ng-select .ng-option {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+ng-select .ng-option.ng-option-selected {
+    background-color: #444 !important;
+}
+
+ng-select .ng-value {
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+    border: 1px solid white;
+    border-radius: 10%;
+    color: #fff !important;
+}
+
+ng-select .ng-value-label {
+    margin-right: 5px;
+}
+
+ng-select .ng-value .ng-value-icon {
+    margin-right: 5px;
+    margin-left: 5px;
+    color: red !important;
+}

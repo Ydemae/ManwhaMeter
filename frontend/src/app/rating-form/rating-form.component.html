@@ -1,0 +1,29 @@
+<div class="col">
+    <div class="row">
+        <textarea name="ratingComment" class="form-control" maxlength="2000" [(ngModel)]="this.formData.comment" placeholder="Comment" rows="4" (input)="this.onDataChange()"></textarea>
+        <small class="form-text text-muted">Your personal comment on the book</small>
+    </div>
+    <div class="col margin-top">
+        <div class="row">
+            <div class="margin-top col-md-6 col-sm-12">
+                <input type="number" class="form-control" name="story" placeholder="Story" min="0" max="20" [(ngModel)]="this.formData.story" (change)="this.onDataChange()">
+                <small class="form-text text-muted">How well-written was the story</small>
+            </div>
+            <div class="margin-top col-md-6 col-sm-12">
+                <input type="number" class="form-control" name="art_style" placeholder="Art style" min="0" max="20"  [(ngModel)]="this.formData.art_style" (change)="this.onDataChange()">
+                <small class="form-text text-muted">How good is the art style</small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="margin-top col-md-6 col-sm-12">
+                <input type="number" class="form-control" name="feeling" placeholder="Feeling" min="0" max="20"  [(ngModel)]="this.formData.feeling" (change)="this.onDataChange()">
+                <small class="form-text text-muted">The feeling you had reading the book, it's very subjective</small>
+            </div>
+            <div class="margin-top col-md-6 col-sm-12">
+                <input type="number" class="form-control" name="characters" placeholder="Characters" min="0" max="20"  [(ngModel)]="this.formData.characters" (change)="this.onDataChange()">
+                <small class="form-text text-muted">How well the character design and development was</small>
+            </div>
+        </div>
+    </div>
+
+</div>
