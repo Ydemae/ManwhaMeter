@@ -15,18 +15,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin'])]
     private ?string $username = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['admin'])]
     private array $roles = [];
 
     /**

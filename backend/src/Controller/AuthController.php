@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
 use App\Service\AuthService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -14,30 +15,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AuthController extends AbstractController
 {
     #[Route('/getToken', name: 'token_get', methods: ["POST"])]
-    public function getToken(Request $request, Security $security, AuthService $authService): Response
+    public function getToken(Request $request, Security $security, AuthService $authService, UserRepository $userRepository): Response
     {
         $raw_body = $request->getContent();
         $body = json_decode($raw_body, true);
 
         if (!array_key_exists("username", $body)){
-            $response = [
-                "result" => "error",
-                "error" => "No username provided for authentication"
-            ];
 
             return $this->json(
-                data: json_encode($response),
+                data: ["result" => "error", "error" => "No username provided for authentication"],
                 status: 401
             );
         }
         if (!array_key_exists("password", $body)){
-            $response = [
-                "result" => "error",
-                "error" => "No password provided for authentication"
-            ];
-
             return $this->json(
-                data: json_encode($response),
+                data: ["result" => "error", "error" => "No password provided for authentication"],
                 status: 401
             );
         }

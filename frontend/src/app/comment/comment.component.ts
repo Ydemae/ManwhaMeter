@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Rating } from '../../types/rating';
 
 @Component({
@@ -10,4 +10,15 @@ import { Rating } from '../../types/rating';
 export class CommentComponent {
   @Input()
   public rating!: Rating;
+
+  @Input()
+  public canDelete : boolean = false;
+
+  @Output()
+  public deleteButtonClicked = new EventEmitter<null>();
+
+
+  public onDeleteClicked(){
+    this.deleteButtonClicked.emit()
+  }
 }

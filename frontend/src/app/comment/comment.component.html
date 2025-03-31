@@ -8,4 +8,5 @@
     <div class="col-9">
         {{this.rating.comment}}
     </div>
+    <button class="btn btn-danger" *ngIf="this.canDelete" (click)="onDeleteClicked()">Delete rating</button>
 </div>

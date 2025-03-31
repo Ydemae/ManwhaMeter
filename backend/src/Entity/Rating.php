@@ -42,7 +42,7 @@ class Rating
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    #[Groups(['rating'])]
+    #[Groups(['classic', 'rating'])]
     private ?User $user = null;
 
     #[ORM\Column(length: 2000, nullable: true)]

@@ -54,4 +54,32 @@ export class RatingService {
       });
     })
   }
+
+  delete(
+    rating_id : number
+  ): Promise<boolean> {
+
+    return new Promise((resolve, reject) => {
+      this._http.get(
+        `${this.apiUrl}/ratings/delete/${rating_id}`,
+        {
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${sessionStorage.getItem("token")}`})
+        }
+      ).pipe(
+        catchError(error => {
+          reject(error);
+          return error;
+        })
+      ).subscribe((response : any) => {
+        if (response) {
+          const formattedResponse = response as {result : string, error : string | null}
+
+          resolve(response["result"] === "success");
+        }
+        else {
+          reject();
+        }
+      });
+    })
+  }
 }

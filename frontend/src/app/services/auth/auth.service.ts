@@ -14,11 +14,11 @@ export class AuthService {
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   constructor(private _http: HttpClient) {
-    this.isLoggedInSubject.next(!!localStorage.getItem('MMtoken'));
+    this.isLoggedInSubject.next(!!localStorage.getItem('token'));
   }
 
   logout(){
-    localStorage.removeItem("MMtoken")
+    localStorage.removeItem("token")
     this.isLoggedInSubject.next(false)
   }
 
@@ -43,7 +43,7 @@ export class AuthService {
 
           if (response["result"] == "success"){
             this.isLoggedInSubject.next(true)
-            localStorage.setItem("MMtoken", response["token"])
+            localStorage.setItem("token", response["token"])
           }
           resolve(response["result"] == "success");
         }
