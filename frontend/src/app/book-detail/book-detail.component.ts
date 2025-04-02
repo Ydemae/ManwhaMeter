@@ -6,6 +6,7 @@ import { environment } from '../../environments/environments';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { RatingService } from '../services/rating/rating.service';
 import { RatingData } from '../../types/ratingData';
+import { Rating } from '../../types/rating';
 
 @Component({
   selector: 'app-book-detail',
@@ -24,6 +25,9 @@ export class BookDetailComponent {
   public apiUrl = environment.apiUrl;
 
   public modalOperation = "Rate the book";
+
+  //The user's rating on the book if it exists
+  public personalRating : Rating | null = null;
 
   public showError = false;
   public errTitle = "";
@@ -51,6 +55,7 @@ export class BookDetailComponent {
   }
 
   loadBookData(){
+
     this.bookService.getOneById(this.bookId).then(
       result => {
         this.book = result;
@@ -58,9 +63,30 @@ export class BookDetailComponent {
       }
     ).catch(
       (error) => {
-        console.log(error)
+        this.displayError(
+          "Unexpected error",
+          "An unexpected error occurred when attempting to get the book details"
+        )
       }
     )
+
+    this.ratingService.getOneByBookId(this.bookId).then(
+      result => {
+        this.personalRating = result
+        console.log(result)
+      }
+    ).catch(
+      error => {
+        //errcode 2 means that the user just didn't rate the book, not a true error
+        if (error["errcode"] != 2){
+          this.displayError(
+            "Unexpected error",
+            "An unexpected error occurred when attempting to fetch personal rating on this book"
+          )
+        }
+      }
+    )
+
   }
 
   openCreateRatingModal(){

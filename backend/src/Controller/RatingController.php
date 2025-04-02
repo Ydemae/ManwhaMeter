@@ -61,6 +61,31 @@ final class RatingController extends AbstractController
         return $this->json(["result" => "success","ratings" => json_decode($jsonRatings)]);
     }
 
+    #[Route('/getOneByBookId/{bookId}', name: 'rating_getall', methods: ["GET"])]
+    public function getOneByBookId(int $bookId, AuthService $authService, Request $request, SerializerInterface $serializerInterface, RatingRepository $ratingRepository): Response
+    {
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        }
+
+        $userId = $userData["user_id"];
+
+        $rating = $ratingRepository->findOneBy(["user" => $userId, "book" => $bookId]);
+
+        if ($rating == null){
+            return $this->json(["result" => "error", "error" => "You haven't rated this book yet"], 430);
+        }
+
+        $jsonRating = $serializerInterface->serialize($rating, 'json', ['groups' => "classic"]);
+
+        return $this->json(["result" => "success","rating" => json_decode($jsonRating)]);
+    }
+
     #[Route('/create', name: 'rating_create', methods: ["POST"])]
     public function create(AuthService $authService, Request $request, EntityManagerInterface $em, BookRepository $bookRepository, UserRepository $userRepository, RatingRepository $ratingRepository): Response
     {
