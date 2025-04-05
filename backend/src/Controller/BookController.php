@@ -31,7 +31,7 @@ final class BookController extends AbstractController
         }
         catch(Exception $e){
             $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"]);
+            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
         }
 
         $raw_body = $request->getContent();

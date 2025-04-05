@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { FlashMessageService } from '../flashMessage/flash-message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +15,25 @@ export class AuthService {
   public isLoggedInSubject = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private _http: HttpClient) {
+  constructor(
+    private _http: HttpClient,
+    private router : Router,
+    private flashMessageService : FlashMessageService
+  ) {
     this.isLoggedInSubject.next(!!localStorage.getItem('token'));
   }
 
   logout(){
-    localStorage.removeItem("token")
-    this.isLoggedInSubject.next(false)
+    localStorage.removeItem("token");
+    this.isLoggedInSubject.next(false);
+  }
+
+  forcedLogout(){
+    localStorage.removeItem("token");
+    this.isLoggedInSubject.next(false);
+
+    this.flashMessageService.setFlashMessage("You have been logged out due to your token expiring, please authenticate again")
+    this.router.navigate(["/login"]);
   }
 
   login(username: string, password : string): Promise<boolean> {

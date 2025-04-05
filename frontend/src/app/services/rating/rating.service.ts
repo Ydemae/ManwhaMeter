@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environments';
 import { RatingData } from '../../../types/ratingData';
 import { catchError, of, throwError } from 'rxjs';
 import { Rating } from '../../../types/rating';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,10 @@ export class RatingService {
 
   private apiUrl = environment.apiUrl;
 
-  constructor(private _http: HttpClient) {}
+  constructor(
+    private _http: HttpClient,
+    private authService : AuthService
+  ) {}
 
   getOneByBookId
   (
@@ -30,6 +34,9 @@ export class RatingService {
         catchError(error => {
           let errCode = {"errcode" : 1};
 
+          if (error.status == 401){
+            this.authService.forcedLogout()
+          }
           if (error.status == 430){
             //The user had not rated this book yet
             errCode = {"errcode" : 2};
@@ -76,25 +83,31 @@ export class RatingService {
     }
 
     return new Promise((resolve, reject) => {
-      this._http.post(
+      this._http.post<HttpResponse<any>>(
         `${this.apiUrl}/ratings/update`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`})
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
+          observe: 'response'
         }
       ).pipe(
-        catchError(error => {
-          console.log(`Error caught when attempting to create rating : ${error}`);
-          reject(error);
-          return error;
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.log("Unexpected error caught when attempting to update rating");
+          }
+
+          reject();
+          return throwError(() => { });
         })
-      ).subscribe((response : any) => {
+      ).subscribe((response : HttpResponse<any>) => {
         console.log(response)
         if (response) {
-          console.log(response)
-          const formattedResponse = response as {result : string, error : string | null}
+          const body = response.body as {result : string, error : string | null}
 
-          resolve(response["result"] === "success");
+          resolve(body["result"] === "success");
         }
         else {
           console.log("Error caught when attempting to create the book");
@@ -119,24 +132,31 @@ export class RatingService {
     }
 
     return new Promise((resolve, reject) => {
-      this._http.post(
+      this._http.post<HttpResponse<any>>(
         `${this.apiUrl}/ratings/create`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`})
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
+          observe: 'response'
         }
       ).pipe(
-        catchError(error => {
-          console.log(`Error caught when attempting to create rating : ${error}`);
-          reject(error);
-          return error;
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.log("Unexpected error caught when attempting to create rating");
+          }
+
+          reject();
+          return throwError(() => { });
         })
-      ).subscribe((response : any) => {
+      ).subscribe((response : HttpResponse<any>) => {
         if (response) {
           console.log(response)
-          const formattedResponse = response as {result : string, error : string | null}
+          const body = response.body as {result : string, error : string | null}
 
-          resolve(response["result"] === "success");
+          resolve(body.result === "success");
         }
         else {
           console.log("Error caught when attempting to create the book");
@@ -151,21 +171,29 @@ export class RatingService {
   ): Promise<boolean> {
 
     return new Promise((resolve, reject) => {
-      this._http.get(
+      this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/ratings/delete/${rating_id}`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`})
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
+          observe: 'response'
         }
       ).pipe(
-        catchError(error => {
-          reject(error);
-          return error;
-        })
-      ).subscribe((response : any) => {
-        if (response) {
-          const formattedResponse = response as {result : string, error : string | null}
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.log("Unexpected error caught when attempting to delete rating");
+          }
 
-          resolve(response["result"] === "success");
+          reject();
+          return throwError(() => { });
+        })
+      ).subscribe((response : HttpResponse<any>) => {
+        if (response) {
+          const body = response.body as {result : string, error : string | null}
+
+          resolve(body["result"] === "success");
         }
         else {
           reject();
