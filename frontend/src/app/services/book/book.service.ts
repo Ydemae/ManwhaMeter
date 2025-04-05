@@ -33,14 +33,12 @@ export class BookService {
       active : active === null ? null : active
     }
 
-    console.log(body);
-
     return new Promise((resolve, reject) => {
       this._http.post(
         `${this.apiUrl}/books/getAll`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${sessionStorage.getItem("token")}`})
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`})
         }
       ).pipe(
         catchError(error => {
@@ -72,7 +70,7 @@ export class BookService {
       this._http.get(
         `${this.apiUrl}/books/getOneById/${id}`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${sessionStorage.getItem("token")}`})
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`})
         }
       ).pipe(
         catchError(error => {
@@ -105,7 +103,7 @@ export class BookService {
         `${this.apiUrl}/books/create`,
         book,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${sessionStorage.getItem("token")}`})
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`})
         }
       ).pipe(
         catchError(error => {

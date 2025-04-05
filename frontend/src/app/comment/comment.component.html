@@ -1,12 +1,22 @@
-<div class="row">
-    <div class="col-3">
-        <div>Name</div>
-        <div>
-            <img src="" alt="profile_picture">
+<div class="card border-primary mb-3" style="width: 30rem;">
+    <div class="row card-header">
+        <div class="col-3">{{this.rating.user.username}}</div>
+        <div class="col d-flex">
+            <span class="badge bg-secondary ms-auto">{{this.totalRating}}</span>
         </div>
     </div>
-    <div class="col-9">
-        {{this.rating.comment}}
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <img src="" alt="profile_picture">
+            </div>
+            <div class="col-9">
+                {{this.rating.comment}}
+            </div>
+        </div>
     </div>
-    <button class="btn btn-danger" *ngIf="this.canDelete" (click)="onDeleteClicked()">Delete rating</button>
-</div>
+    <div class="card-footer text-center">
+        <button type="button" class="btn btn-outline-primary m-1" (click)="onEditClicked()" *ngIf="canEdit">Edit</button>
+        <button type="button" class="btn btn-outline-danger m-1" (click)="onDeleteClicked()" *ngIf="canDelete">Delete</button>
+    </div>
+  </div>

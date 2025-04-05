@@ -20,7 +20,7 @@ export class TagService {
       this._http.get(
         `${this.apiUrl}/tag/getAll`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${sessionStorage.getItem("token")}`})
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`})
         }
       ).pipe(
         catchError(error => {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { RatingData } from '../../types/ratingData';
 
 @Component({
@@ -7,7 +7,7 @@ import { RatingData } from '../../types/ratingData';
   templateUrl: './rating-modal.component.html',
   styleUrl: './rating-modal.component.scss'
 })
-export class RatingModalComponent {
+export class RatingModalComponent implements OnInit, OnChanges{
   @Output()
   public closeModalEmitter = new EventEmitter<null>()
 
@@ -15,7 +15,7 @@ export class RatingModalComponent {
   public submitDataEmitter = new EventEmitter<RatingData>();
 
   @Input()
-  public bookRating! : RatingData;
+  public bookRating : RatingData | null = null;
 
   @Input()
   public modalTitle! : string;
@@ -32,11 +32,23 @@ export class RatingModalComponent {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.bookRating === null || this.bookRating === undefined){
+      this.bookRating = {
+        comment: "",
+        story : null,
+        art_style : null,
+        characters : null,
+        feeling : null
+      }
+    }
+  }
+
   close(){
     this.closeModalEmitter.emit()
   }
 
   onSubmit(){
-    this.submitDataEmitter.emit(this.bookRating);
+    this.submitDataEmitter.emit(this.bookRating!);
   }
 }

@@ -36,10 +36,7 @@
 
 
                     <div class="col-sm-12 col-md-6">
-                        <div class="margin-top">
-                            <label for="tagselect">
-                              Tags
-                            </label>
+                        <div>
                             <ng-select
                             [items]="this.tagsList"
                             [multiple]="true"
@@ -49,7 +46,8 @@
                             bindValue="id"
                             (change)="onSelectedTagsChange()"
                             class="form-control"
-                            id="tagselect">
+                            id="tagselect"
+                            [placeholder]="'tags'">
                             </ng-select>
                           </div>
                     </div>

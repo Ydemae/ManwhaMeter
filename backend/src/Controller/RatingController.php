@@ -185,8 +185,8 @@ final class RatingController extends AbstractController
         $body = json_decode($raw_body, true);
 
 
-        if (!array_key_exists("ratingId", $body)){
-            return $this->json(["result" => "error", "error" => "No ratingId provided for creation"], 400);
+        if (!array_key_exists("rating_id", $body)){
+            return $this->json(["result" => "error", "error" => "No rating_id provided for creation"], 400);
         }
 
         if (!array_key_exists("story", $body)){
@@ -210,7 +210,7 @@ final class RatingController extends AbstractController
         $art_style = $body["art_style"];
         $feeling = $body["feeling"];
         $characters = $body["characters"];
-        $ratingId = $body["ratingId"];
+        $ratingId = $body["rating_id"];
 
         $rating = $ratingRepository->findOneBy(["id" => $ratingId]);
 
@@ -225,7 +225,7 @@ final class RatingController extends AbstractController
         }
 
         if ($rating->getUser()->getId() != $userId){
-            return $this->json(["result" => "error", "error" => "You are not allowed to update someone else's rating"], 401);
+            return $this->json(["result" => "error", "error" => "You are not allowed to update someone else's rating"], 403);
         }
 
         $rating->setStory($story);

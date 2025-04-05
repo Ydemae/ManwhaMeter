@@ -1,5 +1,5 @@
-<div class="col">
+<div class="d-flex justify-content-center">
     <ng-container *ngFor="let rating of this.ratingsList">
-        <app-comment [rating]="rating"></app-comment>
+        <app-comment [rating]="rating" class="flex-grow-1 m-2"></app-comment>
     </ng-container>
 </div>

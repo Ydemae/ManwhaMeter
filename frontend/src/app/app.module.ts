@@ -22,6 +22,7 @@ import { CommentComponent } from './comment/comment.component';
 import { CommentListComponent } from './comment-list/comment-list.component';
 import { RatingModalComponent } from './rating-modal/rating-modal.component';
 import { RatingFormComponent } from './rating-form/rating-form.component';
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { RatingFormComponent } from './rating-form/rating-form.component';
     CommentComponent,
     CommentListComponent,
     RatingModalComponent,
-    RatingFormComponent
+    RatingFormComponent,
+    ConfirmModalComponent
   ],
   imports: [
     BrowserModule,

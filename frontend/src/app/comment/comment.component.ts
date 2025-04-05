@@ -13,12 +13,25 @@ export class CommentComponent {
 
   @Input()
   public canDelete : boolean = false;
+  @Input()
+  public canEdit : boolean = false;
 
   @Output()
   public deleteButtonClicked = new EventEmitter<null>();
+  @Output()
+  public editButtonClicked = new EventEmitter<null>();
 
+  public totalRating : number = 0;
+
+  ngOnInit(){
+    this.totalRating = this.rating.art_style + this.rating.characters + this.rating.feeling + this.rating.story
+  }
 
   public onDeleteClicked(){
     this.deleteButtonClicked.emit()
+  }
+
+  public onEditClicked(){
+    this.editButtonClicked.emit()
   }
 }
