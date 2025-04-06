@@ -4,8 +4,8 @@ namespace App\DataFixtures;
 
 use App\Entity\Book;
 use App\Entity\Tag;
-use BookStatus;
-use BookType;
+use App\enum\BookStatus;
+use App\enum\BookType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;

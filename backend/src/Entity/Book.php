@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
+use App\enum\BookStatus;
+use App\enum\BookType;
 use App\Repository\BookRepository;
-use BookStatus;
-use BookType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

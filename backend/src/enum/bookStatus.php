@@ -1,4 +1,6 @@
 <?php
+namespace App\enum;
+
 enum BookStatus : string{
     case ONGOING = "ongoing";
     case PAUSED = "paused";

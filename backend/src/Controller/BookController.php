@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\enum\BookStatus;
+use App\enum\BookType;
 use App\Repository\BookRepository;
-use App\Repository\BookTypeRepository;
-use App\Repository\StatusRepository;
 use App\Repository\TagRepository;
 use App\Service\AuthService;
 use App\Service\ImageManager;
-use BookStatus;
-use BookType;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
