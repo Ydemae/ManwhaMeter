@@ -3,10 +3,51 @@
 ## Introduction
 
 The goal of this project is to create an app to rate and list books, be it manga, webtoons, or novels.
-I personally want this to be a platform for me and my friends to share our recommandations and
+I personally want this to be a platform for me and my friends to share our recommandations.
 
 This project is still in one of its early versions, don't be too harsh on it yet since it's only the beginning.
 Any feedback would be appreciated, wether it is about possible improvements or functionnalities you might want to see in the app.
 
+This file is kind of a notebook for me to remember commands until I set up an automatic deployment process.
+Proper documentation will come with later versions.
+
 ## Credits
 Logout icon by picons.
+
+
+## How to deploy
+
+Clone git repo
+```
+git clone https://github.com/Ydemae/ManwhaMeter.git
+cd ManwhaMeter
+```
+
+Setup your symfony .env.local
+```
+sudo vim backend/.env.local
+```
+
+Copy database (It's the only way for the time being)
+```
+scp -r ./backend/data user@remote:path/to/project/backend/data
+```
+
+
+Build docker images :
+```
+sudo docker build -f angular-build.dockerfile -t angular-build:latest .
+sudo docker build -f symfony-php.dockerfile -t symfony-php:latest .
+sudo docker build -f custom-nginx.dockerfile -t custom-nginx:latest .
+```
+
+Deploy :
+```
+sudo docker compose up
+```
+
+JWT certs generation
+```
+sudo docker exec -it symfony
+php bin/console lexik:jwt:generate-keypair
+```
