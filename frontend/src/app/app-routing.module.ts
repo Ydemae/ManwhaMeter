@@ -5,12 +5,14 @@ import { HomeComponent } from './home/home.component';
 import { GeneralRankingComponent } from './general-ranking/general-ranking.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookCreateComponent } from './book-create/book-create.component';
+import { PersonalRankingComponent } from './personal-ranking/personal-ranking.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'booklist', component: GeneralRankingComponent },
+  { path: 'mybooklist', component: PersonalRankingComponent },
   { path: 'bookdetail/:id', component: BookDetailComponent },
   { path: 'bookcreate', component: BookCreateComponent },
 ];

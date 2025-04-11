@@ -32,7 +32,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
                     "type" => BookType::WEBTOON,
                     "tags" => [
                         $this->getReference("TAG_action", Tag::class),
-                        $this->getReference("TAG_supernaturel", Tag::class),
+                        $this->getReference("TAG_supernatural", Tag::class),
                     ],
                 ],
                 [
@@ -43,7 +43,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
                     "type" => BookType::WEBTOON,
                     "tags" => [
                         $this->getReference("TAG_action", Tag::class),
-                        $this->getReference("TAG_supernaturel", Tag::class),
+                        $this->getReference("TAG_supernatural", Tag::class),
                         $this->getReference("TAG_romance", Tag::class),
                     ],
                 ],
@@ -55,7 +55,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
                     "type" => BookType::NOVEL,
                     "tags" => [
                         $this->getReference("TAG_action", Tag::class),
-                        $this->getReference("TAG_fantaisie", Tag::class),
+                        $this->getReference("TAG_fantasy", Tag::class),
                     ],
                 ],
             ];

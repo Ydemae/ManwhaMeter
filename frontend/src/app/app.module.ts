@@ -23,6 +23,8 @@ import { CommentListComponent } from './comment-list/comment-list.component';
 import { RatingModalComponent } from './rating-modal/rating-modal.component';
 import { RatingFormComponent } from './rating-form/rating-form.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import { PersonalRankingComponent } from './personal-ranking/personal-ranking.component';
+import { BookRankingComponent } from './book-ranking/book-ranking.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     CommentListComponent,
     RatingModalComponent,
     RatingFormComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    PersonalRankingComponent,
+    BookRankingComponent
   ],
   imports: [
     BrowserModule,

@@ -79,6 +79,65 @@ export class BookService {
     })
   }
 
+
+  getAllPersonal(
+    tags: Array<number> | null = null,
+    bookType: string | null = null,
+    bookName: string = "",
+    status: string | null = null,
+    active: boolean | null = null
+  ): Promise<Array<ListedBook>> {
+
+    let body = {
+      tags: tags === null ? [] : tags,
+      book_type: bookType === null ? null : bookType,
+      book_name: bookName === null ? "" : bookName,
+      status: status === null ? null : status,
+      active: active === null ? null : active
+    }
+
+    return new Promise((resolve, reject) => {
+      this._http.post<HttpResponse<any>>(
+        `${this.apiUrl}/books/getAllPersonal`,
+        body,
+        {
+          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.log("Unexpected error caught when attempting to get all books");
+          }
+
+          reject();
+          return throwError(() => { });
+        })
+      ).subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response) {
+            const body = response.body as { result: string, books: Array<ListedBook> }
+
+            console.log(response)
+            resolve(body.books);
+          }
+          else {
+            console.log("Error caught when attempting to get all books");
+            reject();
+          }
+        },
+        error: (error: HttpResponse<any>) => {
+          console.log("Unexpected error caught when attempting to get all books");
+          reject()
+        }
+      }
+      );
+    })
+  }
+
   getOneById(
     id: number
   ): Promise<DetailedBook> {

@@ -325,7 +325,7 @@ final class BookController extends AbstractController
         $book->setBookType($bookType);
         $book->setBookStatus($status);
 
-        $book->setIsActive(false);
+        $book->setIsActive(true);
     
         foreach ($tags as $tag){
             $book->addTag($tag);
