@@ -6,8 +6,9 @@
         <button type="button" class="btn d-flex ms-auto" (click)="close()" aria-label="Close">X</button>
     </div>
     <div class="modal-body">
-        <app-rating-form [formData]="this.bookRating!"></app-rating-form>
+        <app-rating-form [formData]="this.bookRating!" (correctDataFlag)="this.updateCorrectFlag($event)"></app-rating-form>
     </div>
+        <small class="text-danger text-center">{{ this.errorMessage }}</small>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onSubmit()">Confirm</button>
             <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>

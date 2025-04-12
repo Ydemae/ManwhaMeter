@@ -63,6 +63,7 @@ export class BookDetailComponent {
   }
 
   loadBookData(){
+    console.log("called")
     let getBookDetailPromise = this.bookService.getOneById(this.bookId).catch(
       (error) => {
         this.displayError(
@@ -93,13 +94,7 @@ export class BookDetailComponent {
         this.book = results[0]!;
         this.personalRating = results[1]!;
 
-        if (this.personalRating){
-          for (let i = 0; i < this.book.ratings.length; i++){
-            if (this.book.ratings[i].id == this.personalRating.id){
-              this.book.ratings.splice(i,1);
-            }
-          }
-        }
+        this.removePersonalRatingFromRatingList()
         
         this.personalRatingFetched = true;
         this.bookFetched = true;
@@ -115,8 +110,10 @@ export class BookDetailComponent {
       return
     }
 
-    for(let i = 0; i < this.book?.ratings.length!; i++){
-
+    for (let i = 0; i < this.book.ratings.length; i++){
+      if (this.book.ratings[i].id == this.personalRating.id){
+        this.book.ratings.splice(i,1);
+      }
     }
   }
 
@@ -130,13 +127,13 @@ export class BookDetailComponent {
       return;
     }
 
-    let ratingData : RatingData = this.convertRatingDataFrom25To20({
+    let ratingData : RatingData = {
       comment : this.personalRating.comment,
       story : this.personalRating.story,
       art_style : this.personalRating.art_style,
       feeling : this.personalRating.feeling,
       characters : this.personalRating.characters,
-    })
+    }
 
     this.bookRatingToUpdate = ratingData;
     this.ratingModalOperation = RatingModalOperation.UPDATE;
@@ -155,11 +152,10 @@ export class BookDetailComponent {
   }
 
   createRating(data : RatingData){
-    let formatted_data = this.convertRatingDataFrom20To25(data);
 
     this.ratingService.create(
       this.book?.id!,
-      formatted_data
+      data
     ).then(
       response => {
         this.loadBookData();
@@ -178,12 +174,10 @@ export class BookDetailComponent {
       return;
     }
 
-    let formatted_data = this.convertRatingDataFrom20To25(data);
-
     this.ratingService.update(
       this.book?.id!,
       this.personalRating?.id!,
-      formatted_data
+      data
     ).then(
       response => {
         this.loadBookData();
@@ -206,6 +200,7 @@ export class BookDetailComponent {
     }
   }
 
+  /*
   convertRatingDataFrom20To25(data : RatingData) : RatingData{
     return {
       comment : data.comment,
@@ -225,7 +220,7 @@ export class BookDetailComponent {
       feeling : Math.round((data.feeling!/25) * 20 * 100) / 100
     }
   }
-
+  */
 
   displayError(
     title : string,

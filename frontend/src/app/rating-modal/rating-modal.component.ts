@@ -20,6 +20,9 @@ export class RatingModalComponent implements OnInit, OnChanges{
   @Input()
   public modalTitle! : string;
 
+  public correctFlag : boolean = false;
+  public errorMessage : string = "";
+
   ngOnInit(){
     if (this.bookRating === null || this.bookRating === undefined){
       this.bookRating = {
@@ -48,7 +51,17 @@ export class RatingModalComponent implements OnInit, OnChanges{
     this.closeModalEmitter.emit()
   }
 
+  updateCorrectFlag(flag : boolean){
+    this.errorMessage = "";
+    this.correctFlag = flag;
+  }
+
   onSubmit(){
+    if (!this.correctFlag){
+      this.errorMessage = "At least one of the form's field is not correct"
+      return;
+    }
+    
     this.submitDataEmitter.emit(this.bookRating!);
   }
 }

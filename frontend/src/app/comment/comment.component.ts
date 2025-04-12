@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Rating } from '../../types/rating';
 
 @Component({
@@ -7,7 +7,7 @@ import { Rating } from '../../types/rating';
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss'
 })
-export class CommentComponent {
+export class CommentComponent implements OnChanges {
   @Input()
   public rating!: Rating;
 
@@ -24,6 +24,10 @@ export class CommentComponent {
   public totalRating : number = 0;
 
   ngOnInit(){
+    this.totalRating = this.rating.art_style + this.rating.characters + this.rating.feeling + this.rating.story
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     this.totalRating = this.rating.art_style + this.rating.characters + this.rating.feeling + this.rating.story
   }
 
