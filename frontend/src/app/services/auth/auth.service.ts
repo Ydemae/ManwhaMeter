@@ -15,22 +15,27 @@ export class AuthService {
   public isLoggedInSubject = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
+  public isAdminSubject = new BehaviorSubject<boolean>(false);
+  public isAdmin$ = this.isAdminSubject.asObservable();
+
   constructor(
     private _http: HttpClient,
     private router : Router,
     private flashMessageService : FlashMessageService
   ) {
     this.isLoggedInSubject.next(!!localStorage.getItem('token'));
+    this.isAdminSubject.next(!!localStorage.getItem('isAdmin'));
   }
 
   logout(){
+    localStorage.removeItem("isAdmin");
     localStorage.removeItem("token");
     this.isLoggedInSubject.next(false);
+    this.isAdminSubject.next(false);
   }
 
   forcedLogout(){
-    localStorage.removeItem("token");
-    this.isLoggedInSubject.next(false);
+    this.logout();
 
     this.flashMessageService.setFlashMessage("You have been logged out due to your token expiring, please authenticate again")
     this.router.navigate(["/login"]);
@@ -53,10 +58,11 @@ export class AuthService {
         })
       ).subscribe((response : any) => {
         if (response) {
-          console.log(response)
 
           if (response["result"] == "success"){
             this.isLoggedInSubject.next(true)
+            this.isAdminSubject.next(response["isAdmin"])
+            localStorage.setItem("isAdmin", response["isAdmin"])
             localStorage.setItem("token", response["token"])
           }
           resolve(response["result"] == "success");

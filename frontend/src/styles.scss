@@ -46,10 +46,6 @@ body{
     color: #FBFFC0;
 }
 
-.img-button{
-    cursor: pointer;
-}
-
 .margin-left{
     margin-left: 1rem;
 }
@@ -112,4 +108,17 @@ ng-select .ng-value .ng-value-icon {
     margin-right: 5px;
     margin-left: 5px;
     color: red !important;
+}
+
+
+.img-button{
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.5s;
+    width: 2rem;
+}
+
+.img-button:hover{
+    transition: 0.5s;
+    opacity: 1;
 }

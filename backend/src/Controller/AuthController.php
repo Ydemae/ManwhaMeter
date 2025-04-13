@@ -34,8 +34,12 @@ final class AuthController extends AbstractController
             );
         }
 
+        $user = $userRepository->findOneBy(["username" => $body["username"]]);
+
         try{
-            return $this->json(["result" => "success","token" => $authService->getAuthToken($body["username"], $body["password"])]);
+            $token = $authService->getAuthToken($user, $body["password"]);
+
+            return $this->json(["result" => "success","token" => $token, "isAdmin" => in_array("ROLE_ADMIN", $user->getRoles())]);
         }
         catch(AccessDeniedException $e){
             return $this->json(["result" => "error","error" => $e->getMessage()], 401);

@@ -1,0 +1,25 @@
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <input type="text" class="form-control" name="username" placeholder="username" autocomplete="off">
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="row">
+                <div class="col-11">
+                    <input [type]="this.showPassword ? 'text' : 'password'" class="form-control" name="password" placeholder="password">
+                </div>
+                <div class="col-1 password-img-container">
+                    <img
+                    (click)="togglePasswordVisibility()"
+                    class="marginSides img-button center-me password-img"
+                    [classList]=""
+                    [src]="this.showPassword ?  'assets/password-show.png' : 'assets/password-hide.png'"
+                    alt="toggle password visibility">
+                </div>
+            </div>
+            <div class="margin-top">
+                <input [type]="this.showPassword ? 'text' : 'password'" class="form-control" name="password" placeholder="confirm password">
+            </div>
+        </div>
+    </div>
+</div>

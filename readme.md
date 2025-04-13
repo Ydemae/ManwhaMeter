@@ -15,6 +15,10 @@ Proper documentation will come with later versions.
 Logout icon by picons.
 
 
+<a href="https://www.flaticon.com/free-icons/eye" title="eye icons">Eye icons created by Gregor Cresnar - Flaticon</a><br>
+<a href="https://www.flaticon.com/free-icons/eye-password" title="eye password icons">Eye password icons created by sonnycandra - Flaticon</a><br>
+<a href="https://www.flaticon.com/free-icons/copy" title="copy icons">Copy icons created by Freepik - Flaticon</a>
+
 ## How to deploy
 
 Clone git repo

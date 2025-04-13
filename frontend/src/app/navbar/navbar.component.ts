@@ -8,7 +8,8 @@ import { AuthService } from '../services/auth/auth.service';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  userIsConnected!: boolean;
+  public userIsConnected! : boolean;
+  public isAdmin! : boolean;
 
   constructor(private authService : AuthService) {
   }
@@ -17,6 +18,12 @@ export class NavbarComponent {
     this.authService.isLoggedIn$.subscribe(
       (value) => {
         this.userIsConnected = value
+      }
+    )
+
+    this.authService.isAdmin$.subscribe(
+      (value) => {
+        this.isAdmin = value
       }
     )
   }

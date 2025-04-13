@@ -22,9 +22,7 @@ class AuthService
         $this->userPasswordHasherInterface = $userPasswordHasherInterface;
     }
 
-    public function getAuthToken(string $username, string $password): string{
-        $user = $this->userRepository->findOneBy(["username" => $username]);
-
+    public function getAuthToken(User $user, string $password): string{
         if ($user == null){
             throw new Exception("Incorrect identifier or password provided");
         }
