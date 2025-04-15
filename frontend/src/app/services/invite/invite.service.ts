@@ -105,6 +105,46 @@ export class InviteService {
     })
   }
 
+  delete(id : number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this._http.get<HttpResponse<any>>(
+        `${this.apiUrl}/registerInvite/delete/${id}`,
+        {
+          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.log("Unexpected error caught when attempting to delete invite");
+          }
+
+          reject();
+          return throwError(() => { });
+        })
+      ).subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response) {
+            const body = response.body as { result: string }
+            resolve(body.result == "success");
+          }
+          else {
+            console.log("Error caught when attempting to delete invite");
+            reject();
+          }
+        },
+        error: (error: HttpResponse<any>) => {
+          console.log("Unexpected error caught when attempting to delete invite");
+          reject()
+        }
+      }
+      );
+    })
+  }
+
   isUsed(inviteUid : string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this._http.get<HttpResponse<any>>(

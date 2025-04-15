@@ -15,20 +15,26 @@
     <ng-container *ngIf="this.dataFetched else NotFetched">
         <button class="btn btn-primary" (click)="createInvite()">Create invite</button>
         <table class="table">
-            <tr>
-                <th>uid</th>
-                <th>creation date</th>
-                <th>expiration date</th>
-                <th>used</th>
-            </tr>
-            <ng-container *ngFor="let invite of this.invites">
+            <thead>
                 <tr>
-                    <td>{{invite.uid}}</td>
-                    <td>{{this.formatDate(invite.createdAt)}}</td>
-                    <td>{{this.formatDate(invite.exp_date)}}</td>
-                    <td>{{invite.used}}</td>
+                    <th>uid</th>
+                    <th>creation date</th>
+                    <th>expiration date</th>
+                    <th>used</th>
+                    <th>delete</th>
                 </tr>
-            </ng-container>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let invite of this.invites; let i = index">
+                    <tr>
+                        <td>{{invite.uid}}</td>
+                        <td>{{this.formatDate(invite.createdAt)}}</td>
+                        <td>{{this.formatDate(invite.exp_date)}}</td>
+                        <td>{{invite.used}}</td>
+                        <td><button class="btn btn-danger" (click)="onDeleteInviteClicked(i)">Delete</button></td>
+                    </tr>
+                </ng-container>
+            </tbody>
         </table>
     </ng-container>
 
@@ -57,5 +63,15 @@
                 </div>
             </div>
         </div>
+    </ng-template>
+
+    <ng-template #ConfirmationModal>
+        <app-confirm-modal
+        [title]="'Invite deletion'"
+        [text]="'You are about to delete the invite with uid [' + this.invites![this.inviteToDeleteId!].uid + '] , do you confirm ?'"
+        (cancelEmitter)="this.closeConfirmationModal()"
+        (confirmEmitter)="this.deleteInvite()"
+        *ngIf="this.invites != null && this.inviteToDeleteId != null"
+        ></app-confirm-modal>
     </ng-template>
 </div>

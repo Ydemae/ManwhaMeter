@@ -5,6 +5,7 @@ import { Invite } from '../../types/invite';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../environments/environments';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invite-tracker',
@@ -16,6 +17,9 @@ export class InviteTrackerComponent implements OnInit{
 
   private inviteModal! : NgbModalRef;
   @ViewChild('CreatedInviteModal') inviteModalTemplate!: TemplateRef<any>;
+
+  private confirmationModal! : NgbModalRef;
+  @ViewChild('ConfirmationModal') confirmationModalTempalte!: TemplateRef<any>;
 
   public dataFetched : boolean = false;
   public invites? : Invite[];
@@ -30,14 +34,21 @@ export class InviteTrackerComponent implements OnInit{
 
   public copied : boolean = false;
 
+  public inviteToDeleteId : number | null = null
+
   constructor(
     private authService : AuthService,
     private inviteService : InviteService,
     private modalService : NgbModal,
-    private clipboard : Clipboard
+    private clipboard : Clipboard,
+    private router : Router
   ){}
 
   ngOnInit(): void {
+    if (!this.authService.isAdminSubject.value || !this.authService.isLoggedInSubject.value){
+      this.router.navigate(["/home"]);
+    }
+
     this.appUrl = environment.appUrl;
 
     this.loadInvites(null);
@@ -116,6 +127,50 @@ export class InviteTrackerComponent implements OnInit{
     this.clipboard.copy(`${this.appUrl}/register/${this.createdInvite?.uid}`)
     this.copied = true;
     setTimeout(() => (this.copied = false), 2000);
+  }
+
+  openConfirmationModal(){
+    this.confirmationModal = this.modalService.open(this.confirmationModalTempalte);
+  }
+
+  closeConfirmationModal(){
+    if (this.confirmationModal){
+      this.inviteToDeleteId = null;
+      this.confirmationModal.close();
+    }
+  }
+
+  onDeleteInviteClicked(id : number){
+    this.inviteToDeleteId = id;
+    this.openConfirmationModal();
+  }
+
+  deleteInvite(){
+    if (this.invites == null || this.inviteToDeleteId == null){
+      return;
+    }
+
+    this.inviteService.delete(this.invites![this.inviteToDeleteId!].id).then(
+      result => {
+        if (result){
+          this.invites?.splice(this.inviteToDeleteId!, 1);
+          this.closeConfirmationModal()
+        }
+        else{
+          this.displayError(
+            "Unexpected error",
+            "An unexpected error occured when deleting the invite, please try again."
+          )
+        }
+      }
+    ).catch(
+      error => {
+        this.displayError(
+          "Unexpected error",
+          "An unexpected error occured when deleting the invite, please try again."
+        )
+      }
+    )
   }
 
 }

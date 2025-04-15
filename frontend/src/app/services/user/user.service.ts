@@ -18,14 +18,16 @@ export class UserService {
   ) {}
 
   create (
-    userData : DetailedUser,
+    username : string,
+    password : string,
+    profilePicture : string,
     invite : string
   ): Promise<boolean> {
 
     let body = {
-      username : userData.username,
-      password : userData.password,
-      profilePicture : userData.profilePicture,
+      username : username,
+      password : password,
+      profilePicture : profilePicture,
       invite : invite
     }
 
@@ -40,7 +42,7 @@ export class UserService {
         catchError((error: HttpResponse<any>) => {
           console.log("Unexpected error caught when attempting to create user");
 
-          reject();
+          reject(error.status);
           return throwError(() => { });
         })
       ).subscribe({
@@ -55,7 +57,6 @@ export class UserService {
           }
         },
         error: (error: HttpResponse<any>) => {
-          console.log("Unexpected error caught when attempting to create user");
           reject()
         }
       }
@@ -63,4 +64,47 @@ export class UserService {
     })
   }
 
+  usernameExists (
+    username : string,
+    invite : string
+  ): Promise<boolean> {
+
+    let body = {
+      username : username,
+      invite : invite
+    }
+
+    return new Promise((resolve, reject) => {
+      this._http.post<HttpResponse<any>>(
+        `${this.apiUrl}/user/username_exists`,
+        body,
+        {
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          console.log("Unexpected error caught when attempting to check username availability");
+
+          reject();
+          return throwError(() => { });
+        })
+      ).subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response) {
+            const body = response.body as { result: string, exists : boolean }
+            resolve(body.exists);
+          }
+          else {
+            console.log("Unexpected error caught when attempting to check username availability");
+            reject();
+          }
+        },
+        error: (error: HttpResponse<any>) => {
+          console.log("Unexpected error caught when attempting to check username availability");
+          reject()
+        }
+      }
+      );
+    })
+  }
 }

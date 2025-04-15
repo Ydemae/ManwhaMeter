@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\RegisterInviteRepository;
 use App\Repository\UserRepository;
 use App\Service\AuthService;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,10 +90,10 @@ final class UserController extends AbstractController
         $fetchedInvite = $registerInviteRepository->findOneBy(["uid" => $invite]);
 
         if ($fetchedInvite == null){
-            return $this->json(["result" => "error", "error" => "Incorrect or expired invite"]);
+            return $this->json(["result" => "error", "error" => "Incorrect or expired invite"], 403);
         }
-        if ($fetchedInvite->getUsed()){
-            return $this->json(["result" => "error", "error" => "Incorrect or expired invite"]);
+        if ($fetchedInvite->isUsed()){
+            return $this->json(["result" => "error", "error" => "Incorrect or expired invite"], 403);
         }
 
         $passwordHasher = $passwordHasherFactoryInterface->getPasswordHasher(User::class);
@@ -105,6 +106,7 @@ final class UserController extends AbstractController
         $user->setUsername($username);
         $user->setPassword($hashedPassword);
         $user->setRoles(["ROLE_USER"]);
+        $user->setCreatedAt(new DateTimeImmutable());
 
         $em->persist($user);
         $fetchedInvite->setUsed(true);
@@ -199,23 +201,25 @@ final class UserController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
-    #[Route('/nickname_exists', name: 'user_exists', methods: ["POST"])]
-    public function exists(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    #[Route('/username_exists', name: 'username_exists', methods: ["POST"])]
+    public function exists(Request $request, RegisterInviteRepository $registerInviteRepository, UserRepository $userRepository): Response
     {
-        try{
-            $authService->authenticateByToken($request);
-        }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
-        }
-
         $raw_body = $request->getContent();
         $body = json_decode($raw_body, true);
 
 
+        if (!array_key_exists("invite", $body)){
+            return $this->json(["result" => "error", "error" => "No invite provided to check username availability"], 400);
+        }
+
         if (!array_key_exists("username", $body)){
             return $this->json(["result" => "error", "error" => "No username provided to check username availability"], 400);
+        }
+
+        $invite = $registerInviteRepository->findOneBy(["uid" => $body["invite"]]);
+
+        if ($invite == null){
+            return $this->json(["result" => "error", "error" => "Access denied"], 401);
         }
 
         $usernameExists = $userRepository->usernameExists($body["username"]);

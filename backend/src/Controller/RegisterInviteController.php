@@ -88,7 +88,7 @@ final class RegisterInviteController extends AbstractController
         }
 
 
-        return $this->json(["result" => "success","used" => $invite->getUsed()]);
+        return $this->json(["result" => "success","used" => $invite->isUsed()]);
     }
 
     #[Route('/create', name: 'invite_create', methods: ["GET"])]
@@ -128,5 +128,29 @@ final class RegisterInviteController extends AbstractController
 
         $jsonResult = $serializerInterface->serialize($invite, 'json', ['groups' => "classic"]);
         return $this->json(["result" => "success", "invite" => json_decode($jsonResult)]);
+    }
+
+    #[Route('/delete/{id}', name: 'invite_delete', methods: ["GET"])]
+    public function delete(int $id, Request $request, AuthService $authService, EntityManagerInterface $em, RegisterInviteRepository $registerInviteRepository, SerializerInterface $serializerInterface){
+        $userData = [];
+
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        }
+
+        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        $invite = $registerInviteRepository->findOneBy(["id" => $id]);
+
+        $em->remove($invite);
+        $em->flush();
+
+        return $this->json(["result" => "success"]);
     }
 }
