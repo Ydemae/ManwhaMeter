@@ -7,7 +7,7 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-6">
-            <input type="text" class="form-control" name="username" placeholder="username" autocomplete="off" [(ngModel)]="this.formData.username" (change)="checkUsernameAvailability()">
+            <input type="text" class="form-control" name="username" placeholder="username" autocomplete="off" [(ngModel)]="this.formData.username" (change)="onUsernameChange()">
             <small class="form-text text-danger" *ngIf="this.formError.username != ''">{{ this.formError.username }}</small>
             <button type="button" class="btn btn-secondary" (click)="checkUsernameAvailability()">Check username availability</button>
             <small class="form-text" *ngIf="this.usernameAvailable != null" [ngClass]="{'text-danger' : !this.usernameAvailable, 'text-success' : this.usernameAvailable}">{{ this.usernameAvailableLabel }}</small>
@@ -15,7 +15,7 @@
         <div class="col-sm-12 col-md-6">
             <div class="row">
                 <div class="col-11">
-                    <input [type]="this.showPassword ? 'text' : 'password'" class="form-control" name="password" placeholder="password" [(ngModel)]="this.formData.password">
+                    <input [type]="this.showPassword ? 'text' : 'password'" class="form-control" name="password" placeholder="password" [(ngModel)]="this.formData.password" (change)="validateAllFields()">
                 </div>
                 <div class="col-1 password-img-container">
                     <img
@@ -28,7 +28,7 @@
                 <small class="form-text text-danger" *ngIf="this.formError.password != ''">{{ this.formError.password }}</small>
             </div>
             <div class="margin-top">
-                <input [type]="this.showPassword ? 'text' : 'password'" class="form-control" name="password" placeholder="confirm password" [(ngModel)]="this.formData.confirmPassword">
+                <input [type]="this.showPassword ? 'text' : 'password'" class="form-control" name="password" placeholder="confirm password" [(ngModel)]="this.formData.confirmPassword" (change)="validateAllFields()">
                 <small class="form-text text-danger" *ngIf="this.formError.confirmPassword">{{ this.formError.confirmPassword }}</small>
             </div>
         </div>

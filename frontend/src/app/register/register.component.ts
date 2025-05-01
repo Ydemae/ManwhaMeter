@@ -139,6 +139,11 @@ export class RegisterComponent implements OnInit{
     )
   }
 
+  onUsernameChange(){
+    this.validateAllFields()
+    this.checkUsernameAvailability()
+  }
+
   registerUser(){
     if (!this.validateAllFields()){
       return;
