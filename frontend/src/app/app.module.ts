@@ -28,6 +28,7 @@ import { BookRankingComponent } from './book-ranking/book-ranking.component';
 import { RegisterComponent } from './register/register.component';
 import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { InviteTrackerComponent } from './invite-tracker/invite-tracker.component';
+import { UserListComponent } from './user-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { InviteTrackerComponent } from './invite-tracker/invite-tracker.componen
     BookRankingComponent,
     RegisterComponent,
     AdminBoardComponent,
-    InviteTrackerComponent
+    InviteTrackerComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,

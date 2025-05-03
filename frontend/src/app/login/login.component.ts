@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit{
   authenticate(username: string, password: string): void {
       this.authService.login(username,password).then(
           (response) => {
-              if (response === true){
+              if (response === 0){
                   this.router.navigate(["/booklist"])
               }
               else{
@@ -68,11 +68,19 @@ export class LoginComponent implements OnInit{
               }
           }
       ).catch(
-        () => {
+        (error) => {
+          if (error == 2){
             this.showError(
-                "Unexpected error occurred",
-                "Please contact the support if the problem persists"
+              "This account is disabled",
+              "If you wonder why your account was disabled, please contact your server owner."
             )
+          }
+          else{
+            this.showError(
+              "Unexpected error occurred",
+              "Please contact the your server owner if the problem persists"
+            )
+          }
         }
       )
   }

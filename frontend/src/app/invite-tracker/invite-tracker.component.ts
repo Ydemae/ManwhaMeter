@@ -6,6 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../environments/environments';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Router } from '@angular/router';
+import { format_date } from '../../utils/dateFormatting';
 
 @Component({
   selector: 'app-invite-tracker',
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
   styleUrl: './invite-tracker.component.scss'
 })
 export class InviteTrackerComponent implements OnInit{
+  fromatDate = format_date
 
   private inviteModal! : NgbModalRef;
   @ViewChild('CreatedInviteModal') inviteModalTemplate!: TemplateRef<any>;
@@ -45,10 +47,6 @@ export class InviteTrackerComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    if (!this.authService.isAdminSubject.value || !this.authService.isLoggedInSubject.value){
-      this.router.navigate(["/home"]);
-    }
-
     this.appUrl = environment.appUrl;
 
     this.loadInvites(null);
@@ -86,17 +84,6 @@ export class InviteTrackerComponent implements OnInit{
         )
       }
     )
-  }
-
-  formatDate(date: string): string {
-
-    let dateObject = new Date(date);
-
-    const day = dateObject.getDate().toString().padStart(2, '0');
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const year = dateObject.getFullYear();
-  
-    return `${day}/${month}/${year}`;
   }
 
   displayError(

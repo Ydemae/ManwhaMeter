@@ -36,6 +36,10 @@ final class AuthController extends AbstractController
 
         $user = $userRepository->findOneBy(["username" => $body["username"]]);
 
+        if ($user->isActive() == false){
+            return $this->json(["result" => "error","error" => "Your account has been disabled. If you don't know why, contact your server owner."], 403);
+        }
+
         try{
             $token = $authService->getAuthToken($user, $body["password"]);
 

@@ -9,6 +9,7 @@ use App\Service\AuthService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,8 +44,8 @@ final class UserController extends AbstractController
         return $this->json(["result" => "success","user" => json_decode($jsonUser)]);
     }
 
-    #[Route('/getAll', name: 'user_getall', methods: ["POST"])]
-    public function getAll(AuthService $authService, Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository): Response
+    #[Route('/getAll/{active}', name: 'user_getall', methods: ["GET"])]
+    public function getAll(int $active, AuthService $authService, Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository): Response
     {
         $userData = [];
         try{
@@ -59,10 +60,13 @@ final class UserController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
-        $users = $userRepository->findAll();
+        /*  Active 0 searches all inactive users
+            Active 1 serches all active users
+            Active 2 saerches all users indiscriminately of their activation
+        */
+        $users = $active == 0 ?  $userRepository->findBy(["active" => false]) : ($active == 1 ? $userRepository->findBy(["active" => true]) : $users = $userRepository->findAll());
 
-
-        $jsonUsers = $serializerInterface->serialize($users, 'json', ['groups' => "classic"]);
+        $jsonUsers = $serializerInterface->serialize($users, 'json', ['groups' => "admin"]);
 
         return $this->json(["result" => "success","users" => json_decode($jsonUsers)]);
     }
@@ -173,8 +177,8 @@ final class UserController extends AbstractController
     }
 
     
-    #[Route('/delete/{id}', name: 'user_delete', methods: ["GET"])]
-    public function delete(int $id, AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    #[Route('/delete', name: 'user_delete', methods: ["POST"])]
+    public function delete(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
         $userData = [];
         try{
@@ -189,6 +193,15 @@ final class UserController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
+        $raw_body = $request->getContent();
+        $body = json_decode($raw_body, true);
+
+        if (!array_key_exists("user_id", $body)){
+            return $this->json(["result" => "error", "error" => "No user_id provided for user deletion"], 400);
+        }
+
+        $id = $body["user_id"];
+
         $user = $userRepository->findOneBy(["id" => $id]);
 
         if ($user == null){
@@ -196,6 +209,80 @@ final class UserController extends AbstractController
         }
 
         $em->remove($user);
+        $em->flush();
+
+        return $this->json(["result" => "success"]);
+    }
+
+    #[Route('/deactivate', name: 'user_deactivate', methods: ["POST"])]
+    public function deactivate(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    {
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        }
+
+        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        $raw_body = $request->getContent();
+        $body = json_decode($raw_body, true);
+
+        if (!array_key_exists("user_id", $body)){
+            return $this->json(["result" => "error", "error" => "No user_id provided for user deactivation"], 400);
+        }
+
+        $id = $body["user_id"];
+
+        $user = $userRepository->findOneBy(["id" => $id]);
+
+        if ($user == null){
+            return $this->json(["result" => "error", "error" => "Wrong user id given"], 400);
+        }
+
+        $user->setActive(false);
+        $em->flush();
+
+        return $this->json(["result" => "success"]);
+    }
+
+    #[Route('/activate', name: 'user_activate', methods: ["POST"])]
+    public function activate(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    {
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception $e){
+            $errorMessage = $e->getMessage();
+            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        }
+
+        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        $raw_body = $request->getContent();
+        $body = json_decode($raw_body, true);
+
+        if (!array_key_exists("user_id", $body)){
+            return $this->json(["result" => "error", "error" => "No user_id provided for user reactivation"], 400);
+        }
+
+        $id = $body["user_id"];
+
+        $user = $userRepository->findOneBy(["id" => $id]);
+
+        if ($user == null){
+            return $this->json(["result" => "error", "error" => "Wrong user id given"], 400);
+        }
+
+        $user->setActive(true);
         $em->flush();
 
         return $this->json(["result" => "success"]);

@@ -28,8 +28,8 @@
                 <ng-container *ngFor="let invite of this.invites; let i = index">
                     <tr>
                         <td>{{invite.uid}}</td>
-                        <td>{{this.formatDate(invite.createdAt)}}</td>
-                        <td>{{this.formatDate(invite.exp_date)}}</td>
+                        <td>{{fromatDate(invite.createdAt)}}</td>
+                        <td>{{fromatDate(invite.exp_date)}}</td>
                         <td>{{invite.used}}</td>
                         <td><button class="btn btn-danger" (click)="onDeleteInviteClicked(i)">Delete</button></td>
                     </tr>

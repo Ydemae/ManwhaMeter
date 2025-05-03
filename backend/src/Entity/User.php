@@ -47,6 +47,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['classic', 'admin'])]
     private ?string $profilePicture = null;
 
+    #[ORM\Column]
+    #[Groups(['admin'])]
+    private ?bool $active = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +158,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfilePicture(?string $profilePicture): static
     {
         $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }

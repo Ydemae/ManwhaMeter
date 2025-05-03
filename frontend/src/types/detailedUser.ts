@@ -5,4 +5,5 @@ export type DetailedUser = {
     createdAt : string | null;
     updatedAt : string | null;
     password : string | null;
+    active : boolean;
 }
