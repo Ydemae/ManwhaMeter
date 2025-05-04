@@ -10,6 +10,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
+                <li *ngIf="userIsConnected && isAdmin" class="nav-item">
+                    <a class="nav-link" routerLink="/admin">Admin board</a>
+                </li>
                 <li *ngIf="userIsConnected" class="nav-item">
                     <a class="nav-link" routerLink="/booklist">General ranking</a>
                 </li>
@@ -22,7 +25,7 @@
                     <a *ngIf="!userIsConnected" class="nav-link" routerLink="/login">Connexion</a>
                 </li>
                 <li class="nav-item">
-                    <img *ngIf="userIsConnected" (click)="disconnectUser()" class="marginSides img-button" src="assets/log_out.png" alt="déconnexion" style="width: 2rem;">
+                    <img *ngIf="userIsConnected" (click)="disconnectUser()" class="marginSides img-button" src="assets/log_out.png" alt="log out" style="width: 2rem;">
                 </li>
             </ul>
         </div>

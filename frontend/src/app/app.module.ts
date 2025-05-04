@@ -25,6 +25,10 @@ import { RatingFormComponent } from './rating-form/rating-form.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { PersonalRankingComponent } from './personal-ranking/personal-ranking.component';
 import { BookRankingComponent } from './book-ranking/book-ranking.component';
+import { RegisterComponent } from './register/register.component';
+import { AdminBoardComponent } from './admin-board/admin-board.component';
+import { InviteTrackerComponent } from './invite-tracker/invite-tracker.component';
+import { UserListComponent } from './user-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,11 @@ import { BookRankingComponent } from './book-ranking/book-ranking.component';
     RatingFormComponent,
     ConfirmModalComponent,
     PersonalRankingComponent,
-    BookRankingComponent
+    BookRankingComponent,
+    RegisterComponent,
+    AdminBoardComponent,
+    InviteTrackerComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,

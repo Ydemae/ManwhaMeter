@@ -1,0 +1,77 @@
+<div>
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+    </div>
+
+    <ng-template #NotFetched>
+        <div class="alert alert-dismissible alert-secondary">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            Data is being fetched from the server, please wait.
+        </div>
+    </ng-template>
+
+    <ng-container *ngIf="this.dataFetched else NotFetched">
+        <button class="btn btn-primary" (click)="createInvite()">Create invite</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>uid</th>
+                    <th>creation date</th>
+                    <th>expiration date</th>
+                    <th>used</th>
+                    <th>delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let invite of this.invites; let i = index">
+                    <tr>
+                        <td>{{invite.uid}}</td>
+                        <td>{{fromatDate(invite.createdAt)}}</td>
+                        <td>{{fromatDate(invite.exp_date)}}</td>
+                        <td>{{invite.used}}</td>
+                        <td><button class="btn btn-danger" (click)="onDeleteInviteClicked(i)">Delete</button></td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </ng-container>
+
+    <ng-template #CreatedInviteModal>
+        <div class="modal-dialog m-0 p-00" role="document">
+            <div class="modal-content m-0 p-0">
+                <div class="modal-header">
+                    <h5 class="modal-title">Created invite</h5>
+                    <button type="button" class="btn d-flex ms-auto" (click)="this.closeInviteModal()" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-11">
+                            <input type="text" class="form-control m-0" [value]="appUrl + '/register/' + createdInvite?.uid">
+                        </div>
+                        <div class="col-1 copy-img-container">
+                            <img (click)="copyInviteToClipboard()" class="marginSides img-button center-me copy-img" src="assets/copy.png" alt="copy link">
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div *ngIf="copied" class="ms-auto">copied !</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="this.closeInviteModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #ConfirmationModal>
+        <app-confirm-modal
+        [title]="'Invite deletion'"
+        [text]="'You are about to delete the invite with uid [' + this.invites![this.inviteToDeleteId!].uid + '] , do you confirm ?'"
+        (cancelEmitter)="this.closeConfirmationModal()"
+        (confirmEmitter)="this.deleteInvite()"
+        *ngIf="this.invites != null && this.inviteToDeleteId != null"
+        ></app-confirm-modal>
+    </ng-template>
+</div>

@@ -1,0 +1,64 @@
+<div>
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+    </div>
+
+    <ng-template #NotFetched>
+        <div class="alert alert-dismissible alert-secondary">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            Data is being fetched from the server, please wait.
+        </div>
+    </ng-template>
+
+    <ng-container *ngIf="this.dataFetched else NotFetched">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>uid</th>
+                    <th>created at</th>
+                    <th>updated at</th>
+                    <th>deactivate/reactivate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let user of this.users; let i = index">
+                    <tr>
+                        <td>{{user.username}}</td>
+                        <td>{{formatDate(user.createdAt!)}}</td>
+                        <td>{{formatDate(user.updatedAt!)}}</td>
+                        <td>
+                            <ng-container *ngIf="user.active else UserReactivation">
+                                <button class="btn btn-danger" (click)="this.onDeactivateUserClicked(user)">Deactivate</button>
+                            </ng-container>
+                            <ng-template #UserReactivation>
+                                <button class="btn btn-primary" (click)="this.onReactivateUserClicked(user)">Reactivate</button>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </ng-container>
+
+    <ng-template #DeactivationConfirmationModal>
+        <app-confirm-modal
+        [title]="'User deactivation'"
+        [text]="'You are about to deactivate the user with username [' + this.userToDeactivate!.username + '] , do you confirm ? The account may be reactivated later on.'"
+        (cancelEmitter)="this.closeDeactivationConfirmationModal()"
+        (confirmEmitter)="this.deactivate()"
+        *ngIf="this.users && this.userToDeactivate"
+        ></app-confirm-modal>
+    </ng-template>
+
+    <ng-template #ReactivationConfirmationModal>
+        <app-confirm-modal
+        [title]="'User reactivation'"
+        [text]="'You are about to reactivate the user with username [' + this.userToReactivate!.username + '] , do you confirm ? Keep in mind, the account may have been disabled for a reason..'"
+        (cancelEmitter)="this.closeReactivationConfirmationModal()"
+        (confirmEmitter)="this.reactivate()"
+        *ngIf="this.users && this.userToReactivate"
+        ></app-confirm-modal>
+    </ng-template>
+</div>

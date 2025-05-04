@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
@@ -24,7 +25,7 @@ class UserFixtures extends Fixture
                 [
                     "username" => "admin",
                     "password" => "admin",
-                    "roles" => ["ROLE_USER", "ROLE_ADMIN"],
+                    "roles" => ["ROLE_USER", "ROLE_ADMIN"]
                 ],
                 [
                     "username" => "user",
@@ -39,6 +40,7 @@ class UserFixtures extends Fixture
                 $createdUser = new User();
                 $createdUser->setUsername($user["username"]);
                 $createdUser->setRoles($user["roles"]);
+                $createdUser->setCreatedAt(new DateTimeImmutable());
     
                 $hashedPassword = $passwordHasher->hash(
                     $user["password"]
