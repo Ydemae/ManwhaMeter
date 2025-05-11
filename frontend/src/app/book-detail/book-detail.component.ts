@@ -1,7 +1,7 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { DetailedBook } from '../../types/detailedBook';
 import { BookService } from '../services/book/book.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../environments/environments';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { RatingService } from '../services/rating/rating.service';
@@ -24,6 +24,9 @@ export class BookDetailComponent {
 
   private deleteOtherConfirmModalRef! : NgbModalRef;
   @ViewChild('deleteOtherRatingConfirmModal') deleteOtherConfirmModalTemplate!: TemplateRef<any>;
+
+  private deleteBookConfirmModalRef! : NgbModalRef;
+  @ViewChild('deleteBookConfirmModal') deleteBookConfirmModalTemplate!: TemplateRef<any>;
 
   public bookFetched = false;
   public personalRatingFetched = false;
@@ -52,7 +55,8 @@ export class BookDetailComponent {
     private bookService : BookService,
     private route: ActivatedRoute,
     private modalService : NgbModal,
-    private ratingService : RatingService
+    private ratingService : RatingService,
+    private router : Router
   ){
   }
 
@@ -311,6 +315,43 @@ export class BookDetailComponent {
     .catch(
       (error) => {
         this.displayError("Unexpected error", "Could not delete this rating");
+      }
+    )
+  }
+
+
+  onDeleteBookClicked(){
+    this.openDeleteBookConfirmModal();
+  }
+
+  openDeleteBookConfirmModal(){
+    this.deleteBookConfirmModalRef = this.modalService.open(this.deleteBookConfirmModalTemplate);
+  }
+
+
+  closeDeleteBookConfirmModal(){
+    if (this.deleteBookConfirmModalRef){
+      this.deleteBookConfirmModalRef.close();
+    }
+  }
+
+  deleteBook(){
+    this.closeDeleteBookConfirmModal()
+
+    if (!this.book || !this.book.id){
+      return
+    }
+
+    this.bookService.delete(this.book.id).then(
+      (response) => {
+        if (response){
+          this.router.navigate(["/booklist"]);
+        }
+      }
+    )
+    .catch(
+      (error) => {
+        this.displayError("Unexpected error", "Could not delete this book due to an unknown error");
       }
     )
   }

@@ -376,13 +376,13 @@ final class BookController extends AbstractController
 
         $em->remove($bookToDelete);
         $em->flush();
-        
+
         $imageRemovedSuccesfully = $imageManager->deleteImage($image_path);
 
         if (!$imageRemovedSuccesfully){
-            return $this->json(["result" => "error", "error" => "The image couldn't be removed, but the book was deleted"]);
+            return $this->json(["result" => "error", "error" => "The image couldn't be removed, but the book was deleted"], 201);
         }
-        
+
         return $this->json(["result" => "success"]);
     }
 }

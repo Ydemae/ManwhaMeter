@@ -212,4 +212,41 @@ export class BookService {
       });
     })
   }
+
+  delete(
+    book_id: number
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this._http.post<HttpResponse<any>>(
+        `${this.apiUrl}/books/delete`,
+        {id : book_id},
+        {
+          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.log("Unexpected error caught when attempting to delete book");
+          }
+
+          reject();
+          return throwError(() => { });
+        })
+      ).subscribe((response: HttpResponse<any>) => {
+        if (response) {
+          const body = response.body as { result: string, error: string | null }
+
+          resolve(body["result"] === "success");
+        }
+        else {
+          console.log("Error caught when attempting to delete the book");
+          reject();
+        }
+      });
+    })
+  }
 }

@@ -32,6 +32,9 @@
         <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot">
             <button type="button" class="btn btn-primary" (click)="this.openCreateRatingModal()">Rate this book</button>
         </div>
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot">
+            <button type="button" class="btn btn-danger" (click)="this.onDeleteBookClicked()">Delete this book</button>
+        </div>
 
         <div>
             <h3 class="text-center">Your rating</h3>
@@ -69,6 +72,15 @@
         [text]="`You are about to delete the following rating, do you confirm ? <br><br>Comment :<br> ${this.otherRatingToBeDeletedComment}`"
         (cancelEmitter)="this.closeOtherDeleteRatingConfirmModal()"
         (confirmEmitter)="this.deleteOtherRating()"
+        ></app-confirm-modal>
+    </ng-template>
+
+    <ng-template #deleteBookConfirmModal>
+        <app-confirm-modal
+        [title]="'Book deletion'"
+        [text]="`You are about to delete the book with name ${this.book!.name}, do you confirm ?`"
+        (cancelEmitter)="this.closeDeleteBookConfirmModal()"
+        (confirmEmitter)="this.deleteBook()"
         ></app-confirm-modal>
     </ng-template>
 </div>
