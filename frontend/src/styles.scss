@@ -1,17 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
-$primary: #B45309;
-$secondary: #5A3E2B;
-$danger: #8C1C13;
-$warning : #D97706;
+$primary: #1f4d48;
+$secondary: #fcf1ca;
+//$danger: #8C1C13;
+//$warning : #D97706;
 $body-bg: #1C1B18;
-$body-color: #fff;
+$body-color: $secondary;
 
 @use "bootstrap/scss/bootstrap" with (
   $primary: $primary,
   $secondary: $secondary,
-  $danger: $danger,
-  $warning: $warning,
+  //$danger: $danger,
+  //$warning: $warning,
   $body-bg: $body-bg,
   $body-color: $body-color,
   $table-color: $body-color
