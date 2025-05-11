@@ -19,9 +19,6 @@ export class ConfirmModalComponent {
   @Input()
   public title! : string;
 
-  ngOnInit(){
-    
-  }
 
   onCancel(){
     this.cancelEmitter.emit()

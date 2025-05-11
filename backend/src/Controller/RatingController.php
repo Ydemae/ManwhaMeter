@@ -240,7 +240,7 @@ final class RatingController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'rating_delete', methods: ["GET"])]
-    public function delete(int $id, AuthService $authService, Request $request, EntityManagerInterface $em, RatingRepository $ratingRepository): Response
+    public function delete(int $id, AuthService $authService, Request $request, EntityManagerInterface $em, RatingRepository $ratingRepository, UserRepository $userRepository): Response
     {
         $userData = [];
         try{
@@ -253,13 +253,25 @@ final class RatingController extends AbstractController
         $userId = $userData["user_id"];
         
 
+        $user = $userRepository->findOneBy(["id" => $userId]);
+
+        if ($user == null){
+            //Voluntarily misleading error message, in order to avoid giving indications to people bruteforcing with custom made tokens
+            return $this->json(["result" => "error", "error" => "Access denied"], 401);
+        }
+
+        $isAdmin = False;
+        if (in_array("ROLE_ADMIN", $user->getRoles())){
+            $isAdmin = True;
+        }
+
         $rating = $ratingRepository->findOneBy(["id" => $id]);
 
         if ($rating == null){
             return $this->json(["result" => "error", "error" => "No rating exists with rating id prodivded"], 400);
         }
 
-        if ($rating->getUser()->getId() != $userId){
+        if ($rating->getUser()->getId() != $userId && !$isAdmin){
             return $this->json(["result" => "error", "error" => "You are not allowed to delete someone else's rating"], 401);
         }
 

@@ -20,7 +20,10 @@ export class BookDetailComponent {
   @ViewChild('ratingModal') ratingModalTemplate!: TemplateRef<any>;
 
   private confirmModalRef! : NgbModalRef;
-  @ViewChild('deleteRatingConfirmModal') confirmModalTemplate!: TemplateRef<any>;
+  @ViewChild('deletePersonalRatingConfirmModal') confirmModalTemplate!: TemplateRef<any>;
+
+  private deleteOtherConfirmModalRef! : NgbModalRef;
+  @ViewChild('deleteOtherRatingConfirmModal') deleteOtherConfirmModalTemplate!: TemplateRef<any>;
 
   public bookFetched = false;
   public personalRatingFetched = false;
@@ -40,6 +43,10 @@ export class BookDetailComponent {
   public errMessage = "";
 
   public bookRatingToUpdate : RatingData | null = null
+
+  public otherRatingToBeDeletedComment : string = "";
+  public identifierOtherRatingToBeDeleted? : number;
+  public indexOtherRatingToBeDeleted? : number;
 
   constructor(
     private bookService : BookService,
@@ -260,6 +267,50 @@ export class BookDetailComponent {
     .catch(
       (error) => {
         this.displayError("Unexcpected error", "Could not delete your rating");
+      }
+    )
+  }
+
+  onDeleteOtherClicked(event :  [number, number]){
+    this.identifierOtherRatingToBeDeleted = event[0];
+    this.indexOtherRatingToBeDeleted = event[1];
+    this.otherRatingToBeDeletedComment = this.book?.ratings[this.indexOtherRatingToBeDeleted].comment!;
+    this.openOtherDeleteRatingConfirmModal();
+  }
+
+  openOtherDeleteRatingConfirmModal(){
+    this.deleteOtherConfirmModalRef = this.modalService.open(this.deleteOtherConfirmModalTemplate);
+  }
+
+
+  closeOtherDeleteRatingConfirmModal(){
+    if (this.deleteOtherConfirmModalRef){
+      this.deleteOtherConfirmModalRef.close();
+      this.indexOtherRatingToBeDeleted = undefined;
+      this.identifierOtherRatingToBeDeleted = undefined;
+      this.otherRatingToBeDeletedComment = "";
+    }
+  }
+
+  deleteOtherRating(){
+    this.closeDeleteRatingConfirmModal()
+
+    if (!this.identifierOtherRatingToBeDeleted || ! this.indexOtherRatingToBeDeleted){
+      return
+    }
+
+    if (this.book?.ratings[this.indexOtherRatingToBeDeleted].id != this.identifierOtherRatingToBeDeleted){
+      return;
+    }
+
+    this.ratingService.delete(this.identifierOtherRatingToBeDeleted).then(
+      (response) => {
+        this.book?.ratings.splice(this.identifierOtherRatingToBeDeleted!, 1);
+      }
+    )
+    .catch(
+      (error) => {
+        this.displayError("Unexpected error", "Could not delete this rating");
       }
     )
   }

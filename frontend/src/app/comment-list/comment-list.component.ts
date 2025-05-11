@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Rating } from '../../types/rating';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-comment-list',
@@ -10,4 +11,19 @@ import { Rating } from '../../types/rating';
 export class CommentListComponent {
   @Input()
   public ratingsList! : Rating[];
+
+  @Output()
+  public deleteEmitter = new EventEmitter<[number, number]>();
+
+  constructor(
+    private authService : AuthService
+  ){}
+
+  isAdmin() : boolean{
+    return this.authService.isAdminSubject.value
+  }
+
+  onDeleteButtonClicked(identifier : number, index : number){
+    this.deleteEmitter.emit([identifier, index]);
+  }
 }

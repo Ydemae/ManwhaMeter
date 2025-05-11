@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center">
-    <ng-container *ngFor="let rating of this.ratingsList">
-        <app-comment [rating]="rating" class="flex-grow-1 m-2"></app-comment>
+    <ng-container *ngFor="let rating of this.ratingsList; let i = index">
+        <app-comment [rating]="rating" class="flex-grow-1 m-2" [canDelete]="this.isAdmin()" (deleteButtonClicked)="onDeleteButtonClicked(rating.id, i)"></app-comment>
     </ng-container>
 </div>
