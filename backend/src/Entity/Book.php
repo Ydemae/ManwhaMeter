@@ -59,11 +59,18 @@ class Book
     #[Groups(['classic', 'rating'])]
     private ?BookType $bookType = null;
 
+    /**
+     * @var Collection<int, BookReport>
+     */
+    #[ORM\OneToMany(targetEntity: BookReport::class, mappedBy: 'book', orphanRemoval: true)]
+    private Collection $bookReports;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->ratings = new ArrayCollection();
         $this->Comment = new ArrayCollection();
+        $this->bookReports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,6 +200,36 @@ class Book
     public function setBookType(?BookType $bookType): static
     {
         $this->bookType = $bookType;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BookReport>
+     */
+    public function getBookReports(): Collection
+    {
+        return $this->bookReports;
+    }
+
+    public function addBookReport(BookReport $bookReport): static
+    {
+        if (!$this->bookReports->contains($bookReport)) {
+            $this->bookReports->add($bookReport);
+            $bookReport->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookReport(BookReport $bookReport): static
+    {
+        if ($this->bookReports->removeElement($bookReport)) {
+            // set the owning side to null (unless already changed)
+            if ($bookReport->getBook() === $this) {
+                $bookReport->setBook(null);
+            }
+        }
 
         return $this;
     }

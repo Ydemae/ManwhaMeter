@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RatingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -48,6 +50,17 @@ class Rating
     #[ORM\Column(length: 2000, nullable: true)]
     #[Groups(['classic', 'rating'])]
     private ?string $comment = null;
+
+    /**
+     * @var Collection<int, RatingReport>
+     */
+    #[ORM\OneToMany(targetEntity: RatingReport::class, mappedBy: 'rating', orphanRemoval: true)]
+    private Collection $ratingReports;
+
+    public function __construct()
+    {
+        $this->ratingReports = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -146,6 +159,36 @@ class Rating
     public function setComment(?string $comment): static
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RatingReport>
+     */
+    public function getRatingReports(): Collection
+    {
+        return $this->ratingReports;
+    }
+
+    public function addRatingReport(RatingReport $ratingReport): static
+    {
+        if (!$this->ratingReports->contains($ratingReport)) {
+            $this->ratingReports->add($ratingReport);
+            $ratingReport->setRating($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRatingReport(RatingReport $ratingReport): static
+    {
+        if ($this->ratingReports->removeElement($ratingReport)) {
+            // set the owning side to null (unless already changed)
+            if ($ratingReport->getRating() === $this) {
+                $ratingReport->setRating(null);
+            }
+        }
 
         return $this;
     }
