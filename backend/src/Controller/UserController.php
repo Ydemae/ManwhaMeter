@@ -74,8 +74,7 @@ final class UserController extends AbstractController
     #[Route('/create', name: 'user_create', methods: ["POST"])]
     public function create(Request $request, EntityManagerInterface $em, PasswordHasherFactoryInterface $passwordHasherFactoryInterface, RegisterInviteRepository $registerInviteRepository): Response
     {
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("invite", $body)){
             return $this->json(["result" => "error", "error" => "No invite_uid provided for creation"], 400);
@@ -132,8 +131,7 @@ final class UserController extends AbstractController
         }
         $userId = $userData["user_id"];
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("userId", $body)){
             return $this->json(["result" => "error", "error" => "No userId provided for user update"], 400);
@@ -193,8 +191,7 @@ final class UserController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("user_id", $body)){
             return $this->json(["result" => "error", "error" => "No user_id provided for user deletion"], 400);
@@ -230,8 +227,7 @@ final class UserController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("user_id", $body)){
             return $this->json(["result" => "error", "error" => "No user_id provided for user deactivation"], 400);
@@ -267,8 +263,7 @@ final class UserController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("user_id", $body)){
             return $this->json(["result" => "error", "error" => "No user_id provided for user reactivation"], 400);
@@ -291,8 +286,7 @@ final class UserController extends AbstractController
     #[Route('/username_exists', name: 'username_exists', methods: ["POST"])]
     public function exists(Request $request, RegisterInviteRepository $registerInviteRepository, UserRepository $userRepository): Response
     {
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
 
         if (!array_key_exists("invite", $body)){

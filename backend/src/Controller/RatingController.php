@@ -101,8 +101,7 @@ final class RatingController extends AbstractController
 
         $userId = $userData["user_id"];
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
 
         if (!array_key_exists("book_id", $body)){
@@ -181,8 +180,7 @@ final class RatingController extends AbstractController
         }
         $userId = $userData["user_id"];
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
 
         if (!array_key_exists("rating_id", $body)){

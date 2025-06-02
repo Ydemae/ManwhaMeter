@@ -71,8 +71,7 @@ final class TagController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
         }
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
 
         if (!array_key_exists("label", $body)){
@@ -110,9 +109,7 @@ final class TagController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
-
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("id", $body)){
             return $this->json(["result" => "error", "error" => "No id provided for creation"], 400);
@@ -208,9 +205,7 @@ final class TagController extends AbstractController
             return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
         }
 
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
-
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("label", $body)){
             return $this->json(["result" => "error", "error" => "No label provided for search"], 400);

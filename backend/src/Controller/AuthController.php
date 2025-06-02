@@ -17,8 +17,7 @@ final class AuthController extends AbstractController
     #[Route('/getToken', name: 'token_get', methods: ["POST"])]
     public function getToken(Request $request, Security $security, AuthService $authService, UserRepository $userRepository): Response
     {
-        $raw_body = $request->getContent();
-        $body = json_decode($raw_body, true);
+        $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("username", $body)){
 

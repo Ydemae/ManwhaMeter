@@ -49,8 +49,7 @@ final class RegisterInviteController extends AbstractController
         $method = $request->getMethod();
 
         if ($method == 'POST'){
-            $raw_body = $request->getContent();
-            $body = json_decode($raw_body, true);
+            $body = $request->attributes->get("sanitized_body");
 
             if (array_key_exists("used", $body)){
                 if ($body["used"] != null && !is_bool($body["used"])){

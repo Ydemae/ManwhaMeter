@@ -29,6 +29,7 @@ import { RegisterComponent } from './register/register.component';
 import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { InviteTrackerComponent } from './invite-tracker/invite-tracker.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { TagCreateComponent } from './tag-create/tag-create.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { UserListComponent } from './user-list/user-list.component';
     RegisterComponent,
     AdminBoardComponent,
     InviteTrackerComponent,
-    UserListComponent
+    UserListComponent,
+    TagCreateComponent
   ],
   imports: [
     BrowserModule,
