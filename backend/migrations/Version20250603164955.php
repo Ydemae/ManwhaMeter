@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250601144305 extends AbstractMigration
+final class Version20250603164955 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,6 +20,8 @@ final class Version20250601144305 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE billboard_announcement (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+        , announcement_message CLOB NOT NULL, active BOOLEAN NOT NULL)');
         $this->addSql('CREATE TABLE book (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(1000) DEFAULT NULL, image_path VARCHAR(255) NOT NULL, is_active BOOLEAN NOT NULL, status VARCHAR(255) NOT NULL, book_type VARCHAR(255) NOT NULL)');
         $this->addSql('CREATE TABLE book_tag (book_id INTEGER NOT NULL, tag_id INTEGER NOT NULL, PRIMARY KEY(book_id, tag_id), CONSTRAINT FK_F2F4CE1516A2B381 FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_F2F4CE15BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_F2F4CE1516A2B381 ON book_tag (book_id)');
@@ -57,6 +59,7 @@ final class Version20250601144305 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('DROP TABLE billboard_announcement');
         $this->addSql('DROP TABLE book');
         $this->addSql('DROP TABLE book_tag');
         $this->addSql('DROP TABLE book_report');
