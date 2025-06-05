@@ -30,6 +30,10 @@ import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { InviteTrackerComponent } from './invite-tracker/invite-tracker.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { TagCreateComponent } from './tag-create/tag-create.component';
+import { BillboardComponent } from './billboard/billboard.component';
+import { AnnouncementComponent } from './announcement/announcement.component';
+import { LoaderComponent } from './loader/loader.component';
+import { AnnouncementCreateComponent } from './announcement-create/announcement-create.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +60,11 @@ import { TagCreateComponent } from './tag-create/tag-create.component';
     AdminBoardComponent,
     InviteTrackerComponent,
     UserListComponent,
-    TagCreateComponent
+    TagCreateComponent,
+    BillboardComponent,
+    AnnouncementComponent,
+    LoaderComponent,
+    AnnouncementCreateComponent
   ],
   imports: [
     BrowserModule,

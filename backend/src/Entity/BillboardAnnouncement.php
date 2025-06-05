@@ -12,7 +12,7 @@ class BillboardAnnouncement
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['admin'])]
+    #[Groups(['classic', 'admin'])]
     private ?int $id = null;
 
     #[ORM\Column]
@@ -21,11 +21,15 @@ class BillboardAnnouncement
 
     #[ORM\Column(length: 10000)]
     #[Groups(['classic', 'admin'])]
-    private ?string $announcementMessage = null;
+    private ?string $message = null;
 
     #[ORM\Column]
     #[Groups(['classic', 'admin'])]
     private ?bool $active = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['classic', 'admin'])]
+    private ?string $title = null;
 
     public function getId(): ?int
     {
@@ -44,14 +48,14 @@ class BillboardAnnouncement
         return $this;
     }
 
-    public function getAnnouncementMessage(): ?string
+    public function getMessage(): ?string
     {
-        return $this->announcementMessage;
+        return $this->message;
     }
 
-    public function setAnnouncementMessage(string $announcementMessage): static
+    public function setMessage(string $message): static
     {
-        $this->announcementMessage = $announcementMessage;
+        $this->message = $message;
 
         return $this;
     }
@@ -64,6 +68,18 @@ class BillboardAnnouncement
     public function setActive(bool $active): static
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
 
         return $this;
     }

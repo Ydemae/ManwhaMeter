@@ -1,0 +1,33 @@
+<div>
+    <h1>Billboard</h1>
+
+    <a routerLink="/announcement/create" class="btn btn-primary m-2">Create an annoucement</a>
+
+     <div class="alert alert-dismissible alert-success" *ngIf="this.flashMessage != ''">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlash()"></button>
+        {{ this.flashMessage }}
+    </div>
+
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+    </div>
+
+    <ng-container *ngIf="!this.dataFetched else DataFetched">
+        <app-loader></app-loader>
+    </ng-container>
+
+    <ng-template #DataFetched>
+        <app-announcement
+        class="m-1"
+        *ngFor="let announcement of this.announcements; let i = index"
+        [announcement]="announcement"
+        [arrayIndex]="i"
+        [canEdit]="this.isAdmin"
+        (deactivateEmitter)="deactivate($event)"></app-announcement>
+        <div class="alert alert-dismissible alert-info" *ngIf="announcements?.length == 0">
+            There is currently no announcement on the billboard.
+        </div>
+    </ng-template>
+</div>

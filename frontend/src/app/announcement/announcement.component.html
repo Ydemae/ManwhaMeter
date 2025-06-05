@@ -1,0 +1,9 @@
+<div class="card border-primary mb-3">
+    <div class="card-header d-flex"><strong>{{this.announcement.title}}</strong><div class="ms-auto">{{this.postedTimeAgo}} {{this.postedLabel}} ago</div></div>
+    <div class="card-body">
+        <p class="card-text" [innerHTML]="this.announcement.message"></p>
+    </div>
+    <div class="card-footer" *ngIf="canEdit">
+        <button type="button" class="btn btn-danger m-1" *ngIf="this.announcement.active == true" (click)="onDeactivateClicked()">Deactivate announcement</button>
+    </div>
+</div>

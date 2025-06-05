@@ -76,19 +76,27 @@ final class BillboardController extends AbstractController
         if (!array_key_exists("message", $body)){
             return $this->json(["result" => "error", "error" => "No message provided for billboard announcement creation"], 400);
         }
+        if (!array_key_exists("title", $body)){
+            return $this->json(["result" => "error", "error" => "No title provided for billboard announcement creation"], 400);
+        }
+
         $message = $body["message"];
+        $title = $body["title"];
 
         $active = true;
         if (array_key_exists("active", $body)){
             $active = $body["active"];
         }
 
-        $user = new BillboardAnnouncement();
-        $user->setCreatedAt(new DateTimeImmutable());
-        $user->setActive($active);
-        $user->setAnnouncementMessage($message);
+        //$message = nl2br($message);
 
-        $em->persist($user);
+        $announcement = new BillboardAnnouncement();
+        $announcement->setCreatedAt(new DateTimeImmutable());
+        $announcement->setActive($active);
+        $announcement->setMessage($message);
+        $announcement->setTitle($title);
+
+        $em->persist($announcement);
         $em->flush();
 
         return $this->json(["result" => "success"]);

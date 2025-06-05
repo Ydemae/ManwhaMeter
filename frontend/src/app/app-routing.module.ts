@@ -8,6 +8,7 @@ import { BookCreateComponent } from './book-create/book-create.component';
 import { PersonalRankingComponent } from './personal-ranking/personal-ranking.component';
 import { RegisterComponent } from './register/register.component';
 import { AdminBoardComponent } from './admin-board/admin-board.component';
+import { AnnouncementCreateComponent } from './announcement-create/announcement-create.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'bookdetail/:id', component: BookDetailComponent },
   { path: 'bookcreate', component: BookCreateComponent },
   { path: 'admin', component: AdminBoardComponent },
+  { path: 'announcement/create', component: AnnouncementCreateComponent },
 ];
 
 @NgModule({

@@ -30,7 +30,7 @@ class RequestListener
         if (!empty($data)){
             try{
                 $jsonDecoded = json_decode($data, true);
-            
+
                 $sanitizedBody = [];
 
                 foreach ($jsonDecoded as $key => $value){
@@ -90,6 +90,7 @@ class RequestListener
     }
 
     public function sanitizeString(string $toSanitize) : string{
-        return preg_replace("/[^A-Za-z0-9\ \-\.\!\^\']/", '', $toSanitize);
+        $toSanitize = nl2br($toSanitize);
+        return preg_replace("/[^A-Za-z0-9\ \-\.\!\^\'\(\)\<\>]/", '', $toSanitize);
     }
 }
