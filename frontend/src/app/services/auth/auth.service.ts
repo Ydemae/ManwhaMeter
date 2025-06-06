@@ -24,7 +24,7 @@ export class AuthService {
     private flashMessageService : FlashMessageService
   ) {
     this.isLoggedInSubject.next(!!localStorage.getItem('token'));
-    this.isAdminSubject.next(!!localStorage.getItem('isAdmin'));
+    this.isAdminSubject.next(localStorage.getItem('isAdmin') == 'true');
   }
 
   logout(){
