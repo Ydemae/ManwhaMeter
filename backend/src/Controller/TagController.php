@@ -63,12 +63,17 @@ final class TagController extends AbstractController
     #[Route('/create', name: 'tag_create', methods: ["POST"])]
     public function create(AuthService $authService, Request $request, EntityManagerInterface $em): Response
     {
+        $userData = [];
         try{
-            $authService->authenticateByToken($request);
+            $userData = $authService->authenticateByToken($request);
         }
         catch(Exception $e){
             $errorMessage = $e->getMessage();
             return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        }
+
+        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $body = $request->attributes->get("sanitized_body");

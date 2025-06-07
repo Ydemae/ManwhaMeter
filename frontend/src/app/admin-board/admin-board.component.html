@@ -1,8 +1,40 @@
-<div class="row content-wrapper">
-    <div class="col-sm-12 col-md-6">
-        <app-invite-tracker></app-invite-tracker>
-    </div>
-    <div class="col-sm-12 col-md-6">
-        <app-user-list></app-user-list>
+<div class="content-wrapper">
+    <div class="accordion" id="accordionAdmin">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Invites
+            </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionAdmin">
+                <div class="accordion-body">
+                    <app-invite-tracker></app-invite-tracker>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Users
+            </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionAdmin">
+                <div class="accordion-body">
+                    <app-user-list></app-user-list>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Tags
+            </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionAdmin">
+                <div class="accordion-body">
+                    <app-tag-list></app-tag-list>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

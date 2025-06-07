@@ -29,11 +29,12 @@ import { RegisterComponent } from './register/register.component';
 import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { InviteTrackerComponent } from './invite-tracker/invite-tracker.component';
 import { UserListComponent } from './user-list/user-list.component';
-import { TagCreateComponent } from './tag-create/tag-create.component';
 import { BillboardComponent } from './billboard/billboard.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { LoaderComponent } from './loader/loader.component';
 import { AnnouncementCreateComponent } from './announcement-create/announcement-create.component';
+import { TagCreateModalComponent } from './tag-create-modal/tag-create-modal.component';
+import { TagListComponent } from './tag-list/tag-list.component';
 
 @NgModule({
   declarations: [
@@ -60,11 +61,12 @@ import { AnnouncementCreateComponent } from './announcement-create/announcement-
     AdminBoardComponent,
     InviteTrackerComponent,
     UserListComponent,
-    TagCreateComponent,
     BillboardComponent,
     AnnouncementComponent,
     LoaderComponent,
-    AnnouncementCreateComponent
+    AnnouncementCreateComponent,
+    TagCreateModalComponent,
+    TagListComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,44 @@
+<div>
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+    </div>
+
+    <ng-template #NotFetched>
+        <app-loader></app-loader>
+    </ng-template>
+
+    <ng-container *ngIf="this.dataFetched else NotFetched">
+        <div>
+            <button type="button" class="btn btn-primary" (click)="this.onCreateTagClicked()">Create tag</button>
+        </div>
+
+        <div class="row">
+            <ng-container *ngFor="let tag of this.tags; let i = index">
+                <div class="card border-primary mb-3" style="width: 20rem;">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">{{tag.label}}</h4>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-danger" (click)="this.onDeleteTagClicked(i)">Delete</button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <ng-template #DeletionConfirmationModal>
+        <app-confirm-modal
+        [title]="'Tag deletion'"
+        [text]="'You are about to delete the ' + this.tags[this.tagIdToDelete!].label  +' tag, do you confirm ?'"
+        (cancelEmitter)="this.closeDeletionConfirmationModal()"
+        (confirmEmitter)="this.delete()"
+        *ngIf="this.tags && this.tagIdToDelete"
+        ></app-confirm-modal>
+    </ng-template>
+
+    <ng-template #CreationModal>
+        <app-tag-create-modal (closeModalEmitter)="this.closeCreationModal()" (submitDataEmitter)="this.create($event)"></app-tag-create-modal>
+    </ng-template>
+</div>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagCreateComponent } from './tag-create.component';
+import { TagCreateModalComponent } from './tag-create-modal.component';
 
-describe('TagCreateComponent', () => {
-  let component: TagCreateComponent;
-  let fixture: ComponentFixture<TagCreateComponent>;
+describe('TagCreateModalComponent', () => {
+  let component: TagCreateModalComponent;
+  let fixture: ComponentFixture<TagCreateModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TagCreateComponent]
+      declarations: [TagCreateModalComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TagCreateComponent);
+    fixture = TestBed.createComponent(TagCreateModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
