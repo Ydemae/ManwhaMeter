@@ -55,19 +55,29 @@ export class SearchFiltersComponent {
     this.emitFilterChanges()
   }
 
-  onSelectedStatusChange(event : Event){
-    const target = event.target as HTMLInputElement;
-    this.filtersValues.status = this.extractEntityIdFromHtmlId(target.id);
-    this.emitFilterChanges()
-  }
-
-  onSelectedBookTypeChange(event : Event){
-    const target = event.target as HTMLInputElement;
-    this.filtersValues.bookType = this.extractEntityIdFromHtmlId(target.id);
-    this.emitFilterChanges()
-  }
-
   extractEntityIdFromHtmlId(htmlId : string) : string{
     return htmlId.split(";")[1]
+  }
+
+  onSelectStatus(status : string, inputElement : HTMLInputElement){
+    if (status != this.filtersValues.status){
+      this.filtersValues.status = status;
+    }
+    else{
+      this.filtersValues.status = null;
+      inputElement.checked = false;
+    }
+    this.emitFilterChanges()
+  }
+
+  onSelectBookType(booktype : string, inputElement : HTMLInputElement){
+    if (booktype != this.filtersValues.bookType){
+      this.filtersValues.bookType = booktype;
+    }
+    else{
+      this.filtersValues.bookType = null;
+      inputElement.checked = false;
+    }
+    this.emitFilterChanges()
   }
 }
