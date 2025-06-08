@@ -180,12 +180,12 @@ class Book
         return $this;
     }
 
-    public function getBookStatus(): ?BookStatus
+    public function getStatus(): ?BookStatus
     {
         return $this->status;
     }
 
-    public function setBookStatus(?BookStatus $status): static
+    public function setStatus(?BookStatus $status): static
     {
         $this->status = $status;
 

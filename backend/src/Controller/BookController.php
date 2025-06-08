@@ -177,7 +177,6 @@ final class BookController extends AbstractController
 
         $userId = $userData["user_id"];
 
-
         $book = $bookRepository->findOneBy(["id" => $id]);
 
         if ($book == null){
@@ -319,7 +318,7 @@ final class BookController extends AbstractController
         $book->setDescription($bookDescription);
         $book->setImagePath($imageName);
         $book->setBookType($bookType);
-        $book->setBookStatus($status);
+        $book->setStatus($status);
 
         $book->setIsActive(true);
     
@@ -330,6 +329,160 @@ final class BookController extends AbstractController
         $em->persist($book);
         $em->flush();
 
+        return $this->json(["result" => "success"]);
+    }
+
+    #[Route('/update', name: 'book_update', methods: ["POST"])]
+    public function updateBook(Request $request, AuthService $authService, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager, TagRepository $tagRepository){
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        $body = $request->attributes->get("sanitized_body");
+
+        if (!array_key_exists("id", $body)){
+            return $this->json(["result" => "error", "error" => "No id provided"], 400);
+        }
+        $id = $body["id"];
+
+        //Check book existence
+        $book = $bookRepository->findOneBy(["id" => $id]);
+
+        if ($book == null){
+            return $this->json(["result" => "error", "error" => "Book with provided id couldn't be found"], 400);
+        }
+
+        //Name validation
+        $name = null;
+        if (array_key_exists("name", $body)){
+            $name = $body["name"];
+
+            //checking name availability
+            $bookFound = $bookRepository->findOneBy(["name" => $name]);
+
+            if ($bookFound != null){
+                return $this->json(["result" => "error", "error" => "Provided name is already used"], 400);
+            }
+        }
+
+        //Description validation
+        $description = null;
+        if (array_key_exists("description", $body)){
+            $description = $body["description"];
+
+            if ($description == ""){
+                return $this->json(["result" => "error", "error" => "Provided description mustn(t be empty"], 400);
+            }
+        }
+
+
+        //Image validation
+        $image = null;
+        if (array_key_exists("image", $body)){
+            $image = $body["image"];
+
+            try{
+                $is_base_64 = base64_encode(base64_decode($image)) == $image;
+                if (!$is_base_64){
+                    return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"]);
+                }
+            }
+            catch(Exception $e){
+                return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"]);
+            }
+        }
+
+        $tagsIds = null;
+        if (array_key_exists("tags_ids", $body)){
+            $tagsIds = $body["tags_ids"];
+        }
+
+        //Booktype validation
+        $bookType = null;
+        if (array_key_exists("book_type", $body)){
+            $bookType = $body["book_type"];
+
+            if ($bookType !== null){
+                try {
+                    $bookType = BookType::from($bookType);
+                } catch (ValueError $e) {
+                    return $this->json(["result" => "error","error" => "Incorrect book type"]);
+                }
+            }
+        }
+
+        //Status validation
+        $status = null;
+        if (array_key_exists("status", $body)){
+            $status = $body["status"];
+
+
+            if ($status !== null){
+                try {
+                    $status = BookStatus::from($status);
+                } catch (ValueError $e) {
+                    return $this->json(["result" => "error","error" => "Incorrect book status"]);
+                }
+            }
+        }
+
+
+        if ($tagsIds != null){
+
+            //Validate tags existence
+            $tags = $tagRepository->findBy(["id" => $tagsIds]);
+
+            if (Count($tags) != Count($tagsIds)){
+                return $this->json(["result" => "error", "error" => "At least one tag provided does not exist"]);
+            }
+
+            //Setting new tags
+
+            $book->getTags()->clear();
+
+            foreach ($tags as $tag){
+                $book->addTag($tag);
+            }
+        }
+
+        if ($image != null){
+            //Deleting old image
+            $imageManager->deleteImage($book->getImagePath());
+
+            //Creating new image
+            $imageName = $imageManager->saveBase64ImageInJpegFormat($image);
+
+            if ($imageName == null){
+                return $this->json(["result" => "error", "error" => "Unknown error occured when saving the image"], 500);
+            }
+
+            $book->setImagePath($imageName);
+        }
+
+        //Setting new name, description, bookType, bookStatus
+
+        if ($name != null){
+            $book->setName($name);
+        }
+        if ($description != null){
+            $book->setDescription($description);
+        }
+        if ($bookType != null){
+            $book->setBookType($bookType);
+        }
+        if ($status != null){
+            $book->setStatus($status);
+        }
+
+        $em->flush();
         return $this->json(["result" => "success"]);
     }
 

@@ -1,8 +1,16 @@
-<div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
-    <h4 class="alert-heading">{{ this.errTitle }}</h4>
-    {{ this.errMessage }}
+<div class="content-wrapper">
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+    </div>
+
+    <div class="alert alert-dismissible alert-success" *ngIf="this.flashMessage != null">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{this.flashMessage}}
+    </div>
 </div>
+
 <div class="margin-top d-flex justify-content-center">
     <ng-template #NotFetched>
         <div class="alert alert-dismissible alert-secondary">
@@ -23,8 +31,8 @@
                 <div class="margin-bot">
                     <span class="badge tiny-margin-right" *ngFor="let tag of book?.tags; let i = index" [ngClass]="{ 'bg-primary': i<3, 'bg-secondary': i>=3 }">{{tag.label}}</span>
                 </div>
-                <span class="badge bg-success">{{book?.bookType?.label}}</span>
-                <span class="badge bg-success">{{book?.status?.label}}</span>
+                <span class="badge bg-success">{{book?.bookType}}</span>
+                <span class="badge bg-success">{{book?.status}}</span>
 
                 <p>{{ this.book?.description }}</p>
             </div>
@@ -32,7 +40,10 @@
         <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot">
             <button type="button" class="btn btn-primary" (click)="this.openCreateRatingModal()">Rate this book</button>
         </div>
-        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot">
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.isAdmin">
+            <a class="btn btn-secondary" [routerLink]="`/books/edit/${this.book!.id}`">Edit this book</a>
+        </div>
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.isAdmin">
             <button type="button" class="btn btn-danger" (click)="this.onDeleteBookClicked()">Delete this book</button>
         </div>
 

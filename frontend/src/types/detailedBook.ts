@@ -8,6 +8,6 @@ export type DetailedBook = {
     image_path : string;
     overall_rating : number;
     ratings : Array<Rating>;
-    status : {id : number, label : string};
-    bookType : {id : number, label : string};
+    status : string;
+    bookType : string;
 }

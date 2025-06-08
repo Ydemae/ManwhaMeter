@@ -6,6 +6,7 @@ import { ListedBook } from '../../../types/listedBook';
 import { DetailedBook } from '../../../types/detailedBook';
 import { Book } from '../../../types/book';
 import { AuthService } from '../auth/auth.service';
+import { BookType } from '../../../enum/bookType';
 
 @Injectable({
   providedIn: 'root'
@@ -207,6 +208,41 @@ export class BookService {
         }
         else {
           console.log("Error caught when attempting to create the book");
+          reject();
+        }
+      });
+    })
+  }
+
+  update( body : any ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this._http.post<HttpResponse<any>>(
+        `${this.apiUrl}/books/update`,
+        body,
+        {
+          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.log("Unexpected error caught when attempting to update book");
+          }
+
+          reject();
+          return throwError(() => { });
+        })
+      ).subscribe((response: HttpResponse<any>) => {
+        if (response) {
+          const body = response.body as { result: string, error: string | null }
+
+          resolve(body["result"] === "success");
+        }
+        else {
+          console.log("Error caught when attempting to update book");
           reject();
         }
       });

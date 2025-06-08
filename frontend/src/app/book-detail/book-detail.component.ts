@@ -8,6 +8,8 @@ import { RatingService } from '../services/rating/rating.service';
 import { RatingData } from '../../types/ratingData';
 import { Rating } from '../../types/rating';
 import { RatingModalOperation } from '../../enum/ratingModalOperation';
+import { FlashMessageService } from '../services/flashMessage/flash-message.service';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -38,6 +40,8 @@ export class BookDetailComponent {
 
   public ratingModalOperation = RatingModalOperation.CREATE;
 
+  public flashMessage! : string | null;
+
   //The user's rating on the book if it exists
   public personalRating : Rating | null = null;
 
@@ -51,17 +55,24 @@ export class BookDetailComponent {
   public identifierOtherRatingToBeDeleted? : number;
   public indexOtherRatingToBeDeleted? : number;
 
+  public isAdmin : boolean = false;
+
   constructor(
     private bookService : BookService,
     private route: ActivatedRoute,
     private modalService : NgbModal,
     private ratingService : RatingService,
-    private router : Router
-  ){
-  }
+    private router : Router,
+    private flashMessageService : FlashMessageService,
+    private authService : AuthService
+  ){}
 
   ngOnInit(){
+    this.isAdmin = this.authService.isAdminSubject.value;
+
     let stringBookId = this.route.snapshot.paramMap.get("id");
+
+    this.flashMessage = this.flashMessageService.getFlashMessage()
 
     if (stringBookId === null){
       //TO DO - manage error

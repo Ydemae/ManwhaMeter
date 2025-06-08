@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './book-create.component.scss'
 })
 export class BookCreateComponent {
-  public dataWasFetched = false;
+  public dataFetched = false;
   public allTagsList! : Tag[];
 
   public showError = false;

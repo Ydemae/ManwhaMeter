@@ -1,4 +1,4 @@
-<div class="content-wrapper margin-top">
+<div class="margin-top">
     <input type="text" class="col-9 form-control" name="bookname" placeholder="bookname" autocomplete="off" [(ngModel)]="name" maxlength="80" (change)="onNameChange()">
     <small *ngIf="this.nameError != ''" class="form-text text-danger">{{this.nameError}}</small>
 

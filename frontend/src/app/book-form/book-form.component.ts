@@ -3,6 +3,7 @@ import { Tag } from '../../types/tag';
 import { BookStatus } from '../../enum/bookStatus';
 import { BookType } from '../../enum/bookType';
 import { Book } from '../../types/book';
+import { DetailedBook } from '../../types/detailedBook';
 
 @Component({
   selector: 'app-book-form',
@@ -12,6 +13,10 @@ import { Book } from '../../types/book';
 })
 export class BookFormComponent {
 
+  @Input()
+  public edition : boolean = false;
+  @Input()
+  public initializingBook? : DetailedBook;
   @Input()
   public allTagsList! : Tag[];
   @Input()
@@ -47,6 +52,18 @@ export class BookFormComponent {
   ngOnInit(){
     this.allBookTypes = Object.values(BookType);
     this.allBookStatus = Object.values(BookStatus);
+
+    console.log(this.initializingBook);
+    if (this.initializingBook != undefined){
+      this.name = this.initializingBook.name;
+      this.description = this.initializingBook.description;
+      this.status = this.initializingBook.status as BookStatus;
+      this.bookType = this.initializingBook.bookType as BookType;
+
+      for (let i = 0; i < this.initializingBook.tags.length; i++){
+        this.selectedTags.push(this.initializingBook.tags[i].id);
+      }
+    }
   }
 
   onSubmit(){
@@ -58,7 +75,7 @@ export class BookFormComponent {
       name : this.name,
       description : this.description,
       tags_ids : this.selectedTags,
-      image : (this.base64Image as string).split(",")[1],
+      image : this.base64Image != null ? (this.base64Image as string).split(",")[1] : "",
       book_type : this.bookType,
       status : this.status
     } as Book
@@ -83,7 +100,6 @@ export class BookFormComponent {
         this.base64Image = reader.result;
       };
     }
-    this.validateImage();
   }
 
   //Input validation
@@ -100,8 +116,10 @@ export class BookFormComponent {
     if (!this.validateTags()){
       isValid = false;
     }
-    if (!this.validateImage()){
-      isValid = false;
+    if (!this.edition){
+      if (!this.validateImage()){
+        isValid = false;
+      }
     }
 
     return isValid;
