@@ -16,7 +16,11 @@ import { FlashMessageService } from '../services/flashMessage/flash-message.serv
   styleUrl: './book-edit.component.scss'
 })
 export class BookEditComponent implements OnInit {
+
+  public id! : number;
+
   public dataFetched = false;
+  public loadingFailed = false;
   public allTagsList! : Tag[];
   public book! : DetailedBook;
 
@@ -40,12 +44,15 @@ export class BookEditComponent implements OnInit {
       return;
     }
 
-    this
+    this.id = parseInt(id);
 
-    this.loadData(parseInt(id));
+    this.loadData(this.id);
   }
 
   loadData(bookId : number){
+    this.loadingFailed = false;
+    this.dataFetched = false;
+
     let tagPromise = this.tagService.getAll();
     let bookPromise = this.bookService.getOneById(bookId);
 

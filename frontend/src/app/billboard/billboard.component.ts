@@ -12,6 +12,8 @@ import { FlashMessageService } from '../services/flashMessage/flash-message.serv
 })
 export class BillboardComponent implements OnInit, OnChanges {
 
+  public loadingFailed = false;
+
   public dataFetched : boolean = false;
   public announcements? : Announcement[];
   public isAdmin : boolean = false;
@@ -30,19 +32,21 @@ export class BillboardComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdminSubject.value;
-    this.loadAnnouncements();
     let flashMessage = this.flashMessageService.getFlashMessage()
     this.flashMessage = flashMessage != null ? flashMessage : "";
+    this.loadAnnouncements();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.isAdmin = this.authService.isAdminSubject.value;
-    this.loadAnnouncements();
     let flashMessage = this.flashMessageService.getFlashMessage()
     this.flashMessage = flashMessage != null ? flashMessage : "";
+    this.loadAnnouncements();
   }
 
-  private loadAnnouncements(){
+  loadAnnouncements(){
+    this.loadingFailed = false;
+    this.dataFetched = false;
 
     this.billboardService.getAllActive().then(
       results => {
@@ -52,10 +56,7 @@ export class BillboardComponent implements OnInit, OnChanges {
     )
     .catch(
       error => {
-        this.displayError(
-          "Unexpected error",
-          "An unexpected error occured when fetching data from server, please try again."
-        )
+        this.loadingFailed = true;
       }
     )
   }

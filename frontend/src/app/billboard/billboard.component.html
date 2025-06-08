@@ -15,7 +15,7 @@
     </div>
 
     <ng-container *ngIf="!this.dataFetched else DataFetched">
-        <app-loader></app-loader>
+        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="loadAnnouncements()"></app-loader>
     </ng-container>
 
     <ng-template #DataFetched>

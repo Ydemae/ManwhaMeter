@@ -23,6 +23,7 @@ export class InviteTrackerComponent implements OnInit{
   private confirmationModal! : NgbModalRef;
   @ViewChild('ConfirmationModal') confirmationModalTempalte!: TemplateRef<any>;
 
+  public loadingFailed = false;
   public dataFetched : boolean = false;
   public invites? : Invite[];
 
@@ -49,10 +50,13 @@ export class InviteTrackerComponent implements OnInit{
   ngOnInit(): void {
     this.appUrl = environment.appUrl;
 
-    this.loadInvites(null);
+    this.loadInvites();
   }
 
-  loadInvites(used : boolean | null){
+  loadInvites(used : boolean | null = null){
+    this.loadingFailed = false;
+    this.dataFetched = false;
+
     this.inviteService.getAll().then(
       results => {
 

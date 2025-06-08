@@ -21,6 +21,7 @@ export class UserListComponent {
   @ViewChild('DeactivationConfirmationModal') deactivationConfirmationModalTempalte!: TemplateRef<any>;
 
   public dataFetched : boolean = false;
+  public loadingFailed = false;
 
   public users! : DetailedUser[];
 
@@ -47,6 +48,9 @@ export class UserListComponent {
   }
 
   loadUsers(){
+    this.loadingFailed = false;
+    this.dataFetched = false;
+
     this.userService.getAll(this.active).then(
       results => {
 

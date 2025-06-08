@@ -9,6 +9,6 @@
         <app-book-form [allTagsList]="this.allTagsList" [edition]="true" [initializingBook]="this.book!" [submitLabel]="'edit'" (submitEmitter)="onSubmit($event)" (cancelEmitter)="onCancel()"></app-book-form>
     </div>
     <ng-template #NotFetched>
-        <app-loader></app-loader>
+        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadData(this.id)"></app-loader>
     </ng-template>
 </div>

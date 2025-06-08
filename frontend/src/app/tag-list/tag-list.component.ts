@@ -17,6 +17,7 @@ export class TagListComponent {
   @ViewChild('DeletionConfirmationModal') deletionConfirmationModalTemplate!: TemplateRef<any>;
 
   public dataFetched : boolean = false;
+  public loadingFailed = false;
 
   public tags! : Tag[];
 
@@ -39,6 +40,9 @@ export class TagListComponent {
   }
 
   loadTags(){
+    this.loadingFailed = false;
+    this.dataFetched = false;
+
     this.tagService.getAll().then(
       results => {
 

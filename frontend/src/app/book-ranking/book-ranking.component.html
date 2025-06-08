@@ -6,10 +6,7 @@
     </div>
 
     <ng-template #NotFetched>
-        <div class="alert alert-dismissible alert-secondary">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            Data is being fetched from the server, please wait.
-        </div>
+        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadStartingData()"></app-loader>
     </ng-template>
 </div>
 

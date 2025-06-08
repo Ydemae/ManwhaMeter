@@ -13,13 +13,10 @@
 
 <div class="margin-top d-flex justify-content-center">
     <ng-template #NotFetched>
-        <div class="alert alert-dismissible alert-secondary">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            Data is being fetched from the server, please wait.
-        </div>
+        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadBookData()"></app-loader>
     </ng-template>
 
-    <div *ngIf="this.bookFetched && this.personalRatingFetched NotFetched" class="content-wrapper">
+    <div *ngIf="this.bookFetched && this.personalRatingFetched else NotFetched" class="content-wrapper">
         <div class="row">
             <div class="col-sm-12 col-md-3 d-flex justify-content-center">
                 <img src="{{this.apiUrl}}/images/{{this.book?.image_path}}" alt="image" class="detailImage">
@@ -29,15 +26,15 @@
                     <h1>{{this.book?.name}}</h1>
                 </div>
                 <div class="margin-bot">
-                    <span class="badge tiny-margin-right" *ngFor="let tag of book?.tags; let i = index" [ngClass]="{ 'bg-primary': i<3, 'bg-secondary': i>=3 }">{{tag.label}}</span>
+                    <span class="badge m-1" *ngFor="let tag of book?.tags; let i = index" [ngClass]="{ 'bg-primary': i<3, 'bg-secondary': i>=3 }">{{tag.label}}</span>
                 </div>
-                <span class="badge bg-success">{{book?.bookType}}</span>
-                <span class="badge bg-success">{{book?.status}}</span>
+                <span class="badge bg-success m-1">{{book?.bookType}}</span>
+                <span class="badge bg-success m-1">{{book?.status}}</span>
 
                 <p>{{ this.book?.description }}</p>
             </div>
         </div>
-        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot">
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.personalRating == null">
             <button type="button" class="btn btn-primary" (click)="this.openCreateRatingModal()">Rate this book</button>
         </div>
         <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.isAdmin">
@@ -47,7 +44,7 @@
             <button type="button" class="btn btn-danger" (click)="this.onDeleteBookClicked()">Delete this book</button>
         </div>
 
-        <div>
+        <div *ngIf="this.personalRating != null">
             <h3 class="text-center">Your rating</h3>
             <div class="d-flex justify-content-center">
                 <app-comment class="m-1" [canDelete]="true" [canEdit]="true" [rating]="this.personalRating" *ngIf="this.personalRating" (editButtonClicked)="this.openUpdateRatingModal()" (deleteButtonClicked)="onDeleteButtonClicked()"></app-comment>

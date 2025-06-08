@@ -23,6 +23,8 @@ export class BookRankingComponent {
   public errTitle = "";
   public errMessage = "";
 
+  public loadingFailed = false;
+
   constructor(
     private bookService : BookService,
     private tagSercice : TagService,
@@ -30,6 +32,12 @@ export class BookRankingComponent {
   ){
   }
   ngOnInit(){
+    this.loadStartingData()
+  }
+
+  loadStartingData(){
+    this.loadingFailed = false;
+    this.dataWasFetched = false;
 
     let booksPromise = null;
     if (this.personal){
@@ -54,10 +62,7 @@ export class BookRankingComponent {
     )
     .catch(
       error => {
-        this.displayError(
-          "Unexpected error",
-          "An unexpected error occured when fetching data from server, please try again.\nIf the problem persists, contact the support."
-        )
+        this.loadingFailed = true;
       }
     )
   }

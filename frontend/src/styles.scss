@@ -8,13 +8,13 @@ $body-bg: #1C1B18;
 $body-color: $secondary;
 
 @use "bootstrap/scss/bootstrap" with (
-  $primary: $primary,
-  $secondary: $secondary,
-  //$danger: $danger,
-  //$warning: $warning,
-  $body-bg: $body-bg,
-  $body-color: $body-color,
-  $table-color: $body-color
+    $primary: $primary,
+    $secondary: $secondary,
+    //$danger: $danger,
+    //$warning: $warning,
+    $body-bg: $body-bg,
+    $body-color: $body-color,
+    $table-color: $body-color
 );
 
 body{
@@ -144,4 +144,9 @@ ng-select .ng-value .ng-value-icon {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.loader-container{
+    min-width: 15rem;
+    min-height: 80px
 }

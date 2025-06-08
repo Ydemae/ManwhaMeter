@@ -6,7 +6,7 @@
     </div>
 
     <ng-template #NotFetched>
-        <app-loader></app-loader>
+        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadTags()"></app-loader>
     </ng-template>
 
     <ng-container *ngIf="this.dataFetched else NotFetched">

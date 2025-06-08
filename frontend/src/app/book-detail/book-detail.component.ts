@@ -30,6 +30,8 @@ export class BookDetailComponent {
   private deleteBookConfirmModalRef! : NgbModalRef;
   @ViewChild('deleteBookConfirmModal') deleteBookConfirmModalTemplate!: TemplateRef<any>;
 
+  public loadingFailed = false;
+
   public bookFetched = false;
   public personalRatingFetched = false;
 
@@ -85,26 +87,21 @@ export class BookDetailComponent {
   }
 
   loadBookData(){
-    console.log("called")
+    this.loadingFailed = false;
+    this.bookFetched = false;
+
     let getBookDetailPromise = this.bookService.getOneById(this.bookId).catch(
       (error) => {
-        this.displayError(
-          "Unexpected error",
-          "An unexpected error occurred when attempting to get the book details"
-        )
+        this.loadingFailed = true;
       }
     )
 
     let getPersonalRatingPromise = this.ratingService.getOneByBookId(this.bookId).catch(
       error => {
         //errcode 2 means that the user just didn't rate the book, not a true error
-        console.log(error)
 
         if (error["errcode"] != 2){
-          this.displayError(
-            "Unexpected error",
-            "An unexpected error occurred when attempting to fetch personal rating on this book"
-          )
+          this.loadingFailed = true;
           return
         }
         this.personalRatingFetched = true;
