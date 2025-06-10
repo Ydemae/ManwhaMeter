@@ -49,7 +49,7 @@ final class BookController extends AbstractController
                     $type = BookType::from($bookType);
                     $bookType = $type->value;
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book type"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book type"], 400);
                 }
             }
         }
@@ -68,7 +68,7 @@ final class BookController extends AbstractController
                 try {
                     $status = BookStatus::from($status)->value;
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book status"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book status"], 400);
                 }
             }
         }
@@ -125,7 +125,7 @@ final class BookController extends AbstractController
                     $type = BookType::from($bookType);
                     $bookType = $type->value;
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book type"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book type"], 400);
                 }
             }
         }
@@ -143,7 +143,7 @@ final class BookController extends AbstractController
                 try {
                     $status = BookStatus::from($status)->value;
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book status"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book status"], 400);
                 }
             }
         }
@@ -180,7 +180,7 @@ final class BookController extends AbstractController
         $book = $bookRepository->findOneBy(["id" => $id]);
 
         if ($book == null){
-            return $this->json(["result" => "error", "error" => "No book with id : $id"]);
+            return $this->json(["result" => "error", "error" => "No book with id : $id"], 400);
         }
 
         $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "classic"]);
@@ -207,14 +207,14 @@ final class BookController extends AbstractController
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("id", $body)){
-            return $this->json(["result" => "error", "error" => "No id provided"]);
+            return $this->json(["result" => "error", "error" => "No id provided"], 400);
         }
 
         $bookId = $body["id"];
         $bookToValidate = $bookRepository->findOneBy(["id" => $bookId]);
         
         if ($bookToValidate == null){
-            return $this->json(["result" => "error", "error" => "There is no book for book id $bookId"]);
+            return $this->json(["result" => "error", "error" => "There is no book for book id $bookId"], 400);
         }
 
         $bookToValidate->setIsActive(true);
@@ -240,16 +240,16 @@ final class BookController extends AbstractController
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("name", $body)){
-            return $this->json(["result" => "error", "error" => "No name provided"]);
+            return $this->json(["result" => "error", "error" => "No name provided"], 400);
         }
         if (!array_key_exists("description", $body)){
-            return $this->json(["result" => "error", "error" => "No description provided"]);
+            return $this->json(["result" => "error", "error" => "No description provided"], 400);
         }
         if (!array_key_exists("image", $body)){
-            return $this->json(["result" => "error", "error" => "No image provided"]);
+            return $this->json(["result" => "error", "error" => "No image provided"], 400);
         }
         if (!array_key_exists("tags_ids", $body)){
-            return $this->json(["result" => "error", "error" => "At least one tag_id is needed to create a book"]);
+            return $this->json(["result" => "error", "error" => "At least one tag_id is needed to create a book"], 400);
         }
 
         $bookType = null;
@@ -260,12 +260,12 @@ final class BookController extends AbstractController
                 try {
                     $bookType = BookType::from($bookType);
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book type"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book type"], 400);
                 }
             }
         }
         else{
-            return $this->json(["result" => "error","error" => "No book type provided"]);
+            return $this->json(["result" => "error","error" => "No book type provided"], 400);
         }
 
         $status = null;
@@ -277,12 +277,12 @@ final class BookController extends AbstractController
                 try {
                     $status = BookStatus::from($status);
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book status"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book status"], 400);
                 }
             }
         }
         else{
-            return $this->json(["result" => "error","error" => "No book status provided"]);
+            return $this->json(["result" => "error","error" => "No book status provided"], 400);
         }
 
         $bookName = $body["name"];
@@ -293,23 +293,23 @@ final class BookController extends AbstractController
         try{
             $is_base_64 = base64_encode(base64_decode($bookImage)) == $bookImage;
             if (!$is_base_64){
-                return $this->json(["result" => "error", "error" => "The image passed is not a valid base64-encoded image"]);
+                return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"], 400);
             }
         }
         catch(Exception $e){
-            return $this->json(["result" => "error", "error" => "The image passed is not a valid base64-encoded image"]);
+            return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"], 400);
         }
 
         $imageName =$imageManager->saveBase64ImageInJpegFormat($bookImage);
 
         if ($imageName == null){
-            return $this->json(["result" => "error", "error" => "Unknown error occured when saving the image"]);
+            return $this->json(["result" => "error", "error" => "Unknown error occured when saving the image"], 500);
         }
 
         $tags = $tagRepository->findBy(["id" => $bookTagsIds]);
 
         if (Count($tags) != Count($bookTagsIds)){
-            return $this->json(["result" => "error", "error" => "At least one tag provided does not exist"]);
+            return $this->json(["result" => "error", "error" => "At least one of the provided tags does not exist"], 400);
         }
 
 
@@ -392,11 +392,11 @@ final class BookController extends AbstractController
             try{
                 $is_base_64 = base64_encode(base64_decode($image)) == $image;
                 if (!$is_base_64){
-                    return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"]);
+                    return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"], 400);
                 }
             }
             catch(Exception $e){
-                return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"]);
+                return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"], 400);
             }
         }
 
@@ -414,7 +414,7 @@ final class BookController extends AbstractController
                 try {
                     $bookType = BookType::from($bookType);
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book type"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book type"], 400);
                 }
             }
         }
@@ -429,7 +429,7 @@ final class BookController extends AbstractController
                 try {
                     $status = BookStatus::from($status);
                 } catch (ValueError $e) {
-                    return $this->json(["result" => "error","error" => "Incorrect book status"]);
+                    return $this->json(["result" => "error","error" => "Incorrect book status"], 400);
                 }
             }
         }
@@ -441,7 +441,7 @@ final class BookController extends AbstractController
             $tags = $tagRepository->findBy(["id" => $tagsIds]);
 
             if (Count($tags) != Count($tagsIds)){
-                return $this->json(["result" => "error", "error" => "At least one tag provided does not exist"]);
+                return $this->json(["result" => "error", "error" => "At least one of the provided tags does not exist"], 400);
             }
 
             //Setting new tags
@@ -509,14 +509,14 @@ final class BookController extends AbstractController
 
 
         if (!array_key_exists("id", $body)){
-            return $this->json(["result" => "error","error" => "No id provided"]);
+            return $this->json(["result" => "error","error" => "No id provided"], 400);
         }
 
         $bookId = $body["id"];
         $bookToDelete = $bookRepository->findOneBy(["id" => $bookId]);
 
         if ($bookToDelete == null){
-            return $this->json(["result" => "error", "error" => "There is no book for book id $bookId"]);
+            return $this->json(["result" => "error", "error" => "There is no book for book id $bookId"], 400);
         }
 
         $image_path = $bookToDelete->getImagePath();
@@ -528,7 +528,7 @@ final class BookController extends AbstractController
         $imageRemovedSuccesfully = $imageManager->deleteImage($image_path);
 
         if (!$imageRemovedSuccesfully){
-            return $this->json(["result" => "error", "error" => "The image couldn't be removed, but the book was deleted"], 201);
+            return $this->json(["result" => "error", "error" => "The image couldn't be removed, but the book was deleted"], 400);
         }
 
         return $this->json(["result" => "success"]);
