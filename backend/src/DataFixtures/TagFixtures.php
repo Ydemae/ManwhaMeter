@@ -38,7 +38,7 @@ class TagFixtures extends Fixture
                 ],
             ];
         
-           foreach ($tagList as $tag) {
+            foreach ($tagList as $tag) {
                 $createdTag = new Tag();
                 $createdTag->setLabel($tag["label"]);
                 $createdTag->setIsActive(true);

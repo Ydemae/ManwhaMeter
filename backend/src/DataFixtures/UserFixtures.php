@@ -15,7 +15,7 @@ class UserFixtures extends Fixture
 
     public function __construct(PasswordHasherFactoryInterface $passwordHasherFactory)
     {
-      $this->passwordHasherFactory = $passwordHasherFactory;
+        $this->passwordHasherFactory = $passwordHasherFactory;
     }
 
     public function load(ObjectManager $manager): void
@@ -36,7 +36,7 @@ class UserFixtures extends Fixture
     
             $passwordHasher = $this->passwordHasherFactory->getPasswordHasher(User::class);
     
-           foreach ($userList as $user) {
+            foreach ($userList as $user) {
                 $createdUser = new User();
                 $createdUser->setUsername($user["username"]);
                 $createdUser->setRoles($user["roles"]);

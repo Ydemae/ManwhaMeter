@@ -61,12 +61,12 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             ];
     
     
-           foreach ($bookList as $book) {
+            foreach ($bookList as $book) {
                 $createdbook = new Book();
                 $createdbook->setName($book["name"]);
                 $createdbook->setDescription($book["description"]);
                 $createdbook->setImagePath($book["image_path"]);
-                $createdbook->setBookStatus($book["status"]);
+                $createdbook->setStatus($book["status"]);
                 $createdbook->setBookType($book["type"]);
                 $createdbook->setIsActive(true);
                 

@@ -61,7 +61,7 @@ class RatingFixtures extends Fixture implements DependentFixtureInterface
                 ],
             ];
         
-           foreach ($RatingList as $rating) {
+            foreach ($RatingList as $rating) {
                 $createdRating = new Rating();
                 $createdRating->setCharacters($rating["characters"]);
                 $createdRating->setArtStyle($rating["art_style"]);
