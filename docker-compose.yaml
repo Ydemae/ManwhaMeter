@@ -9,12 +9,12 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.custom.address=:8000"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=arthur.maloron@proton.me"
+      - "--certificatesresolvers.myresolver.acme.email=manwhameter@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--log.level=DEBUG"
     ports:
+      - 80:80
       - 443:443
-      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
@@ -37,9 +37,15 @@ services:
       - "traefik.http.routers.nginx-angular.rule=Host(`manwhameter.com`)"
       - "traefik.http.routers.nginx-angular.entrypoints=websecure"
       - "traefik.http.routers.nginx-angular.tls=true"
-      - "traefik.http.routers.nginx-angular.service=nginx-angular-service"
-      - "traefik.http.services.nginx-angular-service.loadbalancer.server.port=443"
       - "traefik.http.routers.nginx-angular.tls.certresolver=myresolver"
+      - "traefik.http.services.nginx-angular.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx-angular-insecure.rule=Host(`manwhameter.com`)"
+      - "traefik.http.routers.nginx-angular-insecure.entrypoints=web"
+      - "traefik.http.routers.nginx-angular-insecure.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.no-cache.headers.customrequestheaders.Cache-Control=no-cache, no-store, must-revalidate"
+      - "traefik.http.middlewares.no-cache.headers.customrequestheaders.Pragma=no-cache"
+      - "traefik.http.middlewares.no-cache.headers.customrequestheaders.Expires=0"
 
   symfony:
     image: symfony-php:latest
@@ -61,4 +67,7 @@ services:
       - "traefik.http.routers.nginx-symfony.entrypoints=websecure"
       - "traefik.http.routers.nginx-symfony.tls=true"
       - "traefik.http.routers.nginx-symfony.tls.certresolver=myresolver"
-      - "traefik.http.services.nginx-symfony.loadbalancer.server.port=8000"
+      - "traefik.http.services.nginx-symfony.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx-symfony-insecure.rule=Host(`api.manwhameter.com`)"
+      - "traefik.http.routers.nginx-symfony-insecure.entrypoints=web"
+      - "traefik.http.routers.nginx-symfony-insecure.middlewares=redirect-to-https"
