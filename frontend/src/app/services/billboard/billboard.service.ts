@@ -66,17 +66,11 @@ export class BillboardService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/billboard/getAllActive`,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get all announcements");
-          }
+          console.log("Unexpected error caught when attempting to get all announcements");
 
           reject();
           return throwError(() => { });

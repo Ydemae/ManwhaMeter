@@ -40,15 +40,8 @@ final class BillboardController extends AbstractController
     }
 
     #[Route('/getAllActive', name: 'billboard_getallactive', methods: ["GET"])]
-    public function getAllActive(AuthService $authService, Request $request, SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    public function getAllActive(Request $request, SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
-        try{
-            $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $announcements = $billboardAnnouncementRepository->getAllActive();
 
         $jsonAnnoucements = $serializerInterface->serialize($announcements, 'json', ['groups' => "classic"]);
