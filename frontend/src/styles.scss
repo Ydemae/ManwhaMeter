@@ -128,6 +128,8 @@ ng-select .ng-value .ng-value-icon {
     position: relative;
 }
 
+//Loader
+
 .loader {
     border: 5px solid $primary;
     border-top: 5px solid $secondary;
@@ -149,4 +151,22 @@ ng-select .ng-value .ng-value-icon {
 .loader-container{
     min-width: 15rem;
     min-height: 80px
+}
+
+
+//Nav elements - placed here because they need the color variables
+
+.custom-nav-item{
+    margin: 0.6rem;
+    color: mix($secondary, gray, 60%);
+    padding: 0.5rem;
+    transition: 1s;
+    text-decoration: none;
+}
+
+.custom-nav-item:hover{
+    color: $secondary;
+    background-color: rgba($color: #000, $alpha: 0.4);
+    border-radius: 15px;
+    transition: 1s;
 }

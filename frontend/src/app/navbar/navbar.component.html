@@ -1,3 +1,61 @@
+<nav class="custom-navbar bg-primary" data-bs-theme="dark">
+
+    <!-- PC version -->
+    <div class="d-none d-md-block nav-items-container position-relative">
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div class="flex-grow-1 d-flex justify-content-end gap-4" style="max-width: 45%;">
+                <ng-container *ngIf="userIsConnected && isAdmin" class="nav-item">
+                    <a class="custom-nav-item" routerLink="/admin">Admin board</a>
+                </ng-container>
+                <ng-container *ngIf="userIsConnected" class="nav-item">
+                    <a class="custom-nav-item" routerLink="/booklist">General ranking</a>
+                </ng-container>
+            </div>
+
+            <div class="navbar-center">
+                <a class="navbar-brand" href="/">
+                    <img src="favicon.png" alt="ManwhaMeter" class="logo">
+                </a>
+            </div>
+
+            <div class="flex-grow-1 d-flex justify-content-start gap-4" style="max-width: 45%;">
+                <a *ngIf="userIsConnected" class="custom-nav-item" routerLink="/mybooklist">Personal ranking</a>
+                <a *ngIf="!userIsConnected" class="custom-nav-item" routerLink="/login">Login</a>
+                <button type="button" *ngIf="userIsConnected" (click)="disconnectUser()" class="custom-nav-item custom-nav-button">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile version -->
+    <div class="d-flex d-md-none justify-content-between align-items-center px-3 py-2 bg-primary">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="m-0 ms-auto">
+            <a class="navbar-brand" href="/">
+                <img src="favicon.png" alt="ManwhaMeter" class="logo" style="height: 40px;">
+            </a>
+        </div>
+
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <div class="mobile-menu bg-primary text-white p-3">
+            <a *ngIf="userIsConnected && isAdmin" class="custom-nav-item d-block mb-2" routerLink="/admin">Admin board</a>
+            <a class="custom-nav-item d-block mb-2" *ngIf="userIsConnected" routerLink="/booklist">General ranking</a>
+            <a *ngIf="userIsConnected" class="custom-nav-item d-block mb-2" routerLink="/mybooklist">Personal ranking</a>
+            <a *ngIf="!userIsConnected" class="custom-nav-item d-block mb-2" routerLink="/login">Login</a>
+            <button type="button" *ngIf="userIsConnected" (click)="disconnectUser()" class="custom-nav-item custom-nav-button d-block mb-2">Logout</button>
+        </div>
+    </div>
+
+</nav>
+
+
+<!-- Old navbar, kept in case I need it later
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">ManwhaMeter</a>
@@ -30,4 +88,4 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav>-->
