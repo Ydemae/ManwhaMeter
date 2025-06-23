@@ -11,14 +11,26 @@
 
 <div class="content-wrapper">
     <form class="col">
-        <div>
-            <label for="login">Username:</label>
-            <input type="text" class="form-control" autocomplete="off" id="login" name="login" [(ngModel)]="username">
+        <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex flex-grow-1" style="max-width: 1000px;">
+                <div class="m-1 me-4">
+                    <label for="login">Username</label>
+                </div>
+                <div class="flex-grow-1">
+                    <input type="text" class="form-control" autocomplete="off" id="login" name="login" [(ngModel)]="username" placeholder="username">
+                </div>
+            </div>
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" autocomplete="off" id="password" name="password" [(ngModel)]="password">
+        <div class="text-center">
+            <small class="text-danger" *ngIf="this.error.username">{{ this.error.username }}</small>
         </div>
-        <button class="btn btn-outline-primary" (click)="onSubmit()">Se connecter</button>
+        <app-password [password]="this.password" (passwordChangeEvent)="onPasswordChange($event)" [error]="this.error.password"></app-password>
+
+        <div class="text-center col">
+            <div>
+                <button class="btn btn-primary" (click)="onSubmit()">Log in</button>
+            </div>
+            <small class="form-text text-danger" *ngIf="this.error.global != ''">{{ this.error.global }}</small>
+        </div>
     </form>
 </div>

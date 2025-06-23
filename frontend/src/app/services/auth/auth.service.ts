@@ -59,7 +59,9 @@ export class AuthService {
           let code = 1
           if (error.status == 403){
             code = 2
-            console.log(code)
+          }
+          else if (error.status == 401){
+            code = 3;
           }
           else {
             console.log("Unexpected error caught when attempting to login");

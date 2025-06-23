@@ -10,7 +10,6 @@ import { AuthService } from '../services/auth/auth.service';
 export class NavbarComponent {
   public userIsConnected! : boolean;
   public isAdmin! : boolean;
-  public mobileMenuOpen : boolean = false;
 
   constructor(private authService : AuthService) {
   }
@@ -33,9 +32,6 @@ export class NavbarComponent {
     this.authService.logout()
   }
 
-  toggleMobileMenu(){
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
 }
 
 

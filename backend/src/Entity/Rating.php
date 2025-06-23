@@ -47,7 +47,7 @@ class Rating
     #[Groups(['classic', 'rating'])]
     private ?User $user = null;
 
-    #[ORM\Column(length: 2000, nullable: true)]
+    #[ORM\Column(length: 6000, nullable: true)]
     #[Groups(['classic', 'rating'])]
     private ?string $comment = null;
 

@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { RatingData } from '../../types/ratingData';
+import { RatingFormComponent } from '../rating-form/rating-form.component';
 
 @Component({
   selector: 'app-rating-modal',
@@ -8,6 +9,8 @@ import { RatingData } from '../../types/ratingData';
   styleUrl: './rating-modal.component.scss'
 })
 export class RatingModalComponent implements OnInit, OnChanges{
+  @ViewChild(RatingFormComponent) ratingComponent!: RatingFormComponent;
+
   @Output()
   public closeModalEmitter = new EventEmitter<null>()
 
@@ -57,8 +60,9 @@ export class RatingModalComponent implements OnInit, OnChanges{
   }
 
   onSubmit(){
+    this.ratingComponent.sendCorrectFlag();
+
     if (!this.correctFlag){
-      this.errorMessage = "At least one of the form's field is not correct"
       return;
     }
     

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use App\Service\AuthService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
@@ -35,6 +36,10 @@ final class AuthController extends AbstractController
 
         $user = $userRepository->findOneBy(["username" => $body["username"]]);
 
+        if ($user == null){
+            return $this->json(["result" => "error", "error" => "Incorrect credentials"],401);
+        }
+
         if ($user->isActive() == false){
             return $this->json(["result" => "error","error" => "Your account has been disabled. If you don't know why, contact your server owner."], 403);
         }
@@ -44,8 +49,8 @@ final class AuthController extends AbstractController
 
             return $this->json(["result" => "success","token" => $token, "isAdmin" => in_array("ROLE_ADMIN", $user->getRoles())]);
         }
-        catch(AccessDeniedException $e){
-            return $this->json(["result" => "error","error" => $e->getMessage()], 401);
+        catch(Exception $e){
+            return $this->json(["result" => "error", "error" => "Incorrect credentials"],401);
         }
     }
 

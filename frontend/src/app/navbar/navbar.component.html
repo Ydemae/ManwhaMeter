@@ -6,10 +6,20 @@
 
             <div class="flex-grow-1 d-flex justify-content-end gap-4" style="max-width: 45%;">
                 <ng-container *ngIf="userIsConnected && isAdmin" class="nav-item">
-                    <a class="custom-nav-item" routerLink="/admin">Admin board</a>
+                    <a class="custom-nav-item"
+                    routerLink="/admin"
+                    routerLinkActive="active" 
+                    [routerLinkActiveOptions]="{ exact: true }">
+                        Admin board
+                    </a>
                 </ng-container>
                 <ng-container *ngIf="userIsConnected" class="nav-item">
-                    <a class="custom-nav-item" routerLink="/booklist">General ranking</a>
+                    <a class="custom-nav-item"
+                    routerLink="/booklist"
+                    routerLinkActive="active" 
+                    [routerLinkActiveOptions]="{ exact: true }">
+                        General ranking
+                    </a>
                 </ng-container>
             </div>
 
@@ -20,8 +30,22 @@
             </div>
 
             <div class="flex-grow-1 d-flex justify-content-start gap-4" style="max-width: 45%;">
-                <a *ngIf="userIsConnected" class="custom-nav-item" routerLink="/mybooklist">Personal ranking</a>
-                <a *ngIf="!userIsConnected" class="custom-nav-item" routerLink="/login">Login</a>
+                <a *ngIf="userIsConnected"
+                class="custom-nav-item"
+                routerLink="/mybooklist"
+                routerLinkActive="active" 
+                [routerLinkActiveOptions]="{ exact: true }">
+                    Personal ranking
+                </a>
+    
+                <a *ngIf="!userIsConnected"
+                class="custom-nav-item"
+                routerLink="/login"
+                routerLinkActive="active" 
+                [routerLinkActiveOptions]="{ exact: true }">
+                    Login
+                </a>
+
                 <button type="button" *ngIf="userIsConnected" (click)="disconnectUser()" class="custom-nav-item custom-nav-button">Logout</button>
             </div>
         </div>
@@ -44,10 +68,38 @@
 
     <div class="collapse navbar-collapse" id="navbarColor01">
         <div class="mobile-menu bg-primary text-white p-3">
-            <a *ngIf="userIsConnected && isAdmin" class="custom-nav-item d-block mb-2" routerLink="/admin">Admin board</a>
-            <a class="custom-nav-item d-block mb-2" *ngIf="userIsConnected" routerLink="/booklist">General ranking</a>
-            <a *ngIf="userIsConnected" class="custom-nav-item d-block mb-2" routerLink="/mybooklist">Personal ranking</a>
-            <a *ngIf="!userIsConnected" class="custom-nav-item d-block mb-2" routerLink="/login">Login</a>
+            <a *ngIf="userIsConnected && isAdmin"
+            class="custom-nav-item d-block mb-2"
+            routerLink="/admin"
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{ exact: true }">
+                Admin board
+            </a>
+
+            <a class="custom-nav-item d-block mb-2"
+            *ngIf="userIsConnected"
+            routerLink="/booklist"
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{ exact: true }">
+                General ranking
+            </a>
+            
+            <a *ngIf="userIsConnected"
+            class="custom-nav-item d-block mb-2"
+            routerLink="/mybooklist"
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{ exact: true }">
+                Personal ranking
+            </a>
+            
+            <a *ngIf="!userIsConnected"
+            class="custom-nav-item d-block mb-2"
+            routerLink="/login"
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{ exact: true }">
+                Login
+            </a>
+
             <button type="button" *ngIf="userIsConnected" (click)="disconnectUser()" class="custom-nav-item custom-nav-button d-block mb-2">Logout</button>
         </div>
     </div>

@@ -13,8 +13,6 @@ import { T } from '@angular/cdk/keycodes';
 })
 export class RegisterComponent implements OnInit{
 
-  public showPassword : boolean = false
-
   private inviteUid! : string;
 
   public usernameAvailable : boolean | null = null;
@@ -61,10 +59,6 @@ export class RegisterComponent implements OnInit{
     this.inviteUid = inviteUid
   }
 
-  togglePasswordVisibility(){
-    this.showPassword = !this.showPassword;
-  }
-
   validateAllFields() : boolean{
     if (
       !this.validatePassword() ||
@@ -76,6 +70,16 @@ export class RegisterComponent implements OnInit{
     }
 
     return true;
+  }
+
+  onPasswordChange(password : string){
+    this.formData.password = password;
+    this.validatePassword();
+    this.validateConfirmPassword();
+  }
+  onConfirmPasswordChange(password : string){
+    this.formData.confirmPassword = password;
+    this.validateConfirmPassword();
   }
 
   validatePassword() : boolean{
@@ -150,7 +154,7 @@ export class RegisterComponent implements OnInit{
     }
 
     if (!this.usernameAvailable){
-      this.displayError("Unverified username", "Your username was not verified or is taken, please click the veryfying button")
+      this.displayError("Unverified username", "Your username was not verified or is taken, please try again")
       return;
     }
     

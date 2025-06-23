@@ -170,3 +170,21 @@ ng-select .ng-value .ng-value-icon {
     border-radius: 15px;
     transition: 1s;
 }
+
+.active{
+    color: $secondary !important;
+}
+
+.mytooltip{
+    color: $secondary !important;
+}
+
+
+.mytooltip .tooltip-inner {
+    background-color: black;
+    color: $secondary !important;
+}
+
+.mytooltip .arrow::before {
+    border-top-color: darkgreen;
+}

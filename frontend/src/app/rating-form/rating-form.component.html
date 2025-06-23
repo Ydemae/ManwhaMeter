@@ -1,7 +1,7 @@
 <div class="col">
-    <div class="row">
-        <textarea name="ratingComment" class="form-control" maxlength="2000" [(ngModel)]="this.formData.comment" placeholder="Comment" rows="4" (input)="this.onDataChange()"></textarea>
-        <small class="form-text text-muted" *ngIf="this.errors.comment == '' else commentError">Your personal comment on the book</small>
+    <div class="row" style="max-width: 100%;">
+        <textarea name="ratingComment" class="form-control shrink" maxlength="2000" [(ngModel)]="this.formData.comment" placeholder="Comment" rows="4" (change)="this.onCommentChange()"></textarea>
+        <small class="form-text text-muted" *ngIf="this.errors.comment == '' else commentError">Your personal comment on the book (6000 characters maximum)</small>
         <ng-template #commentError>
             <small class="text-danger">{{ this.errors.comment }}</small>
         </ng-template>
@@ -10,14 +10,14 @@
         <div class="row">
             <small class="form-text text-muted">All grades are on 25 (So that the sum is on 100)</small>
             <div class="margin-top col-md-6 col-sm-12">
-                <input type="number" class="form-control" name="story" placeholder="Story" min="0" max="25" [(ngModel)]="this.formData.story" (change)="this.onDataChange()">
+                <input type="number" class="form-control" name="story" placeholder="Story" min="0" max="25" [(ngModel)]="this.formData.story" (change)="this.onStoryChange()">
                 <small class="form-text text-muted" *ngIf="this.errors.story == '' else storyError">How good the story is</small>
                 <ng-template #storyError>
                     <small class="text-danger">{{ this.errors.story }}</small>
                 </ng-template>
             </div>
             <div class="margin-top col-md-6 col-sm-12">
-                <input type="number" class="form-control" name="art_style" placeholder="Art style" min="0" max="25"  [(ngModel)]="this.formData.art_style" (change)="this.onDataChange()">
+                <input type="number" class="form-control" name="art_style" placeholder="Art style" min="0" max="25"  [(ngModel)]="this.formData.art_style" (change)="this.onArtStyleChange()">
                 <small class="form-text text-muted"  *ngIf="this.errors.art_style == '' else artStyleError">How good the art style is</small>
                 <ng-template #artStyleError>
                     <small class="text-danger">{{ this.errors.art_style }}</small>
@@ -26,14 +26,14 @@
         </div>
         <div class="row">
             <div class="margin-top col-md-6 col-sm-12">
-                <input type="number" class="form-control" name="feeling" placeholder="Feeling" min="0" max="25"  [(ngModel)]="this.formData.feeling" (change)="this.onDataChange()">
+                <input type="number" class="form-control" name="feeling" placeholder="Feeling" min="0" max="25"  [(ngModel)]="this.formData.feeling" (change)="this.onFeelingChange()">
                 <small class="form-text text-muted" *ngIf="this.errors.feeling == '' else feelingError">The feeling you had reading the book, it's very subjective</small>
                 <ng-template #feelingError>
                     <small class="text-danger">{{ this.errors.feeling }}</small>
                 </ng-template>
             </div>
             <div class="margin-top col-md-6 col-sm-12">
-                <input type="number" class="form-control" name="characters" placeholder="Characters" min="0" max="25"  [(ngModel)]="this.formData.characters" (change)="this.onDataChange()">
+                <input type="number" class="form-control" name="characters" placeholder="Characters" min="0" max="25"  [(ngModel)]="this.formData.characters" (change)="this.onCharactersChange()">
                 <small class="form-text text-muted" *ngIf="this.errors.characters == '' else charactersError">How good the character design and development is</small>
                 <ng-template #charactersError>
                     <small class="text-danger">{{ this.errors.characters }}</small>

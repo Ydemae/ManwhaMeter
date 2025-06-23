@@ -10,12 +10,18 @@ import { FlashMessageService } from '../services/flashMessage/flash-message.serv
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
-  errorIsShown = false
-  errTitle = ""
-  errMessage = ""
+  public errorIsShown = false
+  public errTitle = ""
+  public errMessage = ""
 
-  username : string = "";
-  password : string = "";
+  public username : string = "";
+  public password : string = "";
+
+  public error = {
+    password : "",
+    username : "",
+    global : ""
+  }
 
   public flashMessage : string | null = null;
 
@@ -48,40 +54,83 @@ export class LoginComponent implements OnInit{
     this.errorIsShown = true;
   }
 
+  onPasswordChange(password: string){
+    this.password = password;
+    this.validatePassword();
+  }
+
+  onUsernameChange(){
+    this.validateUsername();
+  }
+
+  validatePassword(){
+    this.error.password = "";
+
+    if (this.password == ""){
+      this.error.password = "Password is empty";
+      return false;
+    }
+
+    return true;
+  }
+
+  validateUsername(){
+    this.error.username = "";
+
+    if (this.username == ""){
+      this.error.username = "Username is empty";
+      return false;
+    }
+
+    return true;
+  }
+
   onSubmit(): void {
-    //TO DO - Add validation to username and password
+    let valid = true;
+
+    if (!this.validatePassword()){
+      valid = false;
+    }
+    if (!this.validateUsername()){
+      valid = false;
+    }
+
+    if (valid === false){
+      return;
+    }
 
     this.authenticate(this.username, this.password);
   }
 
   authenticate(username: string, password: string): void {
-      this.authService.login(username,password).then(
-          (response) => {
-              if (response === 0){
-                  this.router.navigate(["/booklist"])
-              }
-              else{
-                this.showError(
-                    "Invalid credentials",
-                    "Invalid identifier or password"
-                )
-              }
-          }
-      ).catch(
-        (error) => {
-          if (error == 2){
-            this.showError(
-              "This account is disabled",
-              "If you wonder why your account was disabled, please contact your server owner."
-            )
-          }
-          else{
-            this.showError(
-              "Unexpected error occurred",
-              "Please contact the your server owner if the problem persists"
-            )
-          }
+    this.error.global = "";
+    this.authService.login(username,password).then(
+        (response) => {
+            if (response === 0){
+                this.router.navigate(["/booklist"])
+            }
+            else{
+              this.showError(
+                "Invalid credentials",
+                "Invalid identifier or password"
+              )
+            }
         }
-      )
+    ).catch(
+      (error) => {
+        if (error == 2){
+          this.error.global = "This account is disabled. If you don't know why your account was disabled, please contact your server owner";
+        }
+        else if (error == 3){
+          this.error.global = "Incorrect credentials";
+        }
+        else{
+          this.showError(
+            "Unexpected error occurred",
+            "Please contact the your server owner if the problem persists"
+          )
+        }
+      }
+    )
   }
 }

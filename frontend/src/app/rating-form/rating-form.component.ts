@@ -15,7 +15,23 @@ export class RatingFormComponent {
   @Output()
   public correctDataFlag = new EventEmitter<boolean>();
 
-  onDataChange(){
+  onCommentChange(){
+    this.validateComment();
+  }
+  onStoryChange(){
+    this.validateStory();
+  }
+  onArtStyleChange(){
+    this.validateArtStyle();
+  }
+  onFeelingChange(){
+    this.validateFeeling();
+  }
+  onCharactersChange(){
+    this.validateCharacters();
+  }
+
+  sendCorrectFlag(){
     this.correctDataFlag.emit(this.validateAllFields());
   }
 
@@ -28,27 +44,37 @@ export class RatingFormComponent {
   }
 
   validateAllFields() : boolean{
-    if (
-      !this.validateComment() ||
-      !this.validateArtStyle() ||
-      !this.validateCharacters() ||
-      !this.validateFeeling() ||
-      !this.validateStory()
-    ){
-      return false;
+    let valid = true;
+
+    // Could be made with only one if but I want to display all the errors, not only the first one that triggers the condition
+    if (!this.validateComment()){
+      valid = false;
+    }
+    if (!this.validateArtStyle()){
+      valid = false;
+    }
+    if (!this.validateCharacters()){
+      valid = false;
+    }
+    if (!this.validateFeeling()){
+      valid = false;
+    }
+    if (!this.validateStory()){
+      valid = false;
     }
 
-    return true;
+    return valid;
   }
 
   validateComment() : boolean{
+    this.errors.comment = "";
     if (this.formData.comment.length > 2000){
       this.errors.comment = "The comment must not be over 2000 characters.";
       return false;
     }
 
-    if (this.formData.comment.length < 20){
-      this.errors.comment = "Please put at least 20 characters in your comment.";
+    if (this.formData.comment.length < 5){
+      this.errors.comment = "Please put at least 5 characters in your comment.";
       return false;
     }
 
@@ -56,9 +82,6 @@ export class RatingFormComponent {
   }
   validateArtStyle(){
     this.errors.art_style = ""
-    if (!this.formData.art_style){
-      this.errors.art_style = "Art style grade cannot be null.";
-    }
 
     const validationResult = this.validateGradeField(this.formData.art_style!);
 
@@ -71,10 +94,6 @@ export class RatingFormComponent {
   }
   validateStory(){
     this.errors.story = ""
-    if (!this.formData.story){
-      this.errors.story = "Story grade cannot be null.";
-    }
-
     const validationResult = this.validateGradeField(this.formData.story!);
 
     if (validationResult != ""){
@@ -86,9 +105,6 @@ export class RatingFormComponent {
   }
   validateFeeling(){
     this.errors.feeling = ""
-    if (!this.formData.feeling){
-      this.errors.feeling = "Feeling grade cannot be null.";
-    }
 
     const validationResult = this.validateGradeField(this.formData.feeling!);
 
@@ -101,9 +117,6 @@ export class RatingFormComponent {
   }
   validateCharacters() : boolean{
     this.errors.characters = ""
-    if (!this.formData.characters){
-      this.errors.characters = "Characters grade cannot be null.";
-    }
 
     const validationResult = this.validateGradeField(this.formData.characters!);
 
@@ -115,6 +128,9 @@ export class RatingFormComponent {
     return true;
   }
   validateGradeField(value : number) : string{
+    if (value === null || value === undefined){
+      return "[Field] grade is empty.";
+    }
     if (isNaN(value)){
       return "[Field] is not a number.";
     }

@@ -46,8 +46,8 @@
 
         <div *ngIf="this.personalRating != null">
             <h3 class="text-center">Your rating</h3>
-            <div class="d-flex justify-content-center">
-                <app-comment class="m-1" [canDelete]="true" [canEdit]="true" [rating]="this.personalRating" *ngIf="this.personalRating" (editButtonClicked)="this.openUpdateRatingModal()" (deleteButtonClicked)="onDeleteButtonClicked()"></app-comment>
+            <div class="d-flex justify-content-center w-100">
+                <app-comment class="m-2 w-100" style="max-width:30rem;" [canDelete]="true" [canEdit]="true" [rating]="this.personalRating" *ngIf="this.personalRating" (editButtonClicked)="this.openUpdateRatingModal()" (deleteButtonClicked)="onDeleteButtonClicked()"></app-comment>
             </div>
         </div>
 
@@ -56,7 +56,7 @@
             <div class="text-center">
                 <h3>Book Ratings</h3>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="w-100">
                 <app-comment-list [ratingsList]="this.book?.ratings!" (deleteEmitter)="this.onDeleteOtherClicked($event)"></app-comment-list>
             </div>
         </div>
