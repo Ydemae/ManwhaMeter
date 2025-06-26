@@ -17,30 +17,30 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 1000, nullable: true)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?string $image_path = null;
 
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?bool $is_active = null;
 
     /**
      * @var Collection<int, Tag>
      */
     #[ORM\ManyToMany(targetEntity: Tag::class)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private Collection $tags;
 
     /**
@@ -48,15 +48,15 @@ class Book
      */
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'book', orphanRemoval: true)]
     #[MaxDepth(1)]
-    #[Groups(['classic'])]
+    #[Groups(['classic', 'admin'])]
     private Collection $ratings;
 
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?BookStatus $status = null;
 
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?BookType $bookType = null;
 
     /**

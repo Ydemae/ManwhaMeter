@@ -22,16 +22,8 @@ use ValueError;
 final class BookController extends AbstractController
 {
     #[Route('/getAll', name: 'book_getall', methods: ["POST"])]
-    public function getAll(Request $request, AuthService $authService, BookRepository $bookRepository, SerializerInterface $serializerInterface): Response
+    public function getAll(Request $request, BookRepository $bookRepository, SerializerInterface $serializerInterface): Response
     {
-        try{
-            $authService->authenticateByToken($request);
-        }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
 
@@ -165,17 +157,18 @@ final class BookController extends AbstractController
     #[Route('/getOneById/{id}', name: 'book_getonebyid', methods: ["GET"])]
     public function getOneById(int $id, Request $request, AuthService $authService, BookRepository $bookRepository, SerializerInterface $serializerInterface): Response
     {
-        $userData = [];
+        $loggedIn = false;
 
-        try{
-            $userData = $authService->authenticateByToken($request);
+        if ($request->headers->get("authorization")){
+            $loggedIn = true;
+            try{
+                $authService->authenticateByToken($request);
+            }
+            catch(Exception $e){
+                $errorMessage = $e->getMessage();
+                return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+            }
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
-        }
-
-        $userId = $userData["user_id"];
 
         $book = $bookRepository->findOneBy(["id" => $id]);
 
@@ -183,7 +176,12 @@ final class BookController extends AbstractController
             return $this->json(["result" => "error", "error" => "No book with id : $id"], 400);
         }
 
-        $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "classic"]);
+        if ($loggedIn){
+            $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "classic"]);
+        }
+        else{
+            $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "unlogged"]);
+        }
 
         return $this->json(["result" => "success","book" => json_decode($jsonBook)]);
     }

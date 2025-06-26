@@ -16,39 +16,39 @@ class Rating
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?int $story = null;
 
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?int $feeling = null;
 
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?int $characters = null;
 
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?int $art_style = null;
 
     #[ORM\ManyToOne(inversedBy: 'ratings')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    #[Groups(['rating'])]
+    #[Groups(['admin'])]
     private ?Book $book = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?User $user = null;
 
     #[ORM\Column(length: 6000, nullable: true)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
     private ?string $comment = null;
 
     /**

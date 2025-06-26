@@ -24,7 +24,6 @@ export class TagService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/tag/getAll`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(

@@ -43,7 +43,6 @@ export class BookService {
         `${this.apiUrl}/books/getAll`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
@@ -140,14 +139,15 @@ export class BookService {
   }
 
   getOneById(
-    id: number
+    id: number,
+    logged : boolean = false
   ): Promise<DetailedBook> {
 
     return new Promise((resolve, reject) => {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/books/getOneById/${id}`,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          headers: logged === true ? new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }) : new HttpHeaders(),
           observe: 'response'
         }
       ).pipe(

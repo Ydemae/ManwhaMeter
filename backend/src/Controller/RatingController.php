@@ -37,7 +37,7 @@ final class RatingController extends AbstractController
             return $this->json(["result" => "error", "error" => "No rating with id : $id"], 400);
         }
 
-        $jsonRating = $serializerInterface->serialize($rating, 'json', ['groups' => "rating"]);
+        $jsonRating = $serializerInterface->serialize($rating, 'json', ['groups' => "admin"]);
 
         return $this->json(["result" => "success","rating" => json_decode($jsonRating)]);
     }
@@ -56,7 +56,7 @@ final class RatingController extends AbstractController
         $ratings = $ratingRepository->findAll();
 
 
-        $jsonRatings = $serializerInterface->serialize($ratings, 'json', ['groups' => "rating"]);
+        $jsonRatings = $serializerInterface->serialize($ratings, 'json', ['groups' => "admin"]);
 
         return $this->json(["result" => "success","ratings" => json_decode($jsonRatings)]);
     }

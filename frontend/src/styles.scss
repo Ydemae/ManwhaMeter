@@ -188,3 +188,8 @@ ng-select .ng-value .ng-value-icon {
 .mytooltip .arrow::before {
     border-top-color: darkgreen;
 }
+
+.accordion-button:not(.collapsed) {
+    background-color: mix($secondary, gray, 80%) !important;
+    color: $body-bg;
+}

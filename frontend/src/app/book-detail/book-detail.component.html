@@ -34,7 +34,7 @@
                 <p>{{ this.book?.description }}</p>
             </div>
         </div>
-        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.personalRating == null">
+        <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.personalRating == null && this.isLoggedIn === true">
             <button type="button" class="btn btn-primary" (click)="this.openCreateRatingModal()">Rate this book</button>
         </div>
         <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.isAdmin">
@@ -44,22 +44,32 @@
             <button type="button" class="btn btn-danger" (click)="this.onDeleteBookClicked()">Delete this book</button>
         </div>
 
-        <div *ngIf="this.personalRating != null">
-            <h3 class="text-center">Your rating</h3>
-            <div class="d-flex justify-content-center w-100">
-                <app-comment class="m-2 w-100" style="max-width:30rem;" [canDelete]="true" [canEdit]="true" [rating]="this.personalRating" *ngIf="this.personalRating" (editButtonClicked)="this.openUpdateRatingModal()" (deleteButtonClicked)="onDeleteButtonClicked()"></app-comment>
+        <ng-container *ngIf="this.isLoggedIn else NotLoggedIn">
+            <div *ngIf="this.personalRating != null">
+                <h3 class="text-center">Your rating</h3>
+                <div class="d-flex justify-content-center w-100">
+                    <app-comment class="m-2 w-100" style="max-width:30rem;" [canDelete]="true" [canEdit]="true" [rating]="this.personalRating" *ngIf="this.personalRating" (editButtonClicked)="this.openUpdateRatingModal()" (deleteButtonClicked)="onDeleteButtonClicked()"></app-comment>
+                </div>
             </div>
-        </div>
 
 
-        <div class="book-rating-container">
-            <div class="text-center">
-                <h3>Book Ratings</h3>
+            <div class="book-rating-container">
+                <div class="text-center">
+                    <h3>Book Ratings</h3>
+                </div>
+                <div class="w-100">
+                    <app-comment-list [ratingsList]="this.book?.ratings!" (deleteEmitter)="this.onDeleteOtherClicked($event)"></app-comment-list>
+                </div>
             </div>
-            <div class="w-100">
-                <app-comment-list [ratingsList]="this.book?.ratings!" (deleteEmitter)="this.onDeleteOtherClicked($event)"></app-comment-list>
+        </ng-container>
+        <ng-template #NotLoggedIn>
+            <div class="mt-3 content-wrapper d-flex justify-content-center">
+                <div class="alert alert-dismissible alert-secondary">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    Log in to view the ratings or rate the book yourself.
+                </div>
             </div>
-        </div>
+        </ng-template>
     </div>
     <ng-template #ratingModal>
         <app-rating-modal (closeModalEmitter)="this.closeRatingModal()" (submitDataEmitter)="this.onRatingModalSubmit($event)" [modalTitle]="ratingModalOperation" [bookRating]="bookRatingToUpdate"></app-rating-modal>

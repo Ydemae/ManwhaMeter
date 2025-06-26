@@ -42,16 +42,8 @@ final class TagController extends AbstractController
     }
 
     #[Route('/getAll', name: 'tag_getall', methods: ["GET"])]
-    public function getAll(AuthService $authService, Request $request, SerializerInterface $serializerInterface, TagRepository $tagRepository): Response
+    public function getAll(Request $request, SerializerInterface $serializerInterface, TagRepository $tagRepository): Response
     {
-        try{
-            $authService->authenticateByToken($request);
-        }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
-        }
-
         $tags = $tagRepository->findAll();
 
 

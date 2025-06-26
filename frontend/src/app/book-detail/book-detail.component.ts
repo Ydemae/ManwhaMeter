@@ -58,6 +58,7 @@ export class BookDetailComponent {
   public indexOtherRatingToBeDeleted? : number;
 
   public isAdmin : boolean = false;
+  public isLoggedIn : boolean = false;
 
   constructor(
     private bookService : BookService,
@@ -70,6 +71,7 @@ export class BookDetailComponent {
   ){}
 
   ngOnInit(){
+    this.isLoggedIn = this.authService.isLoggedInSubject.value;
     this.isAdmin = this.authService.isAdminSubject.value;
 
     let stringBookId = this.route.snapshot.paramMap.get("id");
@@ -90,23 +92,27 @@ export class BookDetailComponent {
     this.loadingFailed = false;
     this.bookFetched = false;
 
-    let getBookDetailPromise = this.bookService.getOneById(this.bookId).catch(
+    let getBookDetailPromise = this.bookService.getOneById(this.bookId, this.isLoggedIn).catch(
       (error) => {
         this.loadingFailed = true;
       }
     )
 
-    let getPersonalRatingPromise = this.ratingService.getOneByBookId(this.bookId).catch(
-      error => {
-        //errcode 2 means that the user just didn't rate the book, not a true error
+    let getPersonalRatingPromise = null;
 
-        if (error["errcode"] != 2){
-          this.loadingFailed = true;
-          return
+    if (this.isLoggedIn === true){
+      getPersonalRatingPromise = this.ratingService.getOneByBookId(this.bookId).catch(
+        error => {
+          //errcode 2 means that the user just didn't rate the book, not a true error
+
+          if (error["errcode"] != 2){
+            this.loadingFailed = true;
+            return
+          }
+          this.personalRatingFetched = true;
         }
-        this.personalRatingFetched = true;
-      }
-    )
+      )
+    }
 
     Promise.all([getBookDetailPromise, getPersonalRatingPromise]).then(
       results => {
