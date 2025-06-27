@@ -12,11 +12,11 @@ class Tag
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'rating', 'unlogged'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 80, unique: true)]
-    #[Groups(['classic', 'rating'])]
+    #[Groups(['classic', 'rating', 'unlogged'])]
     private ?string $label = null;
 
     #[ORM\Column]

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250604125520 extends AbstractMigration
+final class Version20250627065949 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -29,12 +29,15 @@ final class Version20250604125520 extends AbstractMigration
         $this->addSql('CREATE TABLE book_report (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, book_id INTEGER NOT NULL, reason VARCHAR(2000) NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , CONSTRAINT FK_EDF87C0916A2B381 FOREIGN KEY (book_id) REFERENCES book (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_EDF87C0916A2B381 ON book_report (book_id)');
-        $this->addSql('CREATE TABLE rating (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, book_id INTEGER NOT NULL, user_id INTEGER NOT NULL, story INTEGER NOT NULL, feeling INTEGER NOT NULL, characters INTEGER NOT NULL, art_style INTEGER NOT NULL, comment VARCHAR(2000) DEFAULT NULL, CONSTRAINT FK_D889262216A2B381 FOREIGN KEY (book_id) REFERENCES book (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_D8892622A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE TABLE rating (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, book_id INTEGER NOT NULL, user_id INTEGER NOT NULL, story INTEGER NOT NULL, feeling INTEGER NOT NULL, characters INTEGER NOT NULL, art_style INTEGER NOT NULL, comment CLOB DEFAULT NULL, CONSTRAINT FK_D889262216A2B381 FOREIGN KEY (book_id) REFERENCES book (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_D8892622A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_D889262216A2B381 ON rating (book_id)');
         $this->addSql('CREATE INDEX IDX_D8892622A76ED395 ON rating (user_id)');
         $this->addSql('CREATE TABLE rating_report (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, rating_id INTEGER NOT NULL, reason VARCHAR(2000) NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , CONSTRAINT FK_EBDD1D0CA32EFC6 FOREIGN KEY (rating_id) REFERENCES rating (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_EBDD1D0CA32EFC6 ON rating_report (rating_id)');
+        $this->addSql('CREATE TABLE reading_list_entry (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, book_id INTEGER NOT NULL, CONSTRAINT FK_3ADDC75A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_3ADDC7516A2B381 FOREIGN KEY (book_id) REFERENCES book (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE INDEX IDX_3ADDC75A76ED395 ON reading_list_entry (user_id)');
+        $this->addSql('CREATE INDEX IDX_3ADDC7516A2B381 ON reading_list_entry (book_id)');
         $this->addSql('CREATE TABLE register_invite (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, creator_id INTEGER NOT NULL, uid VARCHAR(36) NOT NULL, used BOOLEAN NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , exp_date DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , CONSTRAINT FK_7452683D61220EA6 FOREIGN KEY (creator_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
@@ -65,6 +68,7 @@ final class Version20250604125520 extends AbstractMigration
         $this->addSql('DROP TABLE book_report');
         $this->addSql('DROP TABLE rating');
         $this->addSql('DROP TABLE rating_report');
+        $this->addSql('DROP TABLE reading_list_entry');
         $this->addSql('DROP TABLE register_invite');
         $this->addSql('DROP TABLE tag');
         $this->addSql('DROP TABLE user');

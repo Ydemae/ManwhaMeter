@@ -4,7 +4,9 @@
         <p class="loader-text">Data is being fetched, please wait.</p>
     </ng-container>
     <ng-template #Retry>
-        <button type="button" class="btn btn-primary" (click)="retry()">Retry</button>
+        <div class="d-inline-block">
+            <button type="button" class="btn btn-primary" (click)="retry()">Retry</button>
+        </div>
         <p class="loader-text">Data couldn't be fetched from the server, please try again</p>
     </ng-template>
 </div>

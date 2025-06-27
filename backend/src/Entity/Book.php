@@ -65,12 +65,19 @@ class Book
     #[ORM\OneToMany(targetEntity: BookReport::class, mappedBy: 'book', orphanRemoval: true)]
     private Collection $bookReports;
 
+    /**
+     * @var Collection<int, ReadingListEntry>
+     */
+    #[ORM\OneToMany(targetEntity: ReadingListEntry::class, mappedBy: 'book', orphanRemoval: true)]
+    private Collection $readingListEntries;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->ratings = new ArrayCollection();
         $this->Comment = new ArrayCollection();
         $this->bookReports = new ArrayCollection();
+        $this->readingListEntries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -228,6 +235,36 @@ class Book
             // set the owning side to null (unless already changed)
             if ($bookReport->getBook() === $this) {
                 $bookReport->setBook(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReadingListEntry>
+     */
+    public function getReadingListEntries(): Collection
+    {
+        return $this->readingListEntries;
+    }
+
+    public function addReadingListEntry(ReadingListEntry $readingListEntry): static
+    {
+        if (!$this->readingListEntries->contains($readingListEntry)) {
+            $this->readingListEntries->add($readingListEntry);
+            $readingListEntry->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReadingListEntry(ReadingListEntry $readingListEntry): static
+    {
+        if ($this->readingListEntries->removeElement($readingListEntry)) {
+            // set the owning side to null (unless already changed)
+            if ($readingListEntry->getBook() === $this) {
+                $readingListEntry->setBook(null);
             }
         }
 
