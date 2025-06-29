@@ -1,0 +1,24 @@
+<div class="content-wrapper">
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+    </div>
+
+    <ng-template #NotFetched>
+        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadReadingList()"></app-loader>
+    </ng-template>
+
+    <ng-container *ngIf="this.dataFetched else NotFetched">
+        <div class="mb-5">
+            <h1>Reading list</h1>
+            <p>This is your personal reading list, it allows you to list the books you may want to read later.</p>
+        </div>
+        <app-book-list [books]="this.books"
+        [ranked]="false"
+        (bookClickedEventEmitter)="receiveBookClickedEvent($event)"
+        (removeReadingListEmitter)="this.receiveDeleteFromReadingListEvent($event)"
+        [bookIdToReadingListEntry]="this.bookIdToReadingListEntry"
+        [logged]="true"></app-book-list>
+    </ng-container>
+</div>

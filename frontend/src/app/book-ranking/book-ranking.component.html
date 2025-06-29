@@ -16,7 +16,13 @@
     <app-search-filters [tagsList]="tags!" (filterChangeEmitter)="receiveFilterChangeEvent($event)"></app-search-filters>
 
     <ng-container *ngIf="this.books != [] else Empty">
-        <app-book-list [books]="this.books!" (bookClickedEventEmitter)="receiveBookClickedEvent($event)"></app-book-list>
+        <app-book-list [books]="this.books!"
+        [bookIdToReadingListEntry]="this.bookIdToReadingListEntry"
+        [logged]="this.authService.isLoggedInSubject.value"
+        (bookClickedEventEmitter)="receiveBookClickedEvent($event)"
+        (addReadingListEmitter)="onAddReadingListReceived($event)"
+        (removeReadingListEmitter)="onRemoveReadingListReceived($event)">
+        </app-book-list>
     </ng-container>
 
     <ng-template #Empty>

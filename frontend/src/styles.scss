@@ -116,7 +116,6 @@ ng-select .ng-value .ng-value-icon {
     cursor: pointer;
     opacity: 0.6;
     transition: 0.5s;
-    width: 2rem;
 }
 
 .img-button:hover{
@@ -172,6 +171,7 @@ ng-select .ng-value .ng-value-icon {
 }
 
 .active{
+    background-color: inherit !important;
     color: $secondary !important;
 }
 

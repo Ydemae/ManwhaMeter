@@ -30,13 +30,24 @@
             </div>
 
             <div class="flex-grow-1 d-flex justify-content-start gap-4" style="max-width: 45%;">
-                <a *ngIf="userIsConnected"
-                class="custom-nav-item"
-                routerLink="/mybooklist"
-                routerLinkActive="active" 
-                [routerLinkActiveOptions]="{ exact: true }">
-                    Personal ranking
-                </a>
+
+                <a class="dropdown-toggle custom-nav-item" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Personal space</a>
+                <div class="dropdown-menu">
+                    <a *ngIf="userIsConnected"
+                    class="dropdown-item custom-nav-item m-1"
+                    routerLink="/mybooklist"
+                    routerLinkActive="active" 
+                    [routerLinkActiveOptions]="{ exact: true }">
+                        Personal ranking
+                    </a>
+                    <a *ngIf="userIsConnected"
+                    class="dropdown-item custom-nav-item m-1"
+                    routerLink="/readinglist"
+                    routerLinkActive="active" 
+                    [routerLinkActiveOptions]="{ exact: true }">
+                        Reading list
+                    </a>
+                </div>
     
                 <a *ngIf="!userIsConnected"
                 class="custom-nav-item"

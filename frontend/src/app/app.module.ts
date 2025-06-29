@@ -36,6 +36,7 @@ import { AnnouncementCreateComponent } from './announcement-create/announcement-
 import { TagCreateModalComponent } from './tag-create-modal/tag-create-modal.component';
 import { TagListComponent } from './tag-list/tag-list.component';
 import { PasswordComponent } from './password/password.component';
+import { ReadingListComponent } from './reading-list/reading-list.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { PasswordComponent } from './password/password.component';
     AnnouncementCreateComponent,
     TagCreateModalComponent,
     TagListComponent,
-    PasswordComponent
+    PasswordComponent,
+    ReadingListComponent
   ],
   imports: [
     BrowserModule,

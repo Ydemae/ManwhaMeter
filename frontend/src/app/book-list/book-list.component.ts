@@ -10,13 +10,35 @@ import { ListedBook } from '../../types/listedBook';
 export class BookListComponent {
 
   @Input()
-  public books! : Array<ListedBook>
+  public logged! : boolean;
+
+  @Input()
+  public books! : Array<ListedBook>;
+
+  @Input()
+  public bookIdToReadingListEntry : Map<number, number> = new Map();
+
+  @Input()
+  public ranked : boolean = true;
 
   @Output()
   public bookClickedEventEmitter = new EventEmitter<number>()
 
+  @Output()
+  private addReadingListEmitter = new EventEmitter<number>();
+
+  @Output()
+  private removeReadingListEmitter = new EventEmitter<number>();
+
   receiveBookClickedEvent(bookId : number){
-    console.log(bookId)
     this.bookClickedEventEmitter.emit(bookId)
+  }
+
+  public onAddReadingListReceived(bookId : number){
+    this.addReadingListEmitter.emit(bookId);
+  }
+
+  public onRemoveReadingListReceived(bookId : number){
+    this.removeReadingListEmitter.emit(bookId);
   }
 }

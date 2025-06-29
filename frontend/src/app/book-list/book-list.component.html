@@ -2,7 +2,14 @@
     <div class="container">
         <div class="row">
             <div *ngFor="let book of this.books" class="col-sm-4 col-lg-3 ">
-                <app-book-card [book]="book" (clickEmitter)="receiveBookClickedEvent($event)"></app-book-card>
+                <app-book-card [book]="book"
+                (clickEmitter)="receiveBookClickedEvent($event)"
+                [inReadingList]="this.bookIdToReadingListEntry.has(book.id)"
+                [ranked]="this.ranked"
+                [logged]="this.logged"
+                (addReadingListEmitter)="this.onAddReadingListReceived($event)"
+                (removeReadingListEmitter)="this.onRemoveReadingListReceived($event)">
+                </app-book-card>
             </div>
         </div>
     </div>

@@ -10,6 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { AnnouncementCreateComponent } from './announcement-create/announcement-create.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
+import { ReadingListComponent } from './reading-list/reading-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'admin', component: AdminBoardComponent },
   { path: 'announcement/create', component: AnnouncementCreateComponent },
   { path: 'books/edit/:id', component: BookEditComponent },
+  { path: 'readinglist', component: ReadingListComponent },
 ];
 
 @NgModule({

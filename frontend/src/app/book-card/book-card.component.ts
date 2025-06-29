@@ -13,8 +13,23 @@ export class BookCardComponent {
   public book! : ListedBook;
   public displayedTags : string = "";
 
+  @Input()
+  public logged : boolean = false;
+
+  @Input()
+  public inReadingList : boolean = false;
+
+  @Input()
+  public ranked : boolean = true;
+
   @Output()
   private clickEmitter = new EventEmitter<number>();
+
+  @Output()
+  private addReadingListEmitter = new EventEmitter<number>();
+
+  @Output()
+  private removeReadingListEmitter = new EventEmitter<number>();
 
   public apiUrl = environment.apiUrl;
 
@@ -24,6 +39,16 @@ export class BookCardComponent {
 
   public onBookClicked(){
     this.clickEmitter.emit(this.book.id)
+  }
+
+  public onAddReadingListClicked(event : MouseEvent){
+    event.stopPropagation();
+    this.addReadingListEmitter.emit(this.book.id);
+  }
+
+  public onRemoveReadingListClicked(event : MouseEvent){
+    event.stopPropagation();
+    this.removeReadingListEmitter.emit(this.book.id);
   }
 
   private initializeDisplayedTags(){
