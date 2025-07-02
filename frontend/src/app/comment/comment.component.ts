@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Rating } from '../../types/rating';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';

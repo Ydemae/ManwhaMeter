@@ -1,3 +1,6 @@
+<!--Copyright (c) 2025 Ydemae
+    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+
 <div class="alert alert-dismissible alert-danger" *ngIf="this.errorIsShown">
     <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
     <h4 class="alert-heading">{{ this.errTitle }}</h4>
@@ -11,17 +14,17 @@
 
 <div class="content-wrapper">
     <form class="col">
-        <div class="d-flex justify-content-center mt-4">
-            <div class="d-flex flex-grow-1" style="max-width: 1000px;">
-                <div class="m-1 me-4">
-                    <label for="login">Username</label>
-                </div>
-                <div class="flex-grow-1">
-                    <input type="text" class="form-control" autocomplete="off" id="login" name="login" [(ngModel)]="username" placeholder="username">
-                </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-1 col-sm-12">
+                <label for="login">Username</label>
             </div>
+            <div class="col-md-7 col-sm-12">
+                <input type="text" class="form-control" autocomplete="off" id="login" name="login" [(ngModel)]="username" placeholder="username">
+            </div>
+            <div class="col-md-2"></div>
         </div>
-        <div class="text-center">
+        <div class="text-center mb-2">
             <small class="text-danger" *ngIf="this.error.username">{{ this.error.username }}</small>
         </div>
         <app-password [password]="this.password" (passwordChangeEvent)="onPasswordChange($event)" [error]="this.error.password"></app-password>

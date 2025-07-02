@@ -1,5 +1,8 @@
 <?php
 
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 use Symfony\Component\Dotenv\Dotenv;
 
 require dirname(__DIR__).'/vendor/autoload.php';

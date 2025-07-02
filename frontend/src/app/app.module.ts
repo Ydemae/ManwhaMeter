@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -37,6 +40,9 @@ import { TagCreateModalComponent } from './tag-create-modal/tag-create-modal.com
 import { TagListComponent } from './tag-list/tag-list.component';
 import { PasswordComponent } from './password/password.component';
 import { ReadingListComponent } from './reading-list/reading-list.component';
+import { CreditsComponent } from './credits/credits.component';
+import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +76,10 @@ import { ReadingListComponent } from './reading-list/reading-list.component';
     TagCreateModalComponent,
     TagListComponent,
     PasswordComponent,
-    ReadingListComponent
+    ReadingListComponent,
+    CreditsComponent,
+    TermsOfServiceComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,

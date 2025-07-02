@@ -1,18 +1,14 @@
 <?php
 
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 namespace App\Controller;
 
-use App\Entity\Book;
 use App\Entity\RegisterInvite;
-use App\enum\BookStatus;
-use App\enum\BookType;
-use App\Repository\BookRepository;
 use App\Repository\RegisterInviteRepository;
-use App\Repository\TagRepository;
 use App\Repository\UserRepository;
 use App\Service\AuthService;
-use App\Service\ImageManager;
-use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -22,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
-use ValueError;
 
 #[Route('/registerInvite')]
 final class RegisterInviteController extends AbstractController
@@ -35,9 +30,8 @@ final class RegisterInviteController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -97,9 +91,8 @@ final class RegisterInviteController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -136,9 +129,8 @@ final class RegisterInviteController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){

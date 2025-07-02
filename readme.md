@@ -3,17 +3,14 @@
 ## Introduction
 
 The goal of this project is to create an app to rate and list books, be it manga, webtoons, or novels.
-I personally want this to be a platform for me and my friends to share our recommandations.
+I personally want this to be a platform for me and my friends to share our recommendations.
 
-This project is still in one of its early versions, don't be too harsh on it yet since it's only the beginning.
-Any feedback would be appreciated, wether it is about possible improvements or functionnalities you might want to see in the app.
+Any feedback would be appreciated, wether it is about possible improvements or features you might want to see in the app.
 
 This file is kind of a notebook for me to remember commands until I set up an automatic deployment process.
-Proper documentation will come with later versions.
+A proper and cleaner documentation may come with later versions.
 
 ## Credits
-Logout icon by picons.
-
 
 <a href="https://www.flaticon.com/free-icons/eye" title="eye icons">Eye icons created by Gregor Cresnar - Flaticon</a><br>
 <a href="https://www.flaticon.com/free-icons/eye-password" title="eye password icons">Eye password icons created by sonnycandra - Flaticon</a><br>

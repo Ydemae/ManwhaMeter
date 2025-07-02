@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
 
 $primary: #1f4d48;
 $secondary: #fcf1ca;
@@ -19,6 +20,8 @@ $body-color: $secondary;
 
 body{
     overflow-x: hidden;
+    height: 100%;
+    padding-bottom: 40px;
 }
 
 .hidden {

@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Tag } from '../../types/tag';
 import { BookStatus } from '../../enum/bookStatus';
@@ -163,7 +166,7 @@ export class BookFormComponent {
     let errorString = this.validateStringField(
       this.description,
       "description",
-      25,
+      10,
       1000
     );
   

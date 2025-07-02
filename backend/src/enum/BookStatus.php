@@ -1,4 +1,8 @@
 <?php
+
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 namespace App\enum;
 
 enum BookStatus : string{

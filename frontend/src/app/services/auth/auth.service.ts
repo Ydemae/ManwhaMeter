@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environments';

@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { RatingData } from '../../types/ratingData';
 import { RatingFormComponent } from '../rating-form/rating-form.component';

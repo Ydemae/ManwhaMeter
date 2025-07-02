@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
@@ -11,6 +14,9 @@ import { AdminBoardComponent } from './admin-board/admin-board.component';
 import { AnnouncementCreateComponent } from './announcement-create/announcement-create.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { ReadingListComponent } from './reading-list/reading-list.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
+import { CreditsComponent } from './credits/credits.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -25,6 +31,9 @@ const routes: Routes = [
   { path: 'announcement/create', component: AnnouncementCreateComponent },
   { path: 'books/edit/:id', component: BookEditComponent },
   { path: 'readinglist', component: ReadingListComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'terms-of-service', component: TermsOfServiceComponent },
+  { path: 'credits', component: CreditsComponent },
 ];
 
 @NgModule({

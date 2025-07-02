@@ -1,5 +1,8 @@
 <?php
 
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 namespace App\Controller;
 
 use App\Entity\Tag;
@@ -25,9 +28,8 @@ final class TagController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $tag = $tagRepository->findOneBy(["id" => $id]);
@@ -59,9 +61,8 @@ final class TagController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -97,9 +98,8 @@ final class TagController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -142,9 +142,8 @@ final class TagController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -170,9 +169,8 @@ final class TagController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -197,9 +195,8 @@ final class TagController extends AbstractController
         try{
             $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $body = $request->attributes->get("sanitized_body");

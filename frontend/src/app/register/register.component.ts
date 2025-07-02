@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,14 +25,16 @@ export class RegisterComponent implements OnInit{
     password : "",
     confirmPassword : "",
     username : "",
-    profilePicture : ""
+    profilePicture : "",
+    terms : false,
   }
 
   public formError = {
     password : "",
     confirmPassword : "",
     username : "",
-    profilePicture : ""
+    profilePicture : "",
+    terms : ""
   }
 
   public showError = false;
@@ -60,12 +65,31 @@ export class RegisterComponent implements OnInit{
   }
 
   validateAllFields() : boolean{
-    if (
-      !this.validatePassword() ||
-      !this.validateConfirmPassword() ||
-      !this.validateUsername() ||
-      !this.validateProfilePicture()
-    ){
+    let valid = true;
+
+    if (!this.validatePassword()){
+      valid = false;
+    }
+    if (!this.validateConfirmPassword()){
+      valid = false;
+    }
+    if (!this.validateUsername()){
+      valid = false;
+    }
+    if (!this.validateProfilePicture()){
+      valid = false;
+    }
+    if (!this.validateTerms()){
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  validateTerms(){
+    this.formError.terms = "";
+    if (this.formData.terms == false){
+      this.formError.terms = "You must agree to the terms of service to register.";
       return false;
     }
 
@@ -90,8 +114,14 @@ export class RegisterComponent implements OnInit{
       return false;
     }
 
+    if (this.formData.password.length < 8 || this.formData.password.length > 60){
+      this.formError.password = "Password must be between 8-60 chars.";
+      return false;
+    }
+
     return true;
   }
+
   validateConfirmPassword() : boolean{
     this.formError.confirmPassword = "";
     
@@ -144,7 +174,7 @@ export class RegisterComponent implements OnInit{
   }
 
   onUsernameChange(){
-    this.validateAllFields()
+    this.validateUsername()
     this.checkUsernameAvailability()
   }
 
@@ -154,7 +184,7 @@ export class RegisterComponent implements OnInit{
     }
 
     if (!this.usernameAvailable){
-      this.displayError("Unverified username", "Your username was not verified or is taken, please try again")
+      this.displayError("Unverified username", "Your username was not verified or is already taken. Sometimes you submit the form before the username was verified, please try again after a few seconds.")
       return;
     }
     

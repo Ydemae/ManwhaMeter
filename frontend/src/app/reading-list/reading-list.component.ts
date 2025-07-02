@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Component, OnInit } from '@angular/core';
 import { ReadingListService } from '../services/reading-list/reading-list.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';

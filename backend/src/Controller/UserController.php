@@ -1,5 +1,8 @@
 <?php
 
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -28,9 +31,8 @@ final class UserController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $user = $userRepository->findOneBy(["id" => $id]);
@@ -51,9 +53,8 @@ final class UserController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -125,9 +126,8 @@ final class UserController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
         $userId = $userData["user_id"];
 
@@ -182,9 +182,8 @@ final class UserController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -218,9 +217,8 @@ final class UserController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -254,9 +252,8 @@ final class UserController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){

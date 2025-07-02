@@ -1,5 +1,8 @@
 <?php
 
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 namespace App\Entity;
 
 use App\enum\BookStatus;
@@ -70,6 +73,9 @@ class Book
      */
     #[ORM\OneToMany(targetEntity: ReadingListEntry::class, mappedBy: 'book', orphanRemoval: true)]
     private Collection $readingListEntries;
+
+    #[ORM\ManyToOne(inversedBy: 'books')]
+    private ?User $creator = null;
 
     public function __construct()
     {
@@ -267,6 +273,18 @@ class Book
                 $readingListEntry->setBook(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
 
         return $this;
     }

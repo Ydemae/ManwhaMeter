@@ -1,5 +1,8 @@
 <?php
 
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 namespace App\Controller;
 
 use App\Entity\Rating;
@@ -26,9 +29,8 @@ final class RatingController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $rating = $ratingRepository->findOneBy(["id" => $id]);
@@ -48,9 +50,8 @@ final class RatingController extends AbstractController
         try{
             $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $ratings = $ratingRepository->findAll();
@@ -68,9 +69,8 @@ final class RatingController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $userId = $userData["user_id"];
@@ -94,9 +94,8 @@ final class RatingController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $userId = $userData["user_id"];
@@ -174,9 +173,8 @@ final class RatingController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
         $userId = $userData["user_id"];
 
@@ -244,9 +242,8 @@ final class RatingController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
         $userId = $userData["user_id"];
         

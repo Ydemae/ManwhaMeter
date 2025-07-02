@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { BillboardService } from '../services/billboard/billboard.service';

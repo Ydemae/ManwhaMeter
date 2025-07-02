@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Ydemae
+// Licensed under the AGPLv3 License. See LICENSE file for details.
+
 import { Component } from '@angular/core';
 import { Tag } from '../../types/tag';
 import { TagService } from '../services/tag/tag.service';
@@ -64,6 +67,7 @@ export class BookCreateComponent {
     this.tagService.getAll().then(
       response => {
         this.allTagsList = response
+        this.dataFetched = true;
       }
     )
     .catch(

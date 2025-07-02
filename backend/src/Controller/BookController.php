@@ -1,5 +1,8 @@
 <?php
 
+# Copyright (c) 2025 Ydemae
+# Licensed under the AGPLv3 License. See LICENSE file for details.
+
 namespace App\Controller;
 
 use App\Entity\Book;
@@ -7,6 +10,7 @@ use App\enum\BookStatus;
 use App\enum\BookType;
 use App\Repository\BookRepository;
 use App\Repository\TagRepository;
+use App\Repository\UserRepository;
 use App\Service\AuthService;
 use App\Service\ImageManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -93,9 +97,8 @@ final class BookController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $userId = $userData["user_id"];
@@ -164,9 +167,8 @@ final class BookController extends AbstractController
             try{
                 $authService->authenticateByToken($request);
             }
-            catch(Exception $e){
-                $errorMessage = $e->getMessage();
-                return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+            catch(Exception){
+                return $this->json(["result" => "error","error" => "Access denied"], 401);
             }
         }
 
@@ -193,9 +195,8 @@ final class BookController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
@@ -224,15 +225,20 @@ final class BookController extends AbstractController
 
 
     #[Route('/create', name: 'book_create', methods: ["POST"])]
-    public function createBook(Request $request, AuthService $authService, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager, TagRepository $tagRepository){
+    public function createBook(Request $request, AuthService $authService, UserRepository $userRepository, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager, TagRepository $tagRepository){
         $userData = [];
 
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        $user = $userRepository->findOneBy(["id" => $userData["user_id"]]);
+
+        if ($user == null){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $body = $request->attributes->get("sanitized_body");
@@ -317,6 +323,7 @@ final class BookController extends AbstractController
         $book->setImagePath($imageName);
         $book->setBookType($bookType);
         $book->setStatus($status);
+        $book->setCreator($user);
 
         $book->setIsActive(true);
     
@@ -494,9 +501,8 @@ final class BookController extends AbstractController
         try{
             $userData = $authService->authenticateByToken($request);
         }
-        catch(Exception $e){
-            $errorMessage = $e->getMessage();
-            return $this->json(["result" => "error","error" => "Access denied : $errorMessage"], 401);
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         if (!in_array("ROLE_ADMIN", $userData["roles"])){
