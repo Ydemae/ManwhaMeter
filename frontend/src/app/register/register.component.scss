@@ -1,6 +1,8 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
 
+@use '../../variables.scss' as variables;
+
 .centered-checkbox {
     display: flex;
     flex-direction: column;
@@ -9,4 +11,11 @@
 .centered-checkbox .form-check-label {
     margin-top: 0.5rem;
     text-align: center;
+}
+
+.register-checkbox{
+    width: 1.5rem;
+    height: 1.5rem;
+
+    box-shadow: 0 0 5px variables.$secondary;
 }

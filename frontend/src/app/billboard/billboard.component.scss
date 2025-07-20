@@ -1,2 +1,102 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
+
+@use '../../variables.scss' as variables;
+
+.billboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.billboard-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    
+    .billboard-title {
+        color: variables.$secondary;
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .billboard-subtitle {
+        color: rgba(variables.$secondary, 0.7);
+        font-size: 1.2rem;
+        margin: 0;
+        font-weight: 400;
+    }
+}
+
+.admin-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    
+    .create-announcement-btn {
+        background: linear-gradient(135deg, variables.$primary, variables.$primary-light);
+        border: none;
+        color: variables.$secondary;
+        padding: 1rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        
+        &:hover {
+            background: linear-gradient(135deg, variables.$primary-light, variables.$primary);
+            box-shadow: 0 8px 25px rgba(variables.$primary-backdrop, 0.4);
+        }
+    }
+}
+
+.announcements-grid {
+    display: grid;
+    gap: 2rem;
+    
+    .announcement-item {
+        animation: slideInUp 0.6s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(145deg, variables.$card-bg, variables.$body-bg);
+    border: 2px solid rgba(variables.$primary-backdrop, 0.3);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    
+    .empty-state-icon {
+        margin-bottom: 2rem;
+        
+        i {
+            font-size: 4rem;
+        }
+    }
+    
+    .empty-state-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state-message {
+        color: rgba(variables.$secondary, 0.8);
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state-subtitle {
+        color: rgba(variables.$secondary, 0.6);
+        font-size: 0.95rem;
+        font-style: italic;
+        margin: 0;
+    }
+}

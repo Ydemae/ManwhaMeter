@@ -1,36 +1,69 @@
 <!--Copyright (c) 2025 Ydemae
     Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<div>
-    <h1>Billboard</h1>
-
-    <a routerLink="/announcement/create" class="btn btn-primary m-2" *ngIf="this.isAdmin">Create an annoucement</a>
-
-     <div class="alert alert-dismissible alert-success" *ngIf="this.flashMessage != ''">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlash()"></button>
-        {{ this.flashMessage }}
+<div class="billboard-container">
+    <div class="billboard-header">
+        <h1 class="billboard-title">
+            <i class="fa-solid fa-scroll"></i>
+            Billboard
+        </h1>
+        <p class="billboard-subtitle">Stay updated with the latest announcements and news</p>
     </div>
 
-    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
-        <h4 class="alert-heading">{{ this.errTitle }}</h4>
-        {{ this.errMessage }}
+    <div class="admin-actions" *ngIf="this.isAdmin">
+        <a routerLink="/announcement/create" class="btn btn-primary create-announcement-btn">
+            <i class="fas fa-plus me-2"></i>
+            Create Announcement
+        </a>
+    </div>
+
+    <div class="alert alert-dismissible alert-success" *ngIf="this.flashMessage != ''" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlash()" aria-label="Close success message"></button>
+        <div class="alert-content">
+            <i class="fas fa-check-circle me-2"></i>
+            <span>{{ this.flashMessage }}</span>
+        </div>
+    </div>
+
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()" aria-label="Close error message"></button>
+        <div class="alert-content">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                <h4 class="alert-heading">{{ this.errTitle }}</h4>
+                <p class="mb-0">{{ this.errMessage }}</p>
+            </div>
+        </div>
     </div>
 
     <ng-container *ngIf="!this.dataFetched else DataFetched">
-        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="loadAnnouncements()"></app-loader>
+        <div class="loading-container">
+            <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="loadAnnouncements()"></app-loader>
+        </div>
     </ng-container>
 
     <ng-template #DataFetched>
-        <app-announcement
-        class="m-1"
-        *ngFor="let announcement of this.announcements; let i = index"
-        [announcement]="announcement"
-        [arrayIndex]="i"
-        [canEdit]="this.isAdmin"
-        (deactivateEmitter)="deactivate($event)"></app-announcement>
-        <div class="alert alert-dismissible alert-info" *ngIf="announcements?.length == 0">
-            There is currently no announcement on the billboard.
+        <div class="announcements-grid" *ngIf="announcements != undefined && announcements!.length > 0; else NoAnnouncements">
+            <app-announcement
+            class="announcement-item"
+            *ngFor="let announcement of this.announcements; let i = index"
+            [announcement]="announcement"
+            [arrayIndex]="i"
+            [canEdit]="this.isAdmin"
+            (deactivateEmitter)="deactivate($event)">
+
+            </app-announcement>
         </div>
+        
+        <ng-template #NoAnnouncements>
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fas fa-scroll"></i>
+                </div>
+                <h3 class="empty-state-title">No Announcements</h3>
+                <p class="empty-state-message">There are currently no announcements on the billboard.</p>
+                <p class="empty-state-subtitle">Check back later for updates!</p>
+            </div>
+        </ng-template>
     </ng-template>
 </div>

@@ -1,10 +1,14 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
 
+@use "../../variables.scss" as variables;
+
 .detailImage{
     max-height: 25rem;
     max-width: 18vw;
     width: auto;
+    border: 2px solid variables.$primary-dark;
+    box-shadow: 0 0 15px rgb(variables.$primary-light , 0.8);
 }
 .tiny-margin-right{
     margin-right: 0.5rem;

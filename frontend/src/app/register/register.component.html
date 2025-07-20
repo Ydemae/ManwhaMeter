@@ -1,48 +1,73 @@
 <!--Copyright (c) 2025 Ydemae
     Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<div class="content-wrapper">
-    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+<div class="login-container">
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()" aria-label="Close error message"></button>
         <h4 class="alert-heading">{{ this.errTitle }}</h4>
-        {{ this.errMessage }}
+        <p class="mb-0">{{ this.errMessage }}</p>
     </div>
 
-    <div class="col">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <label class="col-md-1 col-sm-12">Username</label>
-            <div class="col-md-6 col-sm-12">
-                <input type="text" class="form-control" name="username" placeholder="username" autocomplete="off" [(ngModel)]="this.formData.username" (change)="onUsernameChange()">
+    <div class="content-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Create Account</h1>
+                <p class="login-subtitle">Sign up to get started</p>
             </div>
-            <div class="col-md-2"></div>
+
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="register-username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input type="text" class="form-control" id="register-username" name="username" placeholder="Enter your username" autocomplete="off" [(ngModel)]="this.formData.username" (change)="onUsernameChange()" required [class.is-invalid]="this.formError.username">
+                    </div>
+                    <div class="text-danger text-center" *ngIf="this.formError.username != ''">{{ this.formError.username }}</div>
+                    <div class="text-danger text-center" *ngIf="this.usernameAvailable != null" [ngClass]="{'text-danger' : !this.usernameAvailable, 'text-success' : this.usernameAvailable}">{{ this.usernameAvailableLabel }}</div>
+                </div>
+
+                <div class="form-group">
+                    <app-password [error]="this.formError.password" [password]="this.formData.password" (passwordChangeEvent)="this.onPasswordChange($event)"></app-password>
+                </div>
+                <div class="form-group">
+                    <app-password label="Confirm password" [error]="this.formError.confirmPassword" [password]="this.formData.confirmPassword" (passwordChangeEvent)="this.onConfirmPasswordChange($event)"></app-password>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-check centered-checkbox mt-3">
+                        <input class="form-check-input register-checkbox" type="checkbox" id="terms" [(ngModel)]="this.formData.terms" (change)="this.validateTerms()">
+                        <label class="form-check-label text-center" for="terms">
+                            I agree to the 
+                            <a routerLink="terms-of-service" class="text-secondary fw-bold">Terms of Service</a> 
+                            and 
+                            <a routerLink="privacy-policy" class="text-secondary fw-bold">Privacy Policy</a>.
+                        </label>
+                    </div>
+                    <div class="text-danger text-center" *ngIf="this.formError.terms != ''">{{ this.formError.terms }}</div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary w-100" (click)="registerUser()">
+                        <span class="btn-text">Sign up</span>
+                        <i class="fas fa-user-plus mx-1"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-danger w-100" (click)="cancel()">
+                        <span class="btn-text">Cancel</span>
+                        <i class="fas fa-times mx-1"></i>
+                    </button>
+                </div>
+            </div>
+
             <div class="text-center">
-                <small class="form-text text-danger" *ngIf="this.formError.username != ''">{{ this.formError.username }}</small>
-                <small class="form-text" *ngIf="this.usernameAvailable != null" [ngClass]="{'text-danger' : !this.usernameAvailable, 'text-success' : this.usernameAvailable}">{{ this.usernameAvailableLabel }}</small>
+                <p class="register-link">
+                    Already have an account?
+                    <a routerLink="/login" class="link-secondary"><strong>sign in here</strong></a>
+                </p>
             </div>
         </div>
-        <div class="mb-3"></div>
-        <div class="row">
-            <app-password [error]="this.formError.password" [password]="this.formData.password" (passwordChangeEvent)="this.onPasswordChange($event)"></app-password>
-            <app-password class="mt-1" label="Confirm password" [error]="this.formError.confirmPassword" [password]="this.formData.confirmPassword" (passwordChangeEvent)="this.onConfirmPasswordChange($event)"></app-password>
-        </div>
-    </div>
-
-    <div class="form-check centered-checkbox mt-3">
-        <input class="form-check-input" type="checkbox" id="terms" [(ngModel)]="this.formData.terms" (change)="this.validateTerms()">
-        <label class="form-check-label" for="terms">
-            I agree to the 
-            <a routerLink="terms-of-service" class="text-secondary fw-bold">Terms of Service</a> 
-            and 
-            <a routerLink="privacy-policy" class="text-secondary fw-bold">Privacy Policy</a>.
-        </label>
-        <div class="text-center">
-            <small class="form-text text-danger" *ngIf="this.formError.terms != ''">{{ this.formError.terms }}</small>
-        </div>
-    </div>
-
-    <div class="text-center">
-        <button type="button" class="btn btn-primary m-1" (click)="registerUser()">Sign up</button>
-        <button type="button" class="btn btn-danger m-1" (click)="cancel()">Cancel</button>
     </div>
 </div>

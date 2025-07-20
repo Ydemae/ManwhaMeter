@@ -66,6 +66,7 @@ export class RatingModalComponent implements OnInit, OnChanges{
     this.ratingComponent.sendCorrectFlag();
 
     if (!this.correctFlag){
+      this.errorMessage = "There is at least an error in the form.";
       return;
     }
     

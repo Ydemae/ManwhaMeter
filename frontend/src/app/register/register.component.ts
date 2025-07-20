@@ -4,9 +4,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DetailedUser } from '../../types/detailedUser';
 import { UserService } from '../services/user/user.service';
-import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-register',
@@ -82,6 +80,8 @@ export class RegisterComponent implements OnInit{
     if (!this.validateTerms()){
       valid = false;
     }
+
+    console.log(this.formError.terms)
 
     return valid;
   }

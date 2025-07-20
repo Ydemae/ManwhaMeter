@@ -1,13 +1,27 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
 
-.center-container{
+@use '../../variables.scss' as variables;
+
+.active {
+    background: rgba(variables.$primary, 0.3) !important;
+    color: variables.$secondary !important;
+    box-shadow: 0 4px 12px rgba(variables.$primary, 0.2);
+}
+
+
+.center-container {
     margin-right: 30px;
     margin-left: 30px;
 }
 
-.logo{
+.logo {
     height: 55px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: scale(1.05);
+    }
 }
 
 .navbar-center {
@@ -15,19 +29,58 @@
     transform: translate(-50%, -50%);
     position: absolute;
     left: 50%;
+    z-index: 10;
 }
 
-.nav-items-container{
+.nav-items-container {
     position: relative;
+    padding: 0.5rem 0;
 }
 
-.custom-nav-button{
+.custom-nav-button {
     border: none;
-    background-color:inherit;
+    background-color: transparent;
 }
 
-.custom-navbar{
-    position: relative;
-    padding: 0.2rem;
-    min-height: 3.5rem;
+.custom-navbar {
+    position: fixed;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    margin-bottom: 4rem;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    min-height: 3.25rem;
+    background: linear-gradient(135deg, variables.$primary, variables.$primary-light);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid variables.$sec-border-color;
+}
+
+.mobile-menu {
+    background: linear-gradient(135deg, variables.$primary, variables.$primary-light);
+    border-top: 1px solid variables.$sec-border-color;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu {
+    background: #2a2a2a;
+    border: 1px solid variables.$sec-border-color;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.navbar-toggler {
+    border: 1px solid variables.$sec-border-color;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: variables.$sec-border-color;
+    }
 }

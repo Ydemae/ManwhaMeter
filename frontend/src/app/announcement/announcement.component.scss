@@ -1,2 +1,99 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
+
+@use '../../variables.scss' as variables;
+
+.announcement-card {
+    background: linear-gradient(145deg, variables.$card-bg, darken(variables.$card-bg, 5%));
+    border: 2px solid rgba(variables.$primary-backdrop, 0.3);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    
+    &:hover {
+        box-shadow: 0 8px 30px rgba(variables.$primary-backdrop, 0.2);
+    }
+}
+
+.announcement-title {
+    font-size: 1.25rem;
+}
+
+.announcement-meta {
+    .time-ago {
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(variables.$thi-border-color, 0.1);
+    }
+}
+
+.announcement-content {
+    color: rgba(variables.$secondary, 0.8);
+    line-height: 1.6;
+    font-size: 1rem;
+    
+    a {
+        color: variables.$secondary;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(variables.$primary-backdrop, 0.3);
+        transition: all 0.3s ease;
+        
+        &:hover {
+            color: variables.$secondary-light;
+        }
+    }
+    
+    strong, b {
+        color: variables.$secondary;
+        font-weight: 600;
+    }
+    
+    ul, ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+    }
+    
+    blockquote {
+        border-left: 4px solid #1f4d48;
+        padding-left: 1rem;
+        margin: 1rem 0;
+        font-style: italic;
+        color: rgba(variables.$thi-border-color, 0.8);
+        background: rgba(variables.$primary-backdrop, 0.05);
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+    
+    code {
+        background: rgba(variables.$primary-backdrop, 0.2);
+        color: variables.$secondary;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+    }
+}
+
+.card-header {
+    background: rgba(variables.$primary-backdrop, 0.1);
+    border-bottom: 1px solid rgba(variables.$thi-border-color, 0.1);
+    padding: 1.25rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-footer {
+    background: rgba(variables.$primary-backdrop, 0.05);
+    border-top: 1px solid rgba(variables.$thi-border-color, 0.1);
+    padding: 1.25rem;
+}
+
+.announcement-card {
+    animation: slideInUp 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}

@@ -83,4 +83,14 @@ export class SearchFiltersComponent {
     }
     this.emitFilterChanges()
   }
+
+  clearAllFilters(){
+    this.filtersValues = {
+      name : "",
+      status : null,
+      tags : [],
+      bookType : null
+    }
+    this.emitFilterChanges();
+  }
 }

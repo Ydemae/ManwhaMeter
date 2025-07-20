@@ -1,15 +1,132 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
 
-.card-img{
-    max-width: 100%;
-    max-height: 100%;
+@use '../../variables.scss' as variables;
+
+.book-card {
+    transition: all 0.3s ease;
+    border: 2px solid rgba(variables.$primary, 0.2);
+    background: linear-gradient(145deg, #2a2a2a 0%, #1f1f1f 100%);
+    overflow: hidden;
+    position: relative;
+    
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(variables.$primary, 0.3);
+        border-color: rgba(variables.$primary, 0.6);
+        
+        .book-cover {
+            transform: scale(1.05);
+        }
+        
+        .book-overlay {
+            opacity: 1;
+        }
+    }
 }
 
-.card-header {
-    border-color: white !important;
+.book-title {
+    font-size: 1rem;
+    color: variables.$secondary;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-  
-.card-footer {
-    border-color: white !important;
+
+.book-actions {
+    .btn-link {
+        color: rgba(variables.$secondary, 0.7);
+        transition: all 0.3s ease;
+        
+        &:hover {
+            color: variables.$secondary;
+            transform: scale(1.1);
+        }
+    }
+}
+
+.rating-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, variables.$primary, variables.$primary-light) !important;
+    border: 1px solid variables.$sec-border-color;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+.book-image-container {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 2/3;
+    background: variables.$body-bg;
+}
+
+.book-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    border: 3px solid rgb(variables.$primary-light, 0.6);
+    border-radius: 0.5rem;
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+    max-height: calc(100% - 1rem);
+}
+
+.book-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(variables.$primary, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+.view-details {
+    color: variables.$secondary;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.5rem 1rem;
+    border: 2px solid variables.$secondary;
+    border-radius: 0.5rem;
+    background: rgba(variables.$primary, 0.9);
+    transition: all 0.3s ease;
+    
+    &:hover {
+        background: rgba(variables.$secondary, 0.1);
+        transform: scale(1.05);
+    }
+}
+
+.book-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    justify-content: center;
+    align-items: center;
+    min-height: 1.5rem;
+}
+
+.tag-pill {
+    background: rgba(variables.$primary, 0.3);
+    color: variables.$secondary;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid rgba(variables.$sec-border-color, 0.5);
+    transition: all 0.3s ease;
+    
+    &:hover {
+        background: rgba(variables.$primary, 0.7);
+        transform: scale(1.05);
+    }
 }

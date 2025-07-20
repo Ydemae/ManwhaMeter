@@ -1,12 +1,29 @@
 <!--Copyright (c) 2025 Ydemae
     Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<app-navbar></app-navbar>
-<router-outlet></router-outlet>
-<footer style="bottom: 0; position:fixed; width:100%;">
-    <div class="d-flex justify-content-center bg-dark p-2">
-        <a routerLink="terms-of-service" class="text-decoration-none text-secondary mx-3">Terms of Service</a>
-        <a routerLink="privacy-policy" class="text-decoration-none text-secondary mx-3">Privacy Policy</a>
-        <a routerLink="credits" class="text-decoration-none text-secondary mx-3">Credits</a>
-    </div>
-</footer>
+<div class="app-container">
+    <app-navbar></app-navbar>
+
+    <main>
+        <router-outlet></router-outlet>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a routerLink="terms-of-service" class="footer-link interactible">
+                    <i class="fas fa-file-contract me-2"></i>
+                    Terms of Service
+                </a>
+                <a routerLink="privacy-policy" class="footer-link interactible">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    Privacy Policy
+                </a>
+                <a routerLink="credits" class="footer-link interactible">
+                    <i class="fas fa-heart me-2"></i>
+                    Credits
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>

@@ -1,39 +1,70 @@
 <!--Copyright (c) 2025 Ydemae
     Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<div class="alert alert-dismissible alert-danger" *ngIf="this.errorIsShown">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
-    <h4 class="alert-heading">{{ this.errTitle }}</h4>
-    {{ this.errMessage }}
-</div>
+<div class="login-container">
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.errorIsShown" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()" aria-label="Close error message"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        <p class="mb-0">{{ this.errMessage }}</p>
+    </div>
 
-<div class="alert alert-dismissible alert-secondary" *ngIf="this.flashMessage != null">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlashMessage()"></button>
-    {{ this.flashMessage }}
-</div>
+    <div class="alert alert-dismissible alert-secondary" *ngIf="this.flashMessage != null" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlashMessage()" aria-label="Close message"></button>
+        <p class="mb-0">{{ this.flashMessage }}</p>
+    </div>
 
-<div class="content-wrapper">
-    <form class="col">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-1 col-sm-12">
-                <label for="login">Username</label>
+    <div class="content-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Welcome Back</h1>
+                <p class="login-subtitle">Sign in to your account to continue</p>
             </div>
-            <div class="col-md-7 col-sm-12">
-                <input type="text" class="form-control" autocomplete="off" id="login" name="login" [(ngModel)]="username" placeholder="username">
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-        <div class="text-center mb-2">
-            <small class="text-danger" *ngIf="this.error.username">{{ this.error.username }}</small>
-        </div>
-        <app-password [password]="this.password" (passwordChangeEvent)="onPasswordChange($event)" [error]="this.error.password"></app-password>
 
-        <div class="text-center col">
-            <div>
-                <button class="btn btn-primary" (click)="onSubmit()">Log in</button>
-            </div>
-            <small class="form-text text-danger" *ngIf="this.error.global != ''">{{ this.error.global }}</small>
+            <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+                <div class="form-group">
+                    <label for="login" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input type="text" 
+                        class="form-control" 
+                        autocomplete="username" 
+                        id="login" 
+                        name="login" 
+                        [(ngModel)]="username" 
+                        placeholder="Enter your username"
+                        required
+                        [class.is-invalid]="this.error.username">
+
+                    </div>
+                    <div class="invalid-feedback" *ngIf="this.error.username">
+                        {{ this.error.username }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <app-password [password]="this.password" 
+                    (passwordChangeEvent)="onPasswordChange($event)" 
+                    [error]="this.error.password">
+                    </app-password>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" 
+                    class="btn btn-primary w-100" 
+                    [disabled]="loginForm.invalid">
+    
+                        Sign In
+                        <i class="fas fa-sign-in-alt mx-1"></i>
+
+                    </button>
+                </div>
+
+                <div class="text-center" *ngIf="this.error.global != ''">
+                    <p class="text-danger">{{ this.error.global }}</p>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>

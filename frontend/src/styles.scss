@@ -1,198 +1,538 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
 
-$primary: #1f4d48;
-$secondary: #fcf1ca;
-//$danger: #8C1C13;
-//$warning : #D97706;
-$body-bg: #1C1B18;
-$body-color: $secondary;
+@use 'variables.scss' as variables;
 
 @use "bootstrap/scss/bootstrap" with (
-    $primary: $primary,
-    $secondary: $secondary,
-    //$danger: $danger,
-    //$warning: $warning,
-    $body-bg: $body-bg,
-    $body-color: $body-color,
-    $table-color: $body-color
+    $primary: variables.$primary,
+    $secondary: variables.$secondary,
+    $body-bg: variables.$body-bg,
+    $body-color: variables.$body-color,
+    $table-color: variables.$body-color,
+    $card-bg: variables.$card-bg,
+    $border-color: variables.$border-color,
+    $border-radius: 0.75rem,
+    $border-radius-sm: 0.5rem,
+    $border-radius-lg: 1rem,
+    $btn-border-radius: 0.75rem,
+    $btn-border-radius-sm: 0.5rem,
+    $btn-border-radius-lg: 1rem,
+    $input-border-radius: 0.75rem,
+    $input-border-radius-sm: 0.5rem,
+    $input-border-radius-lg: 1rem
 );
 
-body{
-    overflow-x: hidden;
-    height: 100%;
-    padding-bottom: 40px;
+* {
+    box-sizing: border-box;
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+// Scrollbar
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(variables.$secondary, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: variables.$primary;
+    border-radius: 4px;
+    
+    &:hover {
+        background: variables.$primary-light;
+    }
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: variables.$body-bg;
+}
+
+body {
+    padding-top: 6rem;
+    min-height: calc(100vh - 200px);
+    overflow-x: hidden;
+    background: variables.$body-bg;
+    color: variables.$secondary;
+}
+
 
 .hidden {
     display: none !important;
 }
+
 .show {
     display: block !important;
 }
 
-.noCursor:hover{
-    cursor:default;
-}
-.cardImg{
-    border: 3px solid black;
-    max-width: 60%;
-    max-height: 150px;
+.noCursor:hover {
+    cursor: default;
 }
 
-.checkedStar{
-    color: #F5FC50;
-}
-.uncheckedStar{
-    color: white;
-}
-.uncheckedStar:hover{
-    color: #FBFFC0;
-}
+.margin-left { margin-left: 1rem; }
+.margin-right { margin-right: 1rem; }
+.margin-top { margin-top: 1rem; }
+.margin-bot { margin-bottom: 1rem; }
 
-.margin-left{
-    margin-left: 1rem;
-}
-
-.margin-right{
-    margin-right: 1rem;
-}
-
-.margin-top{
-    margin-top: 1rem;
-}
-
-.margin-bot{
-    margin-bottom: 1rem;
-}
-
-.content-wrapper{
-    margin: 1em auto;
+.content-wrapper {
+    margin: 2rem auto;
     max-width: 1400px;
     width: 95%;
+    padding: 0 1rem;
 }
 
-.cursor-pointer{
+.cursor-pointer {
     cursor: pointer;
 }
 
+// Cards
+.card {
+    background: variables.$card-bg;
+    border: 1px solid variables.$border-color;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px variables.$primary;
+    }
+    
+    .card-header {
+        background: rgba(variables.$primary, 0.1);
+        border-bottom: 1px solid variables.$border-color;
+        padding: 1rem 1.25rem;
+    }
 
-// For the ng-select
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .card-footer {
+        border-top: 1px solid variables.$border-color;
+        padding: 1rem;
+    }
+}
 
+.cardImg {
+    border: 2px solid variables.$primary;
+    border-radius: 0.5rem;
+    max-width: 60%;
+    max-height: 150px;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+// Forms
+.form-control {
+    background: rgba(variables.$secondary, 0.05);
+    border: 2px solid variables.$border-color;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: variables.$secondary;
+    transition: all 0.3s ease;
+    
+    &:focus {
+        background: rgba(variables.$secondary, 0.1);
+        border-color: variables.$primary;
+        box-shadow: 0 0 0 5px rgba(variables.$primary-backdrop, 0.25);
+        color: variables.$secondary;
+    }
+    
+    &::placeholder {
+        color: rgba(variables.$secondary, 0.6);
+    }
+}
+
+// ng-select
 ng-select .ng-dropdown-panel {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 0.5rem;
     width: auto;
     margin-top: 0.5rem;
-    background-color: #333 !important;
+    background: variables.$card-bg !important;
+    border: 1px solid variables.$border-color;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 ng-select .ng-option {
-    background-color: #333 !important;
-    color: #fff !important;
+    background: variables.$card-bg !important;
+    color: variables.$secondary !important;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin: 0.25rem 0;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        background: rgba(variables.$primary, 0.1) !important;
+    }
 }
 
 ng-select .ng-option.ng-option-selected {
-    background-color: #444 !important;
+    background: rgba(variables.$primary, 0.2) !important;
+    color: variables.$secondary !important;
 }
 
 ng-select .ng-value {
-    margin-left: 2.5px;
-    margin-right: 2.5px;
-    border: 1px solid white;
-    border-radius: 10%;
-    color: #fff !important;
+    @extend .interactible;
+
+    margin: 0.25rem;
+    border: 1px solid rgba(variables.$secondary, 0.7);
+    border-radius: 0.5rem;
+    color: variables.$secondary !important;
+    background: rgba(variables.$primary-backdrop, 0.1);
+    padding: 0.25rem 0.5rem;
 }
 
 ng-select .ng-value-label {
-    margin-right: 5px;
+    margin-right: 0.5rem;
 }
 
 ng-select .ng-value .ng-value-icon {
-    margin-right: 5px;
-    margin-left: 5px;
-    color: red !important;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+    color: rgba(variables.$secondary, 0.7) !important;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        color: variables.$secondary-light !important;
+        transform: scale(1.1);
+    }
 }
 
-
-.img-button{
+.img-button {
     cursor: pointer;
-    opacity: 0.6;
-    transition: 0.5s;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+    
+    &:hover {
+        opacity: 1;
+        transform: scale(1.1);
+        background: rgba(variables.$primary, 0.1);
+    }
 }
 
-.img-button:hover{
-    transition: 0.5s;
-    opacity: 1;
-}
-
-.relative-container{
+.relative-container {
     position: relative;
 }
 
-//Loader
+//Global classes (things that others will extend on)
 
-.loader {
-    border: 5px solid $primary;
-    border-top: 5px solid $secondary;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1.6s linear infinite;
-}
-.loader-text{
-    position: absolute;
-    top: 60px;
-}
+.interactible{
+    overflow: hidden;
+    position: relative;
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.6s;
+    }
 
-.loader-container{
-    min-width: 15rem;
-    min-height: 80px
+    &:hover::before {
+        left: 100%;
+    }
 }
 
-
-//Nav elements - placed here because they need the color variables
-
-.custom-nav-item{
-    margin: 0.6rem;
-    color: mix($secondary, gray, 60%);
-    padding: 0.5rem;
-    transition: 1s;
-    text-decoration: none;
+.get-up-on-hover{
+    &:hover{
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
 }
 
-.custom-nav-item:hover{
-    color: $secondary;
-    background-color: rgba($color: #000, $alpha: 0.4);
-    border-radius: 15px;
-    transition: 1s;
+// Buttons
+.btn {
+    @extend .interactible;
+    @extend .get-up-on-hover;
+
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.active{
-    background-color: inherit !important;
-    color: $secondary !important;
+.btn-primary {
+    background: linear-gradient(135deg, variables.$primary, variables.$primary-light);
+    color: variables.$secondary;
+    
+    &:hover {
+        background: linear-gradient(135deg, variables.$primary-light, variables.$primary);
+        color: variables.$secondary;
+    }
 }
 
-.mytooltip{
-    color: $secondary !important;
+.btn-secondary {
+    background: linear-gradient(135deg, variables.$secondary-dark, variables.$secondary-light);
+    color: variables.$body-bg;
+    
+    &:hover {
+        background: linear-gradient(135deg, variables.$secondary-light, variables.$secondary-dark);
+        color: variables.$body-bg;
+    }
 }
 
+// Inpyt groups
+
+.input-group {
+    position: relative;
+    
+    .input-group-text {
+        background: rgba(variables.$primary-backdrop, 0.2);
+        border: 2px solid variables.$sec-border-color;
+        border-right: none;
+        color: variables.$secondary;
+        border-radius: 0.75rem 0 0 0.75rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control {
+        border-left: none;
+        border-radius: 0 0.75rem 0.75rem 0;
+        background: variables.$body-bg;
+        border: 2px solid variables.$sec-border-color;
+        color: variables.$secondary;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+
+        &:focus {
+            background: rgba(variables.$thi-border-color, 0.1);
+            border-color: variables.$primary;
+            box-shadow: 0 0 0 5px rgba(variables.$primary-backdrop, 0.25);
+            
+            & + .input-group-text {
+                border-color: variables.$primary;
+                background: rgba(variables.$primary-backdrop, 0.3);
+            }
+        }
+        
+        &::placeholder {
+            color: rgba(variables.$thi-border-color, 0.5);
+        }
+    }
+}
+
+// Modals
+.modal-content {
+    background: variables.$card-bg;
+    border: 1px solid variables.$border-color;
+    border-radius: 1rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    border-bottom: 1px solid variables.$border-color;
+    padding: 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    border-top: 1px solid variables.$border-color;
+    padding: 1.5rem;
+}
+
+// Alerts
+.alert {
+    border: none;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    &.alert-success {
+        background: rgba(25, 135, 84, 0.1);
+        color: #75b798;
+        border-left: 4px solid #198754;
+    }
+    
+    &.alert-danger {
+        background: rgba(220, 53, 69, 0.1);
+        color: #ea868f;
+        border-left: 4px solid #dc3545;
+    }
+    
+    &.alert-info {
+        background: rgba(13, 202, 240, 0.1);
+        color: #6edff6;
+        border-left: 4px solid #0dcaf0;
+    }
+    
+    &.alert-secondary {
+        background: rgba(108, 117, 125, 0.1);
+        color: #adb5bd;
+        border-left: 4px solid #6c757d;
+    }
+}
+
+
+// Others
+.badge {
+    font-weight: 500;
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+}
+
+// Accordion
+
+.accordion-item {
+    background: variables.$card-bg;
+    margin-bottom: 1rem;
+    border: 2px solid rgba(variables.$primary-backdrop, 0.3);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        border-color: rgba(variables.$primary-backdrop, 0.5);
+        box-shadow: 0 8px 30px rgba(variables.$primary-backdrop, 0.2);
+    }
+}
+
+.accordion-button {
+    @extend .interactible;
+
+    background: linear-gradient(135deg, rgba(variables.$primary-backdrop, 0.1), rgba(variables.$primary-backdrop, 0.4));
+    border: none;
+    color: variables.$secondary;
+    font-size: 1.2rem;
+    padding: 1.25rem 1.5rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+
+    &::after {
+        filter: brightness(0) invert(1);
+    }
+
+    &:not(.collapsed){
+        color: variables.$secondary;
+        background: linear-gradient(135deg, rgba(variables.$primary-backdrop, 0.1), rgba(variables.$primary-backdrop, 0.4));
+    }
+}
+
+.accordion-body {
+    background: rgba(variables.$primary-backdrop, 0.05);
+    padding: 2rem;
+    border-top: 1px solid rgba(variables.$thi-border-color, 0.2);
+}
+
+// Tooltip
+.mytooltip {
+    color: variables.$secondary !important;
+}
 
 .mytooltip .tooltip-inner {
-    background-color: black;
-    color: $secondary !important;
+    background: variables.$card-bg;
+    color: variables.$secondary !important;
+    border: 1px solid variables.$border-color;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
 }
 
 .mytooltip .arrow::before {
-    border-top-color: darkgreen;
+    border-top-color: variables.$primary;
 }
 
-.accordion-button:not(.collapsed) {
-    background-color: mix($secondary, gray, 80%) !important;
-    color: $body-bg;
+
+//Navigation
+
+.custom-nav-item {
+    @extend .interactible;
+    @extend .get-up-on-hover;
+
+    margin: 0.5rem;
+    color: rgba(variables.$secondary, 0.7);
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border-radius: 0.75rem;
+
+    &:hover{
+        color: variables.$secondary;
+    }
+}
+
+
+//Login styling elements used in both login and register
+
+.login-card {
+    @extend .interactible;
+
+    background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+    border: 2px solid rgba(variables.$primary-backdrop, 0.3);
+    border-radius: 1.5rem;
+    padding: 3rem 2rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    max-width: 450px;
+    width: 100%;
+}
+
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    
+    .login-title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-subtitle {
+        color: rgba(variables.$thi-border-color, 0.7);
+    }
+}
+
+.login-form {
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        color: variables.$secondary;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+    }
+}
+
+
+//Animation for forms elements
+
+.form-group {
+    animation: slideInUp 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+    
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+}
+
+@keyframes slideInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -1,0 +1,13 @@
+$primary: #1f4d48;
+$secondary: #fcf1ca;
+$primary-light: lighten($primary, 10%);
+$primary-dark: darken($primary, 10%);
+$secondary-light: lighten($secondary, 5%);
+$secondary-dark: darken($secondary, 20%);
+$body-bg: #1C1B18;
+$body-color: $secondary;
+$card-bg: #2a2a2a;
+$border-color: rgba($secondary, 0.2);
+$sec-border-color: rgba(190, 190, 190, 0.25);
+$thi-border-color: rgb(241, 241, 241);
+$primary-backdrop: rgb(31, 77, 72);

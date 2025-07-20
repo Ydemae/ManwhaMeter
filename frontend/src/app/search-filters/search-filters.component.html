@@ -5,57 +5,93 @@
     <div class="accordion" id="filterAccordion">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-            Search filters
-            </button>
+                <button class="accordion-button collapsed interactible" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#collapseOne" 
+                aria-expanded="false" 
+                aria-controls="collapseOne">
+    
+                    <i class="fas fa-filter me-2"></i>
+                    Search filters
+
+                </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#filterAccordion">
-                <div class="accordion-body row d-flex text-center justify-content-center">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="margin-bot">
-                            <input type="text" id="bookname" name="bookname" class="form-control" placeholder="bookname" [(ngModel)]="this.filtersValues.name" (input)="onBookNameChange()">
-                        </div>
-
-                        <h4>Book status</h4>
-                        <div class="btn-group margin-bot" role="group" aria-label="Basic radio toggle button group">
-                            <ng-container *ngFor="let status of statusList; let i = index">
-                                <input
-                                #StatusRadio
-                                type="radio"
-                                name="statusradio"
-                                class="btn-check"
-                                [id]="'statusradio;' + status"
+                <div class="accordion-body">
+                    <div class="filters-grid">
+                        <div class="filter-section">
+                            <label for="bookname" class="filter-label">
+                                <i class="fas fa-search me-2"></i>
+                                Book Name
+                            </label>
+                            <div class="input-group">
+                                <input type="text" 
+                                id="bookname" 
+                                name="bookname" 
+                                class="form-control" 
+                                placeholder="Enter book name..." 
                                 autocomplete="off"
-                                (click)="onSelectStatus(status, StatusRadio)">
-                                <label class="btn btn-primary" [for]="'statusradio;' + status">
-                                    {{ status }}
-                                </label>
-                            </ng-container>
+                                [(ngModel)]="this.filtersValues.name" 
+                                (input)="onBookNameChange()">
+
+                            </div>
                         </div>
 
-                        <h4>Book type</h4>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <ng-container *ngFor="let bookType of bookTypeList; let i = index">
-                                <input
-                                #BookTypeRadio
-                                type="radio"
-                                name="bootyperadio"
-                                class="btn-check"
-                                [id]="'bootyperadio;' + bookType"
-                                autocomplete="off"
-                                (click)="onSelectBookType(bookType, BookTypeRadio)">
-                                <label class="btn btn-primary" [for]="'bootyperadio;' + bookType">
-                                    {{ bookType }}
-                                </label>
-                            </ng-container>
+                        <div class="filter-section">
+                            <label class="filter-label">
+                                <i class="fas fa-bookmark me-2"></i>
+                                Book Status
+                            </label>
+                            <div class="filter-options">
+                                <div class="btn-group" role="group" aria-label="Book status filter">
+                                    <ng-container *ngFor="let status of statusList; let i = index">
+                                        <input #StatusRadio
+                                        type="radio"
+                                        name="statusradio"
+                                        class="btn-check"
+                                        [id]="'statusradio;' + status"
+                                        autocomplete="off"
+                                        (click)="onSelectStatus(status, StatusRadio)">
+
+                                        <label class="btn btn-outline-primary" [for]="'statusradio;' + status">
+                                            {{ status }}
+                                        </label>
+                                    </ng-container>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
+                        <div class="filter-section">
+                            <label class="filter-label">
+                                <i class="fas fa-tag me-2"></i>
+                                Book Type
+                            </label>
+                            <div class="filter-options">
+                                <div class="btn-group" role="group" aria-label="Book type filter">
+                                    <ng-container *ngFor="let bookType of bookTypeList; let i = index">
+                                        <input #BookTypeRadio
+                                        type="radio"
+                                        name="bootyperadio"
+                                        class="btn-check"
+                                        [id]="'bootyperadio;' + bookType"
+                                        autocomplete="off"
+                                        (click)="onSelectBookType(bookType, BookTypeRadio)">
 
-                    <div class="col-sm-12 col-md-6">
-                        <div>
-                            <ng-select
-                            [items]="this.tagsList"
+                                        <label class="btn btn-outline-primary" [for]="'bootyperadio;' + bookType">
+                                            {{ bookType }}
+                                        </label>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label for="tagselect" class="filter-label">
+                                <i class="fas fa-tags me-2"></i>
+                                Tags
+                            </label>
+                            <ng-select [items]="this.tagsList"
                             [multiple]="true"
                             [searchable]="true"
                             [(ngModel)]="filtersValues.tags"
@@ -64,12 +100,22 @@
                             (change)="onSelectedTagsChange()"
                             class="form-control"
                             id="tagselect"
-                            [placeholder]="'tags'">
+                            [placeholder]="'Select tags...'">
+
                             </ng-select>
-                          </div>
+                        </div>
+
+                        <div class="filter-actions">
+                            <button type="button" 
+                            class="btn btn-outline-secondary clear-filters-btn" 
+                            (click)="clearAllFilters()">
+    
+                                <i class="fas fa-broom me-2"></i>
+                                Clear All Filters
+
+                            </button>
+                        </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
