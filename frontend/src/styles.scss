@@ -154,6 +154,14 @@ body {
     }
 }
 
+.form-select {
+    @extend .form-control;
+
+    option {
+        background: rgba(variables.$card-bg, 0.9);
+    }
+}
+
 // ng-select
 ng-select .ng-dropdown-panel {
     padding: 0.5rem;

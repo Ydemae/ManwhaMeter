@@ -1,7 +1,7 @@
 <!--Copyright (c) 2025 Ydemae
     Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<div class="margin-top">
+<div class="margin-top login-card book-from-card">
     <input type="text" class="col-9 form-control" name="bookname" placeholder="bookname" autocomplete="off" [(ngModel)]="name" maxlength="80" (change)="onNameChange()">
     <small *ngIf="this.nameError != ''" class="form-text text-danger">{{this.nameError}}</small>
 
@@ -22,7 +22,8 @@
       bindValue="id"
       class="form-control"
       id="tag-select"
-      (change)="onSelectedTagsChange()">
+      (change)="onSelectedTagsChange()"
+      [placeholder]="'Select tags...'">
       </ng-select>
       <small class="form-text text-muted">Only the first 4 tags will be displayed on the book lists, put them in by order of importance.</small>
       <small *ngIf="this.selectedTagsError != ''" class="form-text text-danger">{{this.selectedTagsError}}</small>

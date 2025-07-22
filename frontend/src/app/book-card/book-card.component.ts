@@ -16,6 +16,8 @@ export class BookCardComponent {
   public book! : ListedBook;
   public displayedTags : string = "";
 
+  public displayedOverallRating! : string;
+
   @Input()
   public logged : boolean = false;
 
@@ -38,6 +40,13 @@ export class BookCardComponent {
 
   ngOnInit(){
     this.initializeDisplayedTags()
+
+    if (this.book.overall_rating == null){
+      this.displayedOverallRating = "N/A";
+    }
+    else{
+      this.displayedOverallRating = this.book.overall_rating.toString();
+    }
   }
 
   public onBookClicked(){
