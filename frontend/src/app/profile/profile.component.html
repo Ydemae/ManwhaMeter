@@ -1,0 +1,25 @@
+<div class="content-wrapper">
+    <h1>Profile page</h1>
+
+    <ng-template #NotFetched>
+        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.fetchMyInfo()"></app-loader>
+    </ng-template>
+
+    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+    </div>
+
+    <div class="alert alert-dismissible alert-success" *ngIf="this.passwordChangeSuccess">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hidePasswordChangeSuccess()"></button>
+        <h4 class="alert-heading">Password updated</h4>
+        Password was successfully updated
+    </div>
+
+    <div *ngIf="this.dataFetched else NotFetched">
+        <app-change-password [loading]="changePasswordLoading" [passwordErrorObservable]="this.changePasswordErrorSubject.asObservable()" (submitEmitter)="this.changePassword($event)"></app-change-password>
+
+    </div>
+
+</div>

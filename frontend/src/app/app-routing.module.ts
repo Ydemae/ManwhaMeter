@@ -17,6 +17,7 @@ import { ReadingListComponent } from './reading-list/reading-list.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { CreditsComponent } from './credits/credits.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'terms-of-service', component: TermsOfServiceComponent },
   { path: 'credits', component: CreditsComponent },
+  { path: 'profile', component: ProfileComponent },
 ];
 
 @NgModule({

@@ -43,6 +43,8 @@ import { ReadingListComponent } from './reading-list/reading-list.component';
 import { CreditsComponent } from './credits/credits.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,9 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
     ReadingListComponent,
     CreditsComponent,
     TermsOfServiceComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    ProfileComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

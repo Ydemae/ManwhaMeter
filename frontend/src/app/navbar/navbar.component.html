@@ -50,6 +50,13 @@
                     [routerLinkActiveOptions]="{ exact: true }">
                         Reading list
                     </a>
+                    <a *ngIf="userIsConnected"
+                    class="dropdown-item custom-nav-item m-1"
+                    routerLink="/profile"
+                    routerLinkActive="active" 
+                    [routerLinkActiveOptions]="{ exact: true }">
+                        Profile
+                    </a>
                 </div>
     
                 <a *ngIf="!userIsConnected"

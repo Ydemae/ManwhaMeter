@@ -292,4 +292,145 @@ export class UserService {
       );
     })
   }
+
+  update (user_id : number | null = null, username : string | null = null, password : string | null = null): Promise<boolean> {
+
+    let body = {
+      userId : user_id,
+      username : username,
+      password : password
+    }
+
+    return new Promise((resolve, reject) => {
+      this._http.post<HttpResponse<any>>(
+        `${this.apiUrl}/user/update`,
+        body,
+        {
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          let code = 1;
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else if (error.status == 460){
+            code = 2;
+          }
+          else {
+            console.error("Unexpected error caught when attempting to update user");
+          }
+
+          reject(code);
+          return throwError(() => { });
+        })
+      ).subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response) {
+            const body = response.body as { result: string }
+            resolve(body.result == "success");
+          }
+          else {
+            console.error("Error caught when attempting to update user");
+            reject();
+          }
+        },
+        error: (error: HttpResponse<any>) => {
+          reject()
+        }
+      }
+      );
+    })
+  }
+
+  changePassword (old_password : string, new_password : string): Promise<boolean> {
+
+    let body = {
+      old_password : old_password,
+      new_password : new_password,
+    }
+
+    return new Promise((resolve, reject) => {
+      this._http.post<HttpResponse<any>>(
+        `${this.apiUrl}/user/changePassword`,
+        body,
+        {
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          let code = 1;
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else if (error.status == 460){
+            code = 2;
+          }
+          else {
+            console.error("Unexpected error caught when attempting to update user's password");
+          }
+
+          reject(code);
+          return throwError(() => { });
+        })
+      ).subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response) {
+            const body = response.body as { result: string }
+            resolve(body.result == "success");
+          }
+          else {
+            console.error("Error caught when attempting to update user's password");
+            reject();
+          }
+        },
+        error: (error: HttpResponse<any>) => {
+          reject()
+        }
+      }
+      );
+    })
+  }
+
+
+  getMyInfo (): Promise<User> {
+    return new Promise((resolve, reject) => {
+      this._http.get<HttpResponse<any>>(
+        `${this.apiUrl}/user/getMyInfo`,
+        {
+          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
+          observe: 'response'
+        }
+      ).pipe(
+        catchError((error: HttpResponse<any>) => {
+          if (error.status == 401) {
+            this.authService.forcedLogout()
+          }
+          else {
+            console.error("Unexpected error caught when attempting to get user id");
+          }
+
+          reject();
+          return throwError(() => { });
+        })
+      ).subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response) {
+            const body = response.body as { result : string, user : User }
+            resolve(body.user);
+          }
+          else {
+            console.error("Error caught when attempting to get user id");
+            reject();
+          }
+        },
+        error: (error: HttpResponse<any>) => {
+          reject()
+        }
+      }
+      );
+    })
+  }
 }

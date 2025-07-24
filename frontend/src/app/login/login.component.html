@@ -34,11 +34,10 @@
                         name="login" 
                         [(ngModel)]="username" 
                         placeholder="Enter your username"
-                        required
-                        [class.is-invalid]="this.error.username">
+                        required>
 
                     </div>
-                    <div class="invalid-feedback" *ngIf="this.error.username">
+                    <div class="text-danger" *ngIf="this.error.username">
                         {{ this.error.username }}
                     </div>
                 </div>

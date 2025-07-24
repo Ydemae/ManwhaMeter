@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -129,46 +130,55 @@ final class UserController extends AbstractController
         catch(Exception){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
-        $userId = $userData["user_id"];
 
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("userId", $body)){
-            return $this->json(["result" => "error", "error" => "No userId provided for user update"], 400);
+            return $this->json(["result" => "error","error" => "No user id provided"], 400);
         }
+        $userId = $body["userId"];
 
-        if (!in_array("ROLE_ADMIN", $userData["roles"]) && $userId != $body["userId"]){
+        if (!in_array("ROLE_ADMIN", $userData["roles"]) || $userId == $userData["user_id"]){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
-        
 
-        if (!array_key_exists("username", $body)){
-            return $this->json(["result" => "error", "error" => "No username provided for update"], 400);
+        $new_username = null;
+        if (array_key_exists("username", $body)){
+            $new_username = $body["username"];
         }
-        if (!array_key_exists("password", $body)){
-            return $this->json(["result" => "error", "error" => "No password provided for update"], 400);
+        $new_password = null;
+        if (array_key_exists("password", $body)){
+            $new_password = $body["password"];
         }
 
-        $user = $userRepository->findOneBy(["id" => $body["userId"]]);
+        if ($new_username == null && $new_password == null){
+            return $this->json(["result" => "error","error" => "No data to update"], 400);
+        }
+
+        $user = $userRepository->findOneBy(["id" => $userId]);
 
         if ($user == null){
             return $this->json(["result" => "error", "error" => "Incorrect user id provided"], 400);
         }
 
-        $username = $body["username"];
-        $password = $body["password"];
-
-        if ($user->getPassword() != $password){
+        if ($new_password != null){
             $passwordHasher = $passwordHasherFactoryInterface->getPasswordHasher(User::class);
 
             $hashedPassword = $passwordHasher->hash(
-                $password
+                $new_password
             );
 
             $user->setPassword($hashedPassword);
         }
+        if ($new_username != null && $new_username != $user->getUsername()){
 
-        $user->setUsername($username);
+            if ($userRepository->usernameExists($new_username)){
+                return $this->json(["result" => "error", "error" => "Username already exists"], 460);
+            }
+
+            $user->setUsername($new_username);
+        }
+
         $em->flush();
 
         return $this->json(["result" => "success"]);
@@ -303,5 +313,78 @@ final class UserController extends AbstractController
         $usernameExists = $userRepository->usernameExists($body["username"]);
 
         return $this->json(["result" => "success", "exists" => $usernameExists]);
+    }
+
+    #[Route('/getMyInfo', name: 'user_get_my_info', methods: ["GET"])]
+    public function getMyInfi(Request $request, AuthService $authService, UserRepository $userRepository, SerializerInterface $serializerInterface): Response
+    {
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+        $userId = $userData["user_id"];
+
+        $user = $userRepository->findOneBy(["id" => $userId]);
+
+        if ($user == null){
+            return $this->json(["result" => "error", "error" => "No user for current token"], 400);
+        }
+
+        $jsonUser = $serializerInterface->serialize($user, 'json', ['groups' => "classic"]);
+
+        return $this->json(["result" => "success","user" => json_decode($jsonUser)]);
+    }
+
+
+    #[Route('/changePassword', name: 'user_change_password', methods: ["POST"])]
+    public function changePassword(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface, PasswordHasherFactoryInterface $passwordHasherFactoryInterface): Response
+    {
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+        $userId = $userData["user_id"];
+
+        $body = $request->attributes->get("sanitized_body");
+
+        if (!array_key_exists("old_password", $body)){
+            return $this->json(["result" => "error","error" => "Old password is missing"], 400);
+        }
+        $oldPassword = $body["old_password"];
+
+        if (!array_key_exists("new_password", $body)){
+            return $this->json(["result" => "error","error" => "New password is missing"], 400);
+        }
+        $newPassword = $body["new_password"];
+
+        $user = $userRepository->findOneBy(["id" => $userId]);
+
+        if ($user == null){
+            return $this->json(["result" => "error","error" => "User doesn't exist"], 400);
+        }
+
+        if (!$userPasswordHasherInterface->isPasswordValid($user, $oldPassword)){
+            return $this->json(["result" => "error","error" => "Incorrect password"], 460);
+        }
+
+        if ($newPassword != null){
+            $passwordHasher = $passwordHasherFactoryInterface->getPasswordHasher(User::class);
+
+            $hashedPassword = $passwordHasher->hash(
+                $newPassword
+            );
+
+            $user->setPassword($hashedPassword);
+        }
+
+        $em->flush();
+
+        return $this->json(["result" => "success"]);
     }
 }

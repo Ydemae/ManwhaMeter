@@ -372,6 +372,10 @@ ng-select .ng-value .ng-value-icon {
         background: rgba(25, 135, 84, 0.1);
         color: #75b798;
         border-left: 4px solid #198754;
+
+        .btn-close{
+            filter: invert(1);
+        }
     }
     
     &.alert-danger {
@@ -392,7 +396,6 @@ ng-select .ng-value .ng-value-icon {
         border-left: 4px solid #6c757d;
     }
 }
-
 
 // Others
 .badge {
@@ -516,13 +519,13 @@ ng-select .ng-value .ng-value-icon {
     .form-group {
         margin-bottom: 1.5rem;
     }
-    
-    .form-label {
-        color: variables.$secondary;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-    }
+}
+
+.form-label {
+    color: variables.$secondary;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
 }
 
 
