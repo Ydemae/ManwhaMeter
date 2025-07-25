@@ -27,7 +27,7 @@ class RegisterInvite
     private bool $used = false;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['classic', 'admin'])]
     private ?User $creator = null;
 

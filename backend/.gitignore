@@ -32,3 +32,6 @@ database.db
 data/
 
 images
+
+migrations/
+migrations/*.php
