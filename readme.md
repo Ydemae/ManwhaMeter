@@ -21,36 +21,46 @@ A proper and cleaner documentation may come with later versions.
 ## How to deploy
 
 Clone git repo
-```
+
+```bash
 git clone https://github.com/Ydemae/ManwhaMeter.git
 cd ManwhaMeter
 ```
 
 Setup your symfony .env.local
-```
+
+```bash
 sudo vim backend/.env.local
 ```
 
 Copy database (It's the only way for the time being)
-```
+
+```bash
 scp -r ./backend/data user@remote:path/to/project/backend/data
 ```
 
-
 Build docker images :
-```
-sudo docker build -f angular-build.dockerfile -t angular-build:latest .
+
+```bash
 sudo docker build -f symfony-php.dockerfile -t symfony-php:latest .
 sudo docker build -f custom-nginx.dockerfile -t custom-nginx:latest .
 ```
 
-Deploy :
+Transpile angular app to js :
+
+```bash
+docker compose --profile build run angular-build
 ```
+
+Deploy :
+
+```bash
 sudo docker compose up
 ```
 
 JWT certs generation
-```
+
+```bash
 sudo docker exec -it symfony
 php bin/console lexik:jwt:generate-keypair
 ```

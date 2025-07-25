@@ -18,13 +18,15 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
-  
-  
+
   angular-build:
-    image: angular-build:latest
+    profiles: ["build"]
+    build:
+      context: .
+      dockerfile: angular-build.dockerfile
     container_name: angular-build
     volumes:
-      - ./frontend/dist:/frontend/dist
+      - ./frontend/dist/frontend:/output
 
   nginx-angular:
     image: custom-nginx:latest
