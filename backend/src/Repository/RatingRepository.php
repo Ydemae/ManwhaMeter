@@ -30,7 +30,7 @@ class RatingRepository extends ServiceEntityRepository
 
         $result = $this->createQueryBuilder("r")
         ->leftJoin("r.book", "b")
-        ->leftJoin("r.user", "u")
+        ->leftJoin("r.app_user", "u")
         ->andWhere("b.id = :bookId")
         ->andWhere("u.id = :usrId")
         ->setParameter("bookId", $bookId)

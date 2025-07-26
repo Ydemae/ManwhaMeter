@@ -35,7 +35,7 @@ class BookRepository extends ServiceEntityRepository
         ->leftJoin("b.tags", "t");
 
         if ($userId != null){
-            $query->leftJoin("r.user", 'u')
+            $query->leftJoin("r.app_user", 'u')
             ->andWhere("u.id = :userId")
             ->setParameter("userId", $userId);
         }
@@ -52,7 +52,7 @@ class BookRepository extends ServiceEntityRepository
 
         if ($bookType != null){
             $query->andWhere("b.bookType = :booktype")
-                  ->setParameter("booktype", $bookType);
+            ->setParameter("booktype", $bookType);
         }
 
         if ($status != null){
