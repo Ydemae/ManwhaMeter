@@ -22,7 +22,7 @@ class BillboardAnnouncementRepository extends ServiceEntityRepository
     public function getAllActive(): array{
 
         $res = $this->createQueryBuilder("b")
-        ->andwhere("b.active = 1")
+        ->andwhere("b.active = true")
         ->orderBy("b.createdAt", "DESC")
         ->getQuery()
         ->getResult();
