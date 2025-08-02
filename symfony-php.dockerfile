@@ -2,9 +2,9 @@ FROM php:8.3-fpm
 
 ENV APP_ENV=prod
 
-RUN apt-get update && apt-get install -y git unzip libzip-dev libicu-dev sqlite3 libsqlite3-dev libsodium-dev
-
-RUN docker-php-ext-install pdo_sqlite sodium zip intl opcache
+RUN apt-get update && apt-get install -y unzip libzip-dev libicu-dev libsodium-dev libjpeg-dev libpng-dev libwebp-dev libfreetype6-dev libpq-dev  \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
+    && docker-php-ext-install pdo_pgsql pgsql sodium zip intl opcache gd
 
 WORKDIR /var/www/symfony
 
