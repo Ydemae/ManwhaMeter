@@ -55,7 +55,7 @@ docker compose --profile build run angular-build
 Deploy :
 
 ```bash
-sudo docker compose up
+docker compose --env-file .env.local up
 ```
 
 JWT certs generation
@@ -64,3 +64,20 @@ JWT certs generation
 sudo docker exec -it symfony
 php bin/console lexik:jwt:generate-keypair
 ```
+
+setup the db
+
+```bash
+php bin/console doctrine:migrations:version --delete --all
+php bin/console doctrine:schema:drop --force
+php bin/console doctrine:schema:create
+php bin/console doctrine:migrations:diff
+```
+
+Create an invite
+
+```bash
+INSERT INTO register_invite (uid, used, created_at, exp_date) VALUES ('6cac456385174911bfe9b40618ba4f15', false, NOW(), NOW() + interval '1 day');
+```
+
+Then create a user and reset it
