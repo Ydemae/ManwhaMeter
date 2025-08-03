@@ -29,12 +29,12 @@
                     <h1>{{this.book?.name}}</h1>
                 </div>
                 <div class="margin-bot">
-                    <span class="badge m-1" *ngFor="let tag of book?.tags; let i = index" [ngClass]="{ 'bg-primary': i<3, 'bg-secondary': i>=3 }">{{tag.label}}</span>
+                    <span class="badge m-1 bg-primary" *ngFor="let tag of book?.tags; let i = index" [ngClass]="{ 'badge-main': i<=3, 'badge-sec' : i>3}">{{tag.label}}</span>
                 </div>
                 <span class="badge bg-success m-1">{{book?.bookType}}</span>
                 <span class="badge bg-success m-1">{{book?.status}}</span>
 
-                <p>{{ this.book?.description }}</p>
+                <p style="white-space: pre-wrap">{{this.bookDesc}}</p>
             </div>
         </div>
         <div class="col-sm-12 col-md-3 d-flex justify-content-center margin-top margin-bot" *ngIf="this.personalRating == null && this.isLoggedIn === true">

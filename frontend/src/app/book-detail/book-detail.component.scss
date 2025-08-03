@@ -13,3 +13,11 @@
 .tiny-margin-right{
     margin-right: 0.5rem;
 }
+
+.badge-main{
+    box-shadow: 0 0 8px variables.$secondary;
+}
+
+.badge-sec{
+    box-shadow: 0 0 8px variables.$primary;
+}

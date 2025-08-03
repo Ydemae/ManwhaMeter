@@ -84,8 +84,6 @@ final class BillboardController extends AbstractController
             $active = $body["active"];
         }
 
-        //$message = nl2br($message);
-
         $announcement = new BillboardAnnouncement();
         $announcement->setCreatedAt(new DateTimeImmutable());
         $announcement->setActive($active);

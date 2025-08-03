@@ -93,7 +93,6 @@ class RequestListener
     }
 
     public function sanitizeString(string $toSanitize) : string{
-        $toSanitize = nl2br($toSanitize);
         //Temporarily disabled, I'm wondering if it's necessary
         //return preg_replace("/[^A-Za-z0-9\ \-\.\!\^\'\(\)\<\>]/", '', $toSanitize);
         return $toSanitize;

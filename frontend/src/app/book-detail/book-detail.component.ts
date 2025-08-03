@@ -40,6 +40,8 @@ export class BookDetailComponent {
 
   public book : DetailedBook | null = null;
 
+  public bookDesc! : string;
+
   private bookId! : number;
   public apiUrl = environment.apiUrl;
 
@@ -124,6 +126,8 @@ export class BookDetailComponent {
 
         this.removePersonalRatingFromRatingList()
         
+        this.bookDesc = this.book?.description.replaceAll("<br />", "") == undefined ? "" : this.book?.description.replaceAll("<br />", "");
+
         this.personalRatingFetched = true;
         this.bookFetched = true;
     })

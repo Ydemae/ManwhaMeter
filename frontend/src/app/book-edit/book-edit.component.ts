@@ -88,7 +88,6 @@ export class BookEditComponent implements OnInit {
   }
 
   onSubmit(data : Book){
-    
     let updateRequestBody : any = {}
 
     updateRequestBody["id"] = this.book.id;

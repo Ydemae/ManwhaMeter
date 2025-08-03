@@ -10,7 +10,7 @@ tabindex="0"
 (keydown.space)="onBookClicked()">
   
   <div class="card-header d-flex align-items-center justify-content-between">
-    <h5 class="book-title mb-0">{{ this.book.name }}</h5>
+    <h5 class="book-title mb-0" [ngbTooltip]="this.book.name" placement="bottom" tooltipClass="mytooltip" container="body">{{ this.book.name }}</h5>
     <div class="book-actions d-flex align-items-center gap-2">
       <ng-container *ngIf="this.logged">
         <button class="btn btn-link p-0 border-0"
