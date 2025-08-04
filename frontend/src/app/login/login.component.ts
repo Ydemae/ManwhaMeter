@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit{
     this.authService.login(username,password).then(
         (response) => {
             if (response === 0){
-                this.router.navigate(["/booklist"])
+                this.router.navigate(["/home"])
             }
             else{
               this.showError(
