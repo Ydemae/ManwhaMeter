@@ -49,7 +49,8 @@ sudo docker build -f custom-nginx.dockerfile -t custom-nginx:latest .
 Transpile angular app to js :
 
 ```bash
-docker compose --profile build run angular-build
+sudo docker compose build --no-cache angular-build
+sudo docker compose --profile build run --remove-orphans angular-build
 ```
 
 Deploy :
