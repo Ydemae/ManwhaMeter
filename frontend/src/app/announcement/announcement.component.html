@@ -19,15 +19,23 @@
     </div>
     
     <div class="card-footer" *ngIf="canEdit">
-        <div class="d-flex">
-            <div class="ms-auto">
+        <div class="d-flex justify-content-end gap-3">
+            <div class="">
+                <a [routerLink]="['/announcement/edit', this.announcement.id]"
+                class="btn btn-primary" 
+                *ngIf="this.announcement.active == true">
+                <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+            </div>
+
+            <div class="">
                 <button type="button"
                 class="btn btn-danger" 
                 *ngIf="this.announcement.active == true" 
                 (click)="onDeactivateClicked()">
 
                 <i class="fas fa-times p-0 m-0"></i>
-            </button>
+                </button>
             </div>
         </div>
     </div>

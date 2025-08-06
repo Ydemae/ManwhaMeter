@@ -1,0 +1,12 @@
+<label for="titleInput">Title</label>
+<input type="text" class="form-control" name="titleInput" id="titleInput" [(ngModel)]="this.title">
+<p class="text-danger" *ngIf="error['title'] != ''">{{error["title"]}}</p>
+
+<label for="messageInput">Message</label>
+<textarea class="form-control" name="messageInput" id="messageInput" rows="15" [(ngModel)]="this.message"></textarea>
+<p class="text-danger" *ngIf="error['message'] != ''">{{error["message"]}}</p>
+
+<div class="text-center">
+    <a class="btn btn-danger m-2" routerLink="/">Cancel</a>
+    <button type="button" class="btn btn-primary m-2" (click)="submit()">{{this.label}}</button>
+</div>

@@ -18,6 +18,7 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { CreditsComponent } from './credits/credits.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AnnouncementEditComponent } from './announcement-edit/announcement-edit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'admin', component: AdminBoardComponent },
   { path: 'announcement/create', component: AnnouncementCreateComponent },
   { path: 'books/edit/:id', component: BookEditComponent },
+  { path: 'announcement/edit/:id', component: AnnouncementEditComponent },
   { path: 'readinglist', component: ReadingListComponent },
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'terms-of-service', component: TermsOfServiceComponent },

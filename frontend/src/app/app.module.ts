@@ -45,6 +45,8 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { AnnouncementEditComponent } from './announcement-edit/announcement-edit.component';
+import { AnnouncementFormComponent } from './announcement-form/announcement-form.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     TermsOfServiceComponent,
     PrivacyPolicyComponent,
     ProfileComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    AnnouncementEditComponent,
+    AnnouncementFormComponent
   ],
   imports: [
     BrowserModule,

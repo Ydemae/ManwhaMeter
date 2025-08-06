@@ -14,14 +14,6 @@ import { Router } from '@angular/router';
 })
 export class AnnouncementCreateComponent {
 
-  public title : string = "";
-  public message : string = "";
-
-  public error = {
-    title : "",
-    message : ""
-  }
-
   public showError = false;
   public errTitle = "";
   public errMessage = "";
@@ -32,25 +24,9 @@ export class AnnouncementCreateComponent {
     private router : Router
   ){}
 
-  createAnnouncement(){
-    this.error["title"] = "";
-    this.error["message"] = "";
+  createAnnouncement(data : {id : number, title : string, message : string}){
 
-    let error = false;
-    if (this.title == ""){
-      this.error["title"] = "Title cannot be empty";
-      error = true;
-    }
-    if (this.message == ""){
-      this.error["message"] = "Message cannot be empty";
-      error = true;
-    }
-
-    if (error == true){
-      return;
-    }
-
-    this.billboardService.create(this.title, this.message).then(
+    this.billboardService.create(data.title, data.message).then(
       results => {
         if (results == true){
           this.flashMessageService.setFlashMessage("Announcement successfully created");

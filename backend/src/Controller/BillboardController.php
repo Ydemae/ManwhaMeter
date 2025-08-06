@@ -42,6 +42,32 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success","announcements" => json_decode($jsonAnnoucements)]);
     }
 
+    #[Route('/getOneById/{id}', name: 'billboard_getOneById', methods: ["GET"])]
+    public function getOneById(int $id, AuthService $authService, Request $request, SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    {
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception $e){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        $announcement = $billboardAnnouncementRepository->findOneBy(["id" => $id]);
+        
+        if ($announcement == null){
+            return $this->json(["result" => "error", "error" => "No announcement for this id"], 400);
+        }
+
+        $jsonAnnoucement = $serializerInterface->serialize($announcement, 'json', ['groups' => "admin"]);
+
+        return $this->json(["result" => "success","announcement" => json_decode($jsonAnnoucement)]);
+    }
+
     #[Route('/getAllActive', name: 'billboard_getallactive', methods: ["GET"])]
     public function getAllActive(Request $request, SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
@@ -96,8 +122,59 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
-    #[Route('/delete', name: 'billboard_delete', methods: ["POST"])]
+    #[Route('/update', name: 'billboard_update', methods: ["POST"])]
     public function update(AuthService $authService, Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    {
+        $userData = [];
+        try{
+            $userData = $authService->authenticateByToken($request);
+        }
+        catch(Exception){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
+        $body = $request->attributes->get("sanitized_body");
+
+        if (!array_key_exists("id", $body)){
+            return $this->json(["result" => "error", "error" => "No id provided for billboard announcement update"], 400);
+        }
+        $message = null;
+        if (array_key_exists("message", $body)){
+            $message = $body["message"];
+        }
+        $title = null;
+        if (array_key_exists("title", $body)){
+            $title = $body["title"];
+        }
+
+        if ($message == null && $title == null){
+            return $this->json(["result" => "error", "error" => "No message or title provided for announcement update"], 400);
+        }
+
+        $announcement = $billboardAnnouncementRepository->findOneBy(["id" => $body["id"]]);
+
+        if ($announcement == null){
+            return $this->json(["result" => "error", "error" => "Announcement doesn't exist"], 400);
+        }
+
+        if ($message != null){
+            $announcement->setMessage($message);
+        }
+        if ($title != null){
+            $announcement->setTitle($title);
+        }
+
+        $em->flush();
+
+        return $this->json(["result" => "success"]);
+    }
+
+    #[Route('/delete', name: 'billboard_delete', methods: ["POST"])]
+    public function delete(AuthService $authService, Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
         $userData = [];
         try{
