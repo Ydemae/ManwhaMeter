@@ -64,39 +64,3 @@
         transform: translateY(20px);
     }
 }
-
-.empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: linear-gradient(145deg, variables.$card-bg, variables.$body-bg);
-    border: 2px solid rgba(variables.$primary-backdrop, 0.3);
-    border-radius: 1.5rem;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    
-    .empty-state-icon {
-        margin-bottom: 2rem;
-        
-        i {
-            font-size: 4rem;
-        }
-    }
-    
-    .empty-state-title {
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-    
-    .empty-state-message {
-        color: rgba(variables.$secondary, 0.8);
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .empty-state-subtitle {
-        color: rgba(variables.$secondary, 0.6);
-        font-size: 0.95rem;
-        font-style: italic;
-        margin: 0;
-    }
-}

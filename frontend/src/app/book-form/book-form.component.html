@@ -5,7 +5,7 @@
     <input type="text" class="col-9 form-control" name="bookname" placeholder="bookname" autocomplete="off" [(ngModel)]="name" maxlength="80" (change)="onNameChange()">
     <small *ngIf="this.nameError != ''" class="form-text text-danger">{{this.nameError}}</small>
 
-    <textarea class="col-9 form-control margin-top" name="bookdescription" placeholder="description" autocomplete="off" [(ngModel)]="description" maxlength="1000" (change)="onDescriptionChange()"></textarea>
+    <textarea class="col-9 form-control margin-top" name="bookdescription" placeholder="description" autocomplete="off" [(ngModel)]="description" maxlength="1000" (change)="onDescriptionChange()" rows="6"></textarea>
     <small class="form-text text-muted">Limited to 1000 chars.</small>
     <small *ngIf="this.descriptionError != ''" class="form-text text-danger">{{this.descriptionError}}</small>
 

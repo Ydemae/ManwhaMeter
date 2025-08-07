@@ -72,6 +72,7 @@ export class BookRankingComponent {
 
         this.books = results[0] as ListedBook[];
         this.tags = results[1] as Tag[];
+        console.log(this.books)
 
         this.dataWasFetched = true;
 

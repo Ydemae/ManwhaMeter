@@ -14,7 +14,7 @@ import { UserService } from '../services/user/user.service';
 })
 export class RegisterComponent implements OnInit{
 
-  private inviteUid! : string;
+  public inviteUid : string = "";
 
   public usernameAvailable : boolean | null = null;
   public usernameAvailableLabel : string = "";
@@ -32,7 +32,8 @@ export class RegisterComponent implements OnInit{
     confirmPassword : "",
     username : "",
     profilePicture : "",
-    terms : ""
+    terms : "",
+    invite : ""
   }
 
   public showError = false;
@@ -55,7 +56,6 @@ export class RegisterComponent implements OnInit{
     let inviteUid = this.route.snapshot.paramMap.get("uid");
 
     if (inviteUid === null){
-      //TO DO - manage error
       return;
     }
 
@@ -80,12 +80,22 @@ export class RegisterComponent implements OnInit{
     if (!this.validateTerms()){
       valid = false;
     }
-
-    console.log(this.formError.terms)
+    if (!this.validateInvite()){
+      valid = false;
+    }
 
     return valid;
   }
 
+  validateInvite(){
+    this.formError.invite = "";
+    if (this.inviteUid == ""){
+      this.formError.invite = "InviteUid cannot be empty.";
+      return false;
+    }
+
+    return true;
+  }
   validateTerms(){
     this.formError.terms = "";
     if (this.formData.terms == false){
@@ -156,6 +166,9 @@ export class RegisterComponent implements OnInit{
     if (this.formData.username == ""){
       return;
     }
+    if (!this.validateInvite()){
+      return;
+    }
 
     this.userService.usernameExists(this.formData.username, this.inviteUid).then(
       (result) => {
@@ -165,10 +178,15 @@ export class RegisterComponent implements OnInit{
       }
     ).catch(
       error => {
-        this.displayError(
-          "Unexpected error",
-          "An unexpected error occured when checking username availability, please try again."
-        )
+        if (error == 2){
+          this.formError.invite = "Invite is invalid";
+        }
+        else{
+          this.displayError(
+            "Unexpected error",
+            "An unexpected error occured when checking username availability, please try again."
+          )
+        }
       }
     )
   }

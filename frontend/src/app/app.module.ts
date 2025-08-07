@@ -47,6 +47,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { AnnouncementEditComponent } from './announcement-edit/announcement-edit.component';
 import { AnnouncementFormComponent } from './announcement-form/announcement-form.component';
+import { NoResultPlaceholderComponent } from './no-result-placeholder/no-result-placeholder.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { AnnouncementFormComponent } from './announcement-form/announcement-form
     ProfileComponent,
     ChangePasswordComponent,
     AnnouncementEditComponent,
-    AnnouncementFormComponent
+    AnnouncementFormComponent,
+    NoResultPlaceholderComponent
   ],
   imports: [
     BrowserModule,

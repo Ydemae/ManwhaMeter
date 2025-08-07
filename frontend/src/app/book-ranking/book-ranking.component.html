@@ -18,7 +18,7 @@
     <a routerLink="/bookcreate" class="btn btn-primary">Create a book</a>
     <app-search-filters [tagsList]="tags!" (filterChangeEmitter)="receiveFilterChangeEvent($event)"></app-search-filters>
 
-    <ng-container *ngIf="this.books != [] else Empty">
+    <ng-container *ngIf="this.books!.length != 0 else Empty">
         <app-book-list [books]="this.books!"
         [bookIdToReadingListEntry]="this.bookIdToReadingListEntry"
         [logged]="this.authService.isLoggedInSubject.value"
@@ -29,10 +29,6 @@
     </ng-container>
 
     <ng-template #Empty>
-        <div class="alert alert-dismissible alert-warning">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <h4 class="alert-heading">No results</h4>
-            No results could be found for the current search filters
-        </div>
+        <app-no-result-placeholder title="No Books" subtitle="We couldn't find any book corresponding to your research." icon="fa-solid fa-book" [updates]="true"></app-no-result-placeholder>
     </ng-template>
 </div>

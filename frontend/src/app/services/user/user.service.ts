@@ -87,9 +87,13 @@ export class UserService {
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          console.log("Unexpected error caught when attempting to check username availability");
+          let code = 1;
 
-          reject();
+          if (error.status == 401){
+            code = 2;
+          }
+
+          reject(code);
           return throwError(() => { });
         })
       ).subscribe({

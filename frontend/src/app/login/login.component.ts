@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit{
 
   public username : string = "";
   public password : string = "";
+  public querying : boolean = false;
 
   public error = {
     password : "",
@@ -107,6 +108,7 @@ export class LoginComponent implements OnInit{
 
   authenticate(username: string, password: string): void {
     this.error.global = "";
+    this.querying = true;
     this.authService.login(username,password).then(
         (response) => {
             if (response === 0){
@@ -117,6 +119,7 @@ export class LoginComponent implements OnInit{
                 "Invalid credentials",
                 "Invalid identifier or password"
               )
+              this.querying = false;
             }
         }
     ).catch(

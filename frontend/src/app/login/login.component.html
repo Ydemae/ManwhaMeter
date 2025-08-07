@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <button type="submit" 
                     class="btn btn-primary w-100" 
-                    [disabled]="loginForm.invalid">
+                    [disabled]="loginForm.invalid || this.querying">
     
                         Sign In
                         <i class="fas fa-sign-in-alt mx-1"></i>
@@ -64,6 +64,13 @@
                     <p class="text-danger">{{ this.error.global }}</p>
                 </div>
             </form>
+
+            <div class="login-footer">
+                <p class="register-link">
+                    Don't have an account? 
+                    <a routerLink="/register" class="link-secondary">Sign up here</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>

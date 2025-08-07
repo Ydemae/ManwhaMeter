@@ -1,0 +1,11 @@
+<!--Copyright (c) 2025 Ydemae
+    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+
+<div class="empty-state">
+    <div class="empty-state-icon">
+        <i [classList]="this.icon"></i>
+    </div>
+    <h3 class="empty-state-title">{{this.title}}</h3>
+    <p class="empty-state-message">{{this.subtitle}}</p>
+    <p class="empty-state-subtitle" *ngIf="updates">Check back later for updates!</p>
+</div>

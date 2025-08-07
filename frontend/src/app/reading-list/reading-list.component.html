@@ -17,11 +17,18 @@
             <h1>Reading list</h1>
             <p>This is your personal reading list, it allows you to list the books you may want to read later.</p>
         </div>
-        <app-book-list [books]="this.books"
-        [ranked]="false"
-        (bookClickedEventEmitter)="receiveBookClickedEvent($event)"
-        (removeReadingListEmitter)="this.receiveDeleteFromReadingListEvent($event)"
-        [bookIdToReadingListEntry]="this.bookIdToReadingListEntry"
-        [logged]="true"></app-book-list>
+
+        <ng-container *ngIf="this.books.length != 0 else Empty">
+            <app-book-list [books]="this.books"
+            [ranked]="false"
+            (bookClickedEventEmitter)="receiveBookClickedEvent($event)"
+            (removeReadingListEmitter)="this.receiveDeleteFromReadingListEvent($event)"
+            [bookIdToReadingListEntry]="this.bookIdToReadingListEntry"
+            [logged]="true"></app-book-list>
+        </ng-container>
+
+        <ng-template #Empty>
+            <app-no-result-placeholder title="No Books" subtitle="There is currently no book in your reading list, but maybe that can be changed ?" icon="fa-solid fa-bookmark"></app-no-result-placeholder>
+        </ng-template>
     </ng-container>
 </div>

@@ -56,14 +56,7 @@
         </div>
         
         <ng-template #NoAnnouncements>
-            <div class="empty-state">
-                <div class="empty-state-icon">
-                    <i class="fas fa-scroll"></i>
-                </div>
-                <h3 class="empty-state-title">No Announcements</h3>
-                <p class="empty-state-message">There are currently no announcements on the billboard.</p>
-                <p class="empty-state-subtitle">Check back later for updates!</p>
-            </div>
+            <app-no-result-placeholder icon="fas fa-scroll" title="No Announcements" subtitle="There are currently no announcements on the billboard." [updates]="true"></app-no-result-placeholder>
         </ng-template>
     </ng-template>
 </div>
