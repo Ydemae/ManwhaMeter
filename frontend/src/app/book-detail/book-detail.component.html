@@ -60,9 +60,12 @@
                 <div class="text-center">
                     <h3>Book Ratings</h3>
                 </div>
-                <div class="w-100">
+                <div class="w-100" *ngIf="this.book?.ratings!.length != 0 else NoRating">
                     <app-comment-list [ratingsList]="this.book?.ratings!" (deleteEmitter)="this.onDeleteOtherClicked($event)"></app-comment-list>
                 </div>
+                <ng-template #NoRating>
+                    <app-no-result-placeholder title="No Ratings" subtitle="No ratings could be found for this book." icon="fa-solid fa-comment" [updates]="true"></app-no-result-placeholder>
+                </ng-template>
             </div>
         </ng-container>
         <ng-template #NotLoggedIn>
