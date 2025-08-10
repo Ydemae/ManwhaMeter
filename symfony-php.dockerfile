@@ -20,4 +20,6 @@ RUN chmod -R 775 /var/www/symfony/var
 
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
+COPY ./custom.ini /usr/local/etc/php/conf.d/custom.ini
+
 CMD ["php-fpm"]
