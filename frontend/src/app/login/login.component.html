@@ -8,12 +8,12 @@
         <p class="mb-0">{{ this.errMessage }}</p>
     </div>
 
-    <div class="alert alert-dismissible alert-secondary" *ngIf="this.flashMessage != null" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlashMessage()" aria-label="Close message"></button>
-        <p class="mb-0">{{ this.flashMessage }}</p>
-    </div>
-
     <div class="content-wrapper">
+        <div class="alert alert-dismissible alert-secondary" *ngIf="this.flashMessage != null" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlashMessage()" aria-label="Close message"></button>
+            <p class="mb-0">{{ this.flashMessage }}</p>
+        </div>
+
         <div class="login-card">
             <div class="login-header">
                 <h1 class="login-title">Welcome Back</h1>

@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary w-100" (click)="registerUser()">
+                    <button type="button" class="btn btn-primary w-100" (click)="registerUser()" [disabled]="this.querying">
                         <span class="btn-text">Sign up</span>
                         <i class="fas fa-user-plus mx-1"></i>
                     </button>

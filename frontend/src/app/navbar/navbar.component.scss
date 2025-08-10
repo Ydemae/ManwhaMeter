@@ -59,9 +59,8 @@
 }
 
 .mobile-menu {
-    background: linear-gradient(135deg, variables.$primary, variables.$primary-light);
+    background: transparent;
     border-top: 1px solid variables.$sec-border-color;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .dropdown-menu {
@@ -82,5 +81,13 @@
     &:hover {
         background: rgba(255, 255, 255, 0.1);
         border-color: variables.$sec-border-color;
+    }
+}
+
+@media (max-width: 800px) {
+    .custom-navbar,
+    .mobile-menu {
+        background: variables.$primary !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     }
 }

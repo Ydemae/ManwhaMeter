@@ -15,7 +15,7 @@
 
 <div  *ngIf="this.dataWasFetched else NotFetched" class="content-wrapper">
 
-    <a routerLink="/bookcreate" class="btn btn-primary">Create a book</a>
+    <a routerLink="/bookcreate" class="btn btn-primary" *ngIf="this.authService.isLoggedInSubject.value">Create a book</a>
     <app-search-filters [tagsList]="tags!" (filterChangeEmitter)="receiveFilterChangeEvent($event)"></app-search-filters>
 
     <ng-container *ngIf="this.books!.length != 0 else Empty">

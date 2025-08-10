@@ -3,6 +3,8 @@
 
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +16,12 @@ export class NavbarComponent {
   public userIsConnected! : boolean;
   public isAdmin! : boolean;
 
-  constructor(private authService : AuthService) {
+  mobileMenuCollapsed : boolean = true;
+
+  constructor(
+    private authService : AuthService,
+    private router : Router
+  ) {
   }
 
   ngOnInit(){
@@ -29,10 +36,29 @@ export class NavbarComponent {
         this.isAdmin = value
       }
     )
+
+    //Close navbar automatically when switching page
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.closeMenu();
+      });
+  }
+
+  ngAfterViewInit() {
+    this.closeMenu();
   }
 
   disconnectUser() {
     this.authService.logout()
+  }
+
+  closeMenu() {
+    this.mobileMenuCollapsed = true;
+  }
+
+  toggleMenu(){
+    this.mobileMenuCollapsed = !this.mobileMenuCollapsed;
   }
 
 }

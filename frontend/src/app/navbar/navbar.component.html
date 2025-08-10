@@ -1,7 +1,7 @@
 <!--Copyright (c) 2025 Ydemae
     Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<nav class="custom-navbar bg-primary" data-bs-theme="dark">
+<nav class="custom-navbar" data-bs-theme="dark">
 
     <!-- PC version -->
     <div class="d-none d-md-block nav-items-container position-relative">
@@ -75,7 +75,7 @@
     <!-- Mobile version -->
     <div class="d-flex d-md-none justify-content-between align-items-center px-3 py-2 bg-primary">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" aria-label="Toggle navigation" (click)="this.toggleMenu()">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -84,10 +84,9 @@
                 <img src="favicon.png" alt="ManwhaMeter" class="logo" style="height: 40px;">
             </a>
         </div>
-
     </div>
 
-    <div class="collapse navbar-collapse" id="navbarColor01">
+    <div class="collapse navbar-collapse" id="navbarColor01" [ngbCollapse]="this.mobileMenuCollapsed">
         <div class="mobile-menu bg-primary text-white p-3">
             <a *ngIf="userIsConnected && isAdmin"
             class="custom-nav-item d-block mb-2"

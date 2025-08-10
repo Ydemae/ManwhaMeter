@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user/user.service';
+import { FlashMessageService } from '../services/flashMessage/flash-message.service';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,8 @@ import { UserService } from '../services/user/user.service';
 export class RegisterComponent implements OnInit{
 
   public inviteUid : string = "";
+
+  public querying : boolean = false;
 
   public usernameAvailable : boolean | null = null;
   public usernameAvailableLabel : string = "";
@@ -44,7 +47,8 @@ export class RegisterComponent implements OnInit{
     private authService : AuthService,
     private router : Router,
     private route : ActivatedRoute,
-    private userService : UserService
+    private userService : UserService,
+    private flashMessageService : FlashMessageService
   ){}
 
   ngOnInit(): void {
@@ -201,11 +205,13 @@ export class RegisterComponent implements OnInit{
       return;
     }
 
+    this.querying = true;
+
     if (!this.usernameAvailable){
+      this.querying = false;
       this.displayError("Unverified username", "Your username was not verified or is already taken. Sometimes you submit the form before the username was verified, please try again after a few seconds.")
       return;
     }
-    
 
     this.userService.create(
       this.formData.username,
@@ -215,9 +221,12 @@ export class RegisterComponent implements OnInit{
     ).then(
       result => {
         if (result == true){
+          this.flashMessageService.setFlashMessage("Account successfully created, you can now sign in !");
+          this.querying = false;
           this.router.navigate(["/login"]);
         }
         else{
+          this.querying = false;
           this.displayError(
             "Unexpected error",
             "An unexpected error occured when creating the user, please try again."
@@ -226,6 +235,7 @@ export class RegisterComponent implements OnInit{
       }
     ).catch(
       error => {
+        this.querying = false;
         if (error == 403){
           this.displayError(
             "Expired invite",
