@@ -124,6 +124,7 @@ export class LoginComponent implements OnInit{
         }
     ).catch(
       (error) => {
+        this.querying = false;
         if (error == 2){
           this.error.global = "This account is disabled. If you don't know why your account was disabled, please contact your server owner";
         }

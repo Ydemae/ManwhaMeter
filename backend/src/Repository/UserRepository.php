@@ -39,7 +39,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function usernameExists(string $username = ""): bool{
 
         $result = $this->createQueryBuilder("u")
-        ->andWhere("u.username = :username")
+        ->andWhere("LOWER(u.username) = LOWER(:username)")
         ->setParameter("username", $username)
         ->select("COUNT(u.id)")
         ->getQuery()
@@ -47,6 +47,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $result == 1;
     }
+
+    public function findUser(string $username = ""){
+
+        $user = $this->createQueryBuilder('u')
+        ->where('LOWER(u.username) = LOWER(:username)')
+        ->setParameter('username', $username)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+        return $user;
+    }
+
 
     //    /**
     //     * @return User[] Returns an array of User objects

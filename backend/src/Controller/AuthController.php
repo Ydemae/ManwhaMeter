@@ -37,7 +37,7 @@ final class AuthController extends AbstractController
             );
         }
 
-        $user = $userRepository->findOneBy(["username" => $body["username"]]);
+        $user = $userRepository->findUser($body["username"]);
 
         if ($user == null){
             return $this->json(["result" => "error", "error" => "Incorrect credentials"],401);
