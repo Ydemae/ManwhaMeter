@@ -86,6 +86,26 @@ class BookRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
 
+        usort($results, function($a, $b) use ($orderBy) {
+            if (is_null($a['overall_rating']) && !is_null($b['overall_rating'])) {
+                return 1;
+            }
+            if (!is_null($a['overall_rating']) && is_null($b['overall_rating'])) {
+                return -1;
+            }
+            
+            if (is_null($a['overall_rating']) && is_null($b['overall_rating'])) {
+                return 0;
+            }
+            
+            if ($orderBy === 'DESC') {
+                return $b['overall_rating'] <=> $a['overall_rating'];
+            } else {
+                return $a['overall_rating'] <=> $b['overall_rating'];
+            }
+        });
+
+
         $books = [];
         $bookIds = [];
         foreach ($results as $row) {
