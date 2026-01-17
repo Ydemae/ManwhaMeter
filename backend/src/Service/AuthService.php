@@ -22,7 +22,7 @@ class AuthService
         $this->userPasswordHasherInterface = $userPasswordHasherInterface;
     }
 
-    public function getAuthToken(User $user, string $password): string{
+    public function login(User $user, string $password): string{
         if ($user == null){
             throw new Exception("Incorrect identifier or password provided");
         }
@@ -34,7 +34,7 @@ class AuthService
         throw new Exception("Incorrect identifier or password provided");
     }
 
-    public function decodeAuthToken(string $token): array{
+    public function decodeAccessToken(string $token): array{
         $correctToken = $this->removeBearerFromAuthToken($token);
 
         return $this->tokenManagementService->decodeToken($correctToken);
@@ -47,7 +47,7 @@ class AuthService
             throw new Exception("No token provided");
         }
 
-        return $this->decodeAuthToken($authToken);
+        return $this->decodeAccessToken($authToken);
     }
 
     private function removeBearerFromAuthToken(string $token) : string{

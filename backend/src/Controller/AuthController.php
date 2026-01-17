@@ -5,12 +5,15 @@
 
 namespace App\Controller;
 
+use App\Repository\RefreshTokenRepository;
 use App\Repository\UserRepository;
 use App\Service\AuthService;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,8 +21,43 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/auth')]
 final class AuthController extends AbstractController
 {
-    #[Route('/getToken', name: 'token_get', methods: ["POST"])]
-    public function getToken(Request $request, Security $security, AuthService $authService, UserRepository $userRepository): Response
+    #[Route('/login', name: 'login', methods: ['POST'])]
+    public function login(): Response
+    {
+        return $this->json(['message' => 'Login handled by LexikJWT']);
+    }
+
+    #[Route('/refresh', name: 'refresh', methods: ['POST'])]
+    public function refresh(): Response
+    {
+        return $this->json(['message' => 'Refresh handled by gesdinet']);
+    }
+
+    #[Route('/refresh/invalidate', name: 'refresh_invalidate', methods: ['POST'])]
+    public function invalidateRefreshToken(Request $request, EntityManagerInterface $em, RefreshTokenRepository $refreshTokenRepository): Response
+    {
+        $refreshTokenString = $request->request->get('refresh_token');
+
+        if (!$refreshTokenString) {
+            return new JsonResponse(['error' => 'Refresh token is required'], status: 400);
+        }
+
+        $refreshToken = $refreshTokenRepository->findOneBy(['refreshToken' => $refreshTokenString]);
+
+        if (!$refreshToken) {
+            return new JsonResponse(['error' => 'Refresh token not found'], 404);
+        }
+
+        $em->remove($refreshToken);
+        $em->flush();
+
+        return new JsonResponse(['message' => 'Refresh token invalidated successfully']);
+    }
+
+
+
+    /*#[Route('/login', name: 'authlogin', methods: ["POST"])]
+    public function login(Request $request, Security $security, AuthService $authService, UserRepository $userRepository): Response
     {
         $body = $request->attributes->get("sanitized_body");
 
@@ -55,9 +93,20 @@ final class AuthController extends AbstractController
         catch(Exception $e){
             return $this->json(["result" => "error", "error" => "Incorrect credentials"],401);
         }
-    }
+    }*/
 
-    #[Route('/isTokenValid', name: 'token_valid', methods: ["GET"])]
+
+    /*#[Route('/test', name: 'test', methods: ["GET"])]
+    public function test(Request $request, Security $security, AuthService $authService, UserRepository $userRepository): Response
+    {
+        $body = $request->attributes->get("sanitized_body");
+
+
+        return $this->json(["result" => "success","token" => $token, "isAdmin" => in_array("ROLE_ADMIN", $user->getRoles())]);
+    }*/
+
+
+    /*#[Route('/isTokenValid', name: 'token_valid', methods: ["GET"])]
     public function index(Request $request, Security $security, AuthService $authService): Response
     {
 
@@ -74,5 +123,5 @@ final class AuthController extends AbstractController
         catch(AccessDeniedException $e){
             return $this->json(["result" => "success","valid" => false]);
         }
-    }
+    }*/
 }

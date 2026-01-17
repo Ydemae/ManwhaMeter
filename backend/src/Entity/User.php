@@ -69,10 +69,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'creator')]
     private Collection $books;
 
+    /**
+     * @var Collection<int, RefreshToken>
+     */
+    #[ORM\OneToMany(targetEntity: RefreshToken::class, mappedBy: 'linkedUser', orphanRemoval: true)]
+    private Collection $refreshTokens;
+
     public function __construct()
     {
         $this->readingListEntries = new ArrayCollection();
         $this->books = new ArrayCollection();
+        $this->refreshTokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -261,5 +268,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->username ?? 'unknown';
+    }
+
+    /**
+     * @return Collection<int, RefreshToken>
+     */
+    public function getRefreshTokens(): Collection
+    {
+        return $this->refreshTokens;
+    }
+
+    public function addRefreshToken(RefreshToken $refreshToken): static
+    {
+        if (!$this->refreshTokens->contains($refreshToken)) {
+            $this->refreshTokens->add($refreshToken);
+            $refreshToken->setLinkedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRefreshToken(RefreshToken $refreshToken): static
+    {
+        if ($this->refreshTokens->removeElement($refreshToken)) {
+            // set the owning side to null (unless already changed)
+            if ($refreshToken->getLinkedUser() === $this) {
+                $refreshToken->setLinkedUser(null);
+            }
+        }
+
+        return $this;
     }
 }

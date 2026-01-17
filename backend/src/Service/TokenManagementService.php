@@ -7,8 +7,10 @@ use DateTime;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\User\UserInterface;
+
+use App\Security\AccessTokenEncoder;
+use App\Security\RefreshTokenEncoder;
+
 
 class TokenManagementService
 {
@@ -21,7 +23,7 @@ class TokenManagementService
         $this->jwtEncoder = $jwtEncoder;
     }
 
-    public function generateToken(User $user): string
+    public function generateAccessToken(User $user): string
     {
         try{
             return $this->jwtEncoder->encode([

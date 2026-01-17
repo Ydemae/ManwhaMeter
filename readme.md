@@ -59,11 +59,18 @@ Deploy :
 docker compose --env-file .env.local up
 ```
 
-JWT certs generation
+JWT keys generation
 
 ```bash
 sudo docker exec -it symfony
 php bin/console lexik:jwt:generate-keypair
+```
+
+or using openssl:
+
+```bash
+openssl genrsa -out ./backend/config/jwt/private.pem 4096
+openssl rsa -pubout -in ./backend/config/jwt/private.pem -out ./backend/config/jwt/public.pem
 ```
 
 setup the db
