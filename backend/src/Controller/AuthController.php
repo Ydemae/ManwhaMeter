@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/auth')]
 final class AuthController extends AbstractController
@@ -24,7 +25,7 @@ final class AuthController extends AbstractController
     #[Route('/login', name: 'login', methods: ['POST'])]
     public function login(): Response
     {
-        return $this->json(['message' => 'Login handled by LexikJWT']);
+        return $this->json(['error' => 'Missing Content-Type header'], 400);
     }
 
     #[Route('/refresh', name: 'refresh', methods: ['POST'])]
@@ -33,6 +34,7 @@ final class AuthController extends AbstractController
         return $this->json(['message' => 'Refresh handled by gesdinet']);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/refresh/invalidate', name: 'refresh_invalidate', methods: ['POST'])]
     public function invalidateRefreshToken(Request $request, EntityManagerInterface $em, RefreshTokenRepository $refreshTokenRepository): Response
     {

@@ -7,34 +7,22 @@ namespace App\Controller;
 
 use App\Entity\BillboardAnnouncement;
 use App\Repository\BillboardAnnouncementRepository;
-use App\Service\AuthService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/billboard')]
 final class BillboardController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/getAll', name: 'billboard_getall', methods: ["GET"])]
-    public function getAll(AuthService $authService, Request $request, SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    public function getAll(SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception $e){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $announcements = $billboardAnnouncementRepository->findAll();
 
         $jsonAnnoucements = $serializerInterface->serialize($announcements, 'json', ['groups' => "admin"]);
@@ -42,21 +30,10 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success","announcements" => json_decode($jsonAnnoucements)]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/getOneById/{id}', name: 'billboard_getOneById', methods: ["GET"])]
-    public function getOneById(int $id, AuthService $authService, Request $request, SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    public function getOneById(int $id, Request $request, SerializerInterface $serializerInterface, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception $e){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $announcement = $billboardAnnouncementRepository->findOneBy(["id" => $id]);
         
         if ($announcement == null){
@@ -78,21 +55,10 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success","announcements" => json_decode($jsonAnnoucements)]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'billboard_create', methods: ["POST"])]
-    public function create(AuthService $authService, Request $request, EntityManagerInterface $em): Response
+    public function create(Request $request, EntityManagerInterface $em): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("message", $body)){
@@ -122,20 +88,10 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/update', name: 'billboard_update', methods: ["POST"])]
-    public function update(AuthService $authService, Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    public function update(Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
 
         $body = $request->attributes->get("sanitized_body");
 
@@ -173,22 +129,10 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/delete', name: 'billboard_delete', methods: ["POST"])]
-    public function delete(AuthService $authService, Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    public function delete(Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("id", $body)){
@@ -207,22 +151,10 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/deactivate', name: 'billboard_deactivate', methods: ["POST"])]
-    public function deactivate(AuthService $authService, Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    public function deactivate(Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("id", $body)){
@@ -241,22 +173,10 @@ final class BillboardController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/activate', name: 'billboard_activate', methods: ["POST"])]
-    public function activate(AuthService $authService, Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
+    public function activate(Request $request, EntityManagerInterface $em, BillboardAnnouncementRepository $billboardAnnouncementRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("id", $body)){

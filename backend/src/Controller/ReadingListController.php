@@ -13,6 +13,7 @@ use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,23 +23,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class ReadingListController extends AbstractController
 {
     #[Route('/getAll', name: 'readinglist_getall', methods: ["GET"])]
-    public function getAll(Request $request, AuthService $authService, ReadingListEntryRepository $readingListEntryRepository, SerializerInterface $serializerInterface, UserRepository $userRepository): Response
+    public function getAll(ReadingListEntryRepository $readingListEntryRepository, SerializerInterface $serializerInterface, UserRepository $userRepository, Security $security): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        $user = $userRepository->findOneBy(["id" => $userData["user_id"]]);
-
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
         if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
-        $readingList = $readingListEntryRepository->findBy(["user" => $userData["user_id"]]);
+        $readingList = $readingListEntryRepository->findBy(["user" => $user->getId()]);
 
         $jsonReadingList = $serializerInterface->serialize($readingList, 'json', ['groups' => "unlogged"]);
 
@@ -46,18 +39,9 @@ final class ReadingListController extends AbstractController
     }
 
     #[Route('/create', name: 'readinglist_create', methods: ["POST"])]
-    public function create(Request $request, AuthService $authService, EntityManagerInterface $em, BookRepository $bookRepository, UserRepository $userRepository){
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        //Checking user extence
-        $user = $userRepository->findOneBy(["id" => $userData["user_id"]]);
-
+    public function create(Request $request, EntityManagerInterface $em, BookRepository $bookRepository, UserRepository $userRepository, Security $security){
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
         if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
@@ -87,14 +71,11 @@ final class ReadingListController extends AbstractController
     }
 
     #[Route('/delete', name: 'readinglist_delete', methods: ["POST"])]
-    public function delete(Request $request, AuthService $authService, ReadingListEntryRepository $readingListEntryRepository, EntityManagerInterface $em): Response
+    public function delete(Request $request, ReadingListEntryRepository $readingListEntryRepository, EntityManagerInterface $em, Security $security, UserRepository $userRepository): Response
     {
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
+        if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
@@ -111,7 +92,7 @@ final class ReadingListController extends AbstractController
             return $this->json(["result" => "error", "error" => "There is no reading list entry corresponding to provided id"], 400);
         }
 
-        if ($userData["user_id"] != $RLEToDelete->getUser()->getId()){
+        if ($user->getId() != $RLEToDelete->getUser()->getId()){
             return $this->json(["result" => "error", "error" => "Access denied"], 401);
         }
 

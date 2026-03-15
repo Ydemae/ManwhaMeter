@@ -11,14 +11,15 @@ use App\enum\BookType;
 use App\Repository\BookRepository;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
-use App\Service\AuthService;
 use App\Service\ImageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use ValueError;
 
@@ -90,19 +91,15 @@ final class BookController extends AbstractController
 
 
     #[Route('/getAllPersonal', name: 'book_getall_personal', methods: ["POST"])]
-    public function getAllPersonalRanking(Request $request, AuthService $authService, BookRepository $bookRepository, SerializerInterface $serializerInterface): Response
+    public function getAllPersonalRanking(Request $request, BookRepository $bookRepository, SerializerInterface $serializerInterface, Security $security, UserRepository $userRepository): Response
     {
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
+        if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
-        $userId = $userData["user_id"];
-
+        $userId = $user->getId();
         $body = $request->attributes->get("sanitized_body");
 
 
@@ -158,48 +155,26 @@ final class BookController extends AbstractController
     }
 
     #[Route('/getOneById/{id}', name: 'book_getonebyid', methods: ["GET"])]
-    public function getOneById(int $id, Request $request, AuthService $authService, BookRepository $bookRepository, SerializerInterface $serializerInterface): Response
+    public function getOneById(int $id, Request $request, BookRepository $bookRepository, SerializerInterface $serializerInterface): Response
     {
-        $loggedIn = false;
-
-        if ($request->headers->get("authorization")){
-            $loggedIn = true;
-            try{
-                $authService->authenticateByToken($request);
-            }
-            catch(Exception){
-                return $this->json(["result" => "error","error" => "Access denied"], 401);
-            }
-        }
-
         $book = $bookRepository->findOneBy(["id" => $id]);
 
         if ($book == null){
             return $this->json(["result" => "error", "error" => "No book with id : $id"], 400);
         }
 
-        if ($loggedIn){
-            $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "classic"]);
-        }
-        else{
-            $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "unlogged"]);
-        }
+        $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "classic"]);
+        
 
         return $this->json(["result" => "success","book" => json_decode($jsonBook)]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/validate', name: 'book_validate', methods: ["POST"])]
-    public function validateBook(Request $request, AuthService $authService, BookRepository $bookRepository, EntityManagerInterface $em){
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
+    public function validateBook(Request $request, BookRepository $bookRepository, EntityManagerInterface $em, Security $security, UserRepository $userRepository): Response{
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
+        if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
@@ -222,21 +197,10 @@ final class BookController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
-
-
     #[Route('/create', name: 'book_create', methods: ["POST"])]
-    public function createBook(Request $request, AuthService $authService, UserRepository $userRepository, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager, TagRepository $tagRepository){
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        $user = $userRepository->findOneBy(["id" => $userData["user_id"]]);
-
+    public function createBook(Request $request, UserRepository $userRepository, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager, TagRepository $tagRepository, Security $security): Response{
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
         if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
@@ -337,20 +301,9 @@ final class BookController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/update', name: 'book_update', methods: ["POST"])]
-    public function updateBook(Request $request, AuthService $authService, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager, TagRepository $tagRepository){
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
+    public function updateBook(Request $request, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager, TagRepository $tagRepository): Response{
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("id", $body)){
@@ -491,24 +444,10 @@ final class BookController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
-
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/delete', name: 'book_delete', methods: ["POST"])]
-    public function delete(Request $request, AuthService $authService, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager): Response
+    public function delete(Request $request, BookRepository $bookRepository, EntityManagerInterface $em, ImageManager $imageManager): Response
     {
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
 

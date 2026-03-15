@@ -1,4 +1,7 @@
 security:
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -11,6 +14,10 @@ security:
                 property: username
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
+        public:
+            pattern: ^/(user/(create|username_exists)|registerInvite/isUsed/.+)$
+            security: false
+
         main:
             lazy: true
             provider: app_user_provider
@@ -30,6 +37,22 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # Admin rules
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/refresh/invalidate, methods: [POST, GET, PUT, DELETE], roles: ROLE_ADMIN }
+        - { path: ^/billboard/(create|update|delete|activate|deactivate|getOneById|getAll$), methods: [POST, GET, PUT, DELETE], roles: ROLE_ADMIN }
+        - { path: ^/books/(validate|update|delete), methods: [POST, GET, PUT, DELETE], roles: ROLE_ADMIN }
+        - { path: ^/registerInvite/(getAll$|create|delete), methods: [POST, GET, PUT, DELETE], roles: ROLE_ADMIN }
+        - { path: ^/tag/(create|update|validate|delete), methods: [POST, GET, PUT, DELETE], roles: ROLE_ADMIN }
+        - { path: ^/user/(getAll$|delete|deactivate|activate), methods: [POST, GET, PUT, DELETE], roles: ROLE_ADMIN }
+
+        # User rules
+        - { path: ^/books, methods: [POST, GET, PUT, DELETE], roles: ROLE_USER }
+        - { path: ^/ratings, methods: [POST, GET, PUT, DELETE], roles: ROLE_USER }
+        - { path: ^/readingList, methods: [POST, GET, PUT, DELETE], roles: ROLE_USER }
+        - { path: ^/billboard, methods: [POST, GET, PUT, DELETE], roles: ROLE_USER }
+        - { path: ^/tag, methods: [POST, GET, PUT, DELETE], roles: ROLE_USER }
+        - { path: ^/user, methods: [POST, GET, PUT, DELETE], roles: ROLE_USER }
+        - { path: ^/registerInvite, methods: [POST, GET, PUT, DELETE], roles: ROLE_USER }
         #- { path: ^/profile, roles: ROLE_USER }
 
