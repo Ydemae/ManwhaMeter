@@ -3,7 +3,7 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environments';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { DetailedUser } from '../../../types/detailedUser';
 import { catchError, throwError } from 'rxjs';
@@ -127,17 +127,11 @@ export class UserService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/user/getAll/${active_code}`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get all users");
-          }
+          console.log("Unexpected error caught when attempting to get all users");
 
           reject();
           return throwError(() => { });
@@ -172,17 +166,11 @@ export class UserService {
         `${this.apiUrl}/user/delete`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to delete user");
-          }
+          console.log("Unexpected error caught when attempting to delete user");
 
           reject();
           return throwError(() => { });
@@ -218,17 +206,11 @@ export class UserService {
         `${this.apiUrl}/user/deactivate`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to deactivate user");
-          }
+          console.log("Unexpected error caught when attempting to deactivate user");
 
           reject();
           return throwError(() => { });
@@ -263,17 +245,11 @@ export class UserService {
         `${this.apiUrl}/user/activate`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to activate user");
-          }
+          console.log("Unexpected error caught when attempting to activate user");
 
           reject();
           return throwError(() => { });
@@ -310,16 +286,13 @@ export class UserService {
         `${this.apiUrl}/user/update`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
           let code = 1;
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else if (error.status == 460){
+
+          if (error.status == 460){
             code = 2;
           }
           else {
@@ -360,16 +333,13 @@ export class UserService {
         `${this.apiUrl}/user/changePassword`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
           let code = 1;
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else if (error.status == 460){
+
+          if (error.status == 460){
             code = 2;
           }
           else {
@@ -404,17 +374,11 @@ export class UserService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/user/getMyInfo`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.error("Unexpected error caught when attempting to get user id");
-          }
+          console.error("Unexpected error caught when attempting to get user id");
 
           reject();
           return throwError(() => { });

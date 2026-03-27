@@ -3,8 +3,7 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environments';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { AuthService } from '../auth/auth.service';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Invite } from '../../../types/invite';
 import { catchError, throwError } from 'rxjs';
 
@@ -17,7 +16,6 @@ export class InviteService {
 
   constructor(
     private _http: HttpClient,
-    private authService: AuthService
   ) {}
 
   getAll(
@@ -32,18 +30,11 @@ export class InviteService {
         `${this.apiUrl}/registerInvite/getAll`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          console.log(error)
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get all invites");
-          }
+          console.log("Unexpected error caught when attempting to get all invites");
 
           reject();
           return throwError(() => { });
@@ -73,17 +64,11 @@ export class InviteService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/registerInvite/create`,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to create invite");
-          }
+          console.log("Unexpected error caught when attempting to create invite");
 
           reject();
           return throwError(() => { });
@@ -113,17 +98,11 @@ export class InviteService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/registerInvite/delete/${id}`,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to delete invite");
-          }
+          console.log("Unexpected error caught when attempting to delete invite");
 
           reject();
           return throwError(() => { });

@@ -51,6 +51,7 @@ export class NavbarComponent {
 
   disconnectUser() {
     this.authService.logout()
+    this.router.navigate(["/login"]);
   }
 
   closeMenu() {

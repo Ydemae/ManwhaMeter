@@ -3,13 +3,11 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environments';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { ListedBook } from '../../../types/listedBook';
 import { DetailedBook } from '../../../types/detailedBook';
 import { Book } from '../../../types/book';
-import { AuthService } from '../auth/auth.service';
-import { BookType } from '../../../enum/bookType';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +17,7 @@ export class BookService {
   private apiUrl = environment.apiUrl;
 
   constructor(
-    private _http: HttpClient,
-    private authService: AuthService
+    private _http: HttpClient
   ) {
 
   }
@@ -50,12 +47,7 @@ export class BookService {
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get all books");
-          }
+          console.log("Unexpected error caught when attempting to get all books");
 
           reject();
           return throwError(() => { });
@@ -104,17 +96,11 @@ export class BookService {
         `${this.apiUrl}/books/getAllPersonal`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get all books");
-          }
+          console.log("Unexpected error caught when attempting to get all books");
 
           reject();
           return throwError(() => { });
@@ -142,25 +128,18 @@ export class BookService {
   }
 
   getOneById(
-    id: number,
-    logged : boolean = false
+    id: number
   ): Promise<DetailedBook> {
 
     return new Promise((resolve, reject) => {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/books/getOneById/${id}`,
         {
-          headers: logged === true ? new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }) : new HttpHeaders(),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to getting one book");
-          }
+          console.log("Unexpected error caught when attempting to getting one book");
 
           reject();
           return throwError(() => { });
@@ -188,17 +167,11 @@ export class BookService {
         `${this.apiUrl}/books/create`,
         book,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to create book");
-          }
+          console.log("Unexpected error caught when attempting to create book");
 
           reject();
           return throwError(() => { });
@@ -223,17 +196,11 @@ export class BookService {
         `${this.apiUrl}/books/update`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to update book");
-          }
+          console.log("Unexpected error caught when attempting to update book");
 
           reject();
           return throwError(() => { });
@@ -260,17 +227,11 @@ export class BookService {
         `${this.apiUrl}/books/delete`,
         {id : book_id},
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to delete book");
-          }
+          console.log("Unexpected error caught when attempting to delete book");
 
           reject();
           return throwError(() => { });

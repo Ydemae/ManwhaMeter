@@ -11,7 +11,7 @@ import { BookCardComponent } from './book-card/book-card.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { GeneralRankingComponent } from './general-ranking/general-ranking.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
@@ -48,6 +48,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { AnnouncementEditComponent } from './announcement-edit/announcement-edit.component';
 import { AnnouncementFormComponent } from './announcement-form/announcement-form.component';
 import { NoResultPlaceholderComponent } from './no-result-placeholder/no-result-placeholder.component';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,7 @@ import { NoResultPlaceholderComponent } from './no-result-placeholder/no-result-
     NgSelectModule
   ],
   providers: [
-    provideHttpClient()
+    provideHttpClient(withInterceptors([authInterceptor]))
   ],
   bootstrap: [AppComponent]
 })
