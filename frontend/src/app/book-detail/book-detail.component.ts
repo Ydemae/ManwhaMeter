@@ -97,7 +97,7 @@ export class BookDetailComponent {
     this.loadingFailed = false;
     this.bookFetched = false;
 
-    let getBookDetailPromise = this.bookService.getOneById(this.bookId, this.isLoggedIn).catch(
+    let getBookDetailPromise = this.bookService.getOneById(this.bookId).catch(
       (error) => {
         this.loadingFailed = true;
       }

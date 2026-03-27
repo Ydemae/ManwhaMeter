@@ -14,28 +14,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/user')]
 final class UserController extends AbstractController
 {
     #[Route('/getOneById/{id}', name: 'user_getonebyid', methods: ["GET"])]
-    public function getOneById(int $id, AuthService $authService, Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository): Response
+    public function getOneById(int $id, Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository): Response
     {
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $user = $userRepository->findOneBy(["id" => $id]);
 
         if ($user == null){
@@ -47,21 +40,10 @@ final class UserController extends AbstractController
         return $this->json(["result" => "success","user" => json_decode($jsonUser)]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/getAll/{active}', name: 'user_getall', methods: ["GET"])]
-    public function getAll(int $active, AuthService $authService, Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository): Response
+    public function getAll(int $active, Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         /*  Active 0 searches all inactive users
             Active 1 serches all active users
             Active 2 saerches all users indiscriminately of their activation
@@ -121,13 +103,11 @@ final class UserController extends AbstractController
     }
 
     #[Route('/update', name: 'user_update', methods: ["POST"])]
-    public function update(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository, PasswordHasherFactoryInterface $passwordHasherFactoryInterface): Response
+    public function update(Request $request, EntityManagerInterface $em, UserRepository $userRepository, PasswordHasherFactoryInterface $passwordHasherFactoryInterface, Security $security): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
+        if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
@@ -138,7 +118,7 @@ final class UserController extends AbstractController
         }
         $userId = $body["userId"];
 
-        if (!in_array("ROLE_ADMIN", $userData["roles"]) || $userId == $userData["user_id"]){
+        if (!in_array("ROLE_ADMIN", $securityUser->getRoles()) || $userId == $user->getId()){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
@@ -184,22 +164,11 @@ final class UserController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
-    
+
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/delete', name: 'user_delete', methods: ["POST"])]
-    public function delete(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    public function delete(Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("user_id", $body)){
@@ -220,21 +189,10 @@ final class UserController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/deactivate', name: 'user_deactivate', methods: ["POST"])]
-    public function deactivate(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    public function deactivate(Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("user_id", $body)){
@@ -255,21 +213,10 @@ final class UserController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/activate', name: 'user_activate', methods: ["POST"])]
-    public function activate(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    public function activate(Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("user_id", $body)){
@@ -295,7 +242,6 @@ final class UserController extends AbstractController
     {
         $body = $request->attributes->get("sanitized_body");
 
-
         if (!array_key_exists("invite", $body)){
             return $this->json(["result" => "error", "error" => "No invite provided to check username availability"], 400);
         }
@@ -316,21 +262,12 @@ final class UserController extends AbstractController
     }
 
     #[Route('/getMyInfo', name: 'user_get_my_info', methods: ["GET"])]
-    public function getMyInfi(Request $request, AuthService $authService, UserRepository $userRepository, SerializerInterface $serializerInterface): Response
+    public function getMyInfo(Request $request, UserRepository $userRepository, SerializerInterface $serializerInterface, Security $security): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-        $userId = $userData["user_id"];
-
-        $user = $userRepository->findOneBy(["id" => $userId]);
-
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
         if ($user == null){
-            return $this->json(["result" => "error", "error" => "No user for current token"], 400);
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
 
         $jsonUser = $serializerInterface->serialize($user, 'json', ['groups' => "classic"]);
@@ -340,16 +277,13 @@ final class UserController extends AbstractController
 
 
     #[Route('/changePassword', name: 'user_change_password', methods: ["POST"])]
-    public function changePassword(AuthService $authService, Request $request, EntityManagerInterface $em, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface, PasswordHasherFactoryInterface $passwordHasherFactoryInterface): Response
+    public function changePassword(Request $request, EntityManagerInterface $em, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface, PasswordHasherFactoryInterface $passwordHasherFactoryInterface, Security $security): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
+        if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
-        $userId = $userData["user_id"];
 
         $body = $request->attributes->get("sanitized_body");
 
@@ -362,12 +296,6 @@ final class UserController extends AbstractController
             return $this->json(["result" => "error","error" => "New password is missing"], 400);
         }
         $newPassword = $body["new_password"];
-
-        $user = $userRepository->findOneBy(["id" => $userId]);
-
-        if ($user == null){
-            return $this->json(["result" => "error","error" => "User doesn't exist"], 400);
-        }
 
         if (!$userPasswordHasherInterface->isPasswordValid($user, $oldPassword)){
             return $this->json(["result" => "error","error" => "Incorrect password"], 460);

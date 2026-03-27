@@ -18,7 +18,8 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 class RequestListener
 {
     public function __construct(
-        private RateLimiterFactory $anonymousApiLimiter
+        private RateLimiterFactory $anonymousApiLimiter,
+        private RateLimiterFactory $loginRouteLimiter
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -55,18 +56,6 @@ class RequestListener
         }
         else{
             $request->attributes->set("sanitized_body", []);
-        }
-
-        $limiter = $this->anonymousApiLimiter->create($request->getClientIp());
-
-        if (false === $limiter->consume(1)->isAccepted()) {
-            $response = new JsonResponse([
-                'result' => 'error',
-                'error' => 'Rate limit exceeded'
-            ], Response::HTTP_TOO_MANY_REQUESTS);
-
-            $event->setResponse($response);
-            return;
         }
     }
 

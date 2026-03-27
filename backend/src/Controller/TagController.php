@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/tag')]
@@ -21,17 +22,8 @@ final class TagController extends AbstractController
 {
 
     #[Route('/getOneById/{id}', name: 'tag_getonebyid', methods: ["GET"])]
-    public function getOneById(int $id, AuthService $authService, Request $request, SerializerInterface $serializerInterface, TagRepository $tagRepository): Response
+    public function getOneById(int $id, Request $request, SerializerInterface $serializerInterface, TagRepository $tagRepository): Response
     {
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $tag = $tagRepository->findOneBy(["id" => $id]);
 
         if ($tag == null){
@@ -48,27 +40,15 @@ final class TagController extends AbstractController
     {
         $tags = $tagRepository->findAll();
 
-
         $jsonTags = $serializerInterface->serialize($tags, 'json', ['groups' => "classic"]);
 
         return $this->json(["result" => "success","tags" => json_decode($jsonTags)]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'tag_create', methods: ["POST"])]
-    public function create(AuthService $authService, Request $request, EntityManagerInterface $em): Response
+    public function create(Request $request, EntityManagerInterface $em): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
 
@@ -91,21 +71,10 @@ final class TagController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/update', name: 'tag_update', methods: ["POST"])]
-    public function update(AuthService $authService, Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
+    public function update(Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("id", $body)){
@@ -135,21 +104,10 @@ final class TagController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/validate/{id}', name: 'tag_validate', methods: ["GET"])]
-    public function validate(int $id, AuthService $authService, Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
+    public function validate(int $id, Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $tag = $tagRepository->findOneBy(["id" => $id]);
 
         if ($tag == null){
@@ -162,21 +120,10 @@ final class TagController extends AbstractController
         return $this->json(["result" => "success"]);
     }
 
-    #[Route('/delete/{id}', name: 'tag_delete', methods: ["GET"])]
-    public function delete(int $id, AuthService $authService, Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/delete/{id}', name: 'tag_delete', methods: ["DELETE"])]
+    public function delete(int $id, Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
     {
-        $userData = [];
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $tag = $tagRepository->findOneBy(["id" => $id]);
 
         if ($tag == null){
@@ -190,15 +137,8 @@ final class TagController extends AbstractController
     }
 
     #[Route('/exists', name: 'tag_exists', methods: ["POST"])]
-    public function exists(AuthService $authService, Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
+    public function exists(Request $request, EntityManagerInterface $em, TagRepository $tagRepository): Response
     {
-        try{
-            $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $body = $request->attributes->get("sanitized_body");
 
         if (!array_key_exists("label", $body)){

@@ -1,13 +1,12 @@
 // Copyright (c) 2025 Ydemae
 // Licensed under the AGPLv3 License. See LICENSE file for details.
 
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environments';
 import { RatingData } from '../../../types/ratingData';
 import { catchError, of, throwError } from 'rxjs';
 import { Rating } from '../../../types/rating';
-import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,6 @@ export class RatingService {
 
   constructor(
     private _http: HttpClient,
-    private authService : AuthService
   ) {}
 
   getOneByBookId
@@ -30,16 +28,12 @@ export class RatingService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/ratings/getOneByBookId/${book_id}`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         },
       ).pipe(
         catchError(error => {
           let errCode = {"errcode" : 1};
 
-          if (error.status == 401){
-            this.authService.forcedLogout()
-          }
           if (error.status == 430){
             //The user had not rated this book yet
             errCode = {"errcode" : 2};
@@ -90,17 +84,11 @@ export class RatingService {
         `${this.apiUrl}/ratings/update`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to update rating");
-          }
+          console.log("Unexpected error caught when attempting to update rating");
 
           reject();
           return throwError(() => { });
@@ -139,17 +127,11 @@ export class RatingService {
         `${this.apiUrl}/ratings/create`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to create rating");
-          }
+          console.log("Unexpected error caught when attempting to create rating");
 
           reject();
           return throwError(() => { });
@@ -177,17 +159,11 @@ export class RatingService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/ratings/delete/${rating_id}`,
         {
-          headers: new HttpHeaders({ "Authorization" : `Bearer ${localStorage.getItem("token")}`}),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to delete rating");
-          }
+          console.log("Unexpected error caught when attempting to delete rating");
 
           reject();
           return throwError(() => { });

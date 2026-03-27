@@ -3,7 +3,7 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environments';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Announcement } from '../../../types/announcement';
 import { catchError, throwError } from 'rxjs';
@@ -26,17 +26,12 @@ export class BillboardService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/billboard/getAll`,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get all announcements");
-          }
+          console.log("Unexpected error caught when attempting to get all announcements");
 
           reject();
           return throwError(() => { });
@@ -68,17 +63,12 @@ export class BillboardService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/billboard/getOneById/${id}`,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get announcements");
-          }
+          console.log("Unexpected error caught when attempting to get announcements");
 
           reject();
           return throwError(() => { });
@@ -155,17 +145,12 @@ export class BillboardService {
         `${this.apiUrl}/billboard/create`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
+          
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to create announcement");
-          }
+          console.log("Unexpected error caught when attempting to create announcement");
 
           reject();
           return throwError(() => { });
@@ -197,17 +182,11 @@ export class BillboardService {
         `${this.apiUrl}/billboard/update`,
         body,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to update announcement");
-          }
+          console.log("Unexpected error caught when attempting to update announcement");
 
           reject();
           return throwError(() => { });
@@ -232,17 +211,11 @@ export class BillboardService {
         `${this.apiUrl}/billboard/deactivate`,
         {id : id},
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to deactivate the announcement");
-          }
+          console.log("Unexpected error caught when attempting to deactivate the announcement");
 
           reject();
           return throwError(() => { });
@@ -267,7 +240,6 @@ export class BillboardService {
         `${this.apiUrl}/billboard/activate`,
         {id : id},
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(

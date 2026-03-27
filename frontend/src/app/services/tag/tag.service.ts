@@ -3,10 +3,9 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environments';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { Tag } from '../../../types/tag';
-import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +15,7 @@ export class TagService {
   private apiUrl = environment.apiUrl;
 
   constructor(
-    private _http: HttpClient,
-    private authService : AuthService
+    private _http: HttpClient
   ) {
     
   }
@@ -31,12 +29,7 @@ export class TagService {
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to get all tags");
-          }
+          console.log("Unexpected error caught when attempting to get all tags");
 
           reject();
           return throwError(() => { });
@@ -62,17 +55,11 @@ export class TagService {
           `${this.apiUrl}/tag/create`,
           {label:label},
           {
-            headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
             observe: 'response'
           }
         ).pipe(
           catchError((error: HttpResponse<any>) => {
-            if (error.status == 401) {
-              this.authService.forcedLogout()
-            }
-            else {
-              console.log("Unexpected error caught when attempting to create tag");
-            }
+            console.log("Unexpected error caught when attempting to create tag");
   
             reject();
             return throwError(() => { });
@@ -96,17 +83,11 @@ export class TagService {
       this._http.get<HttpResponse<any>>(
         `${this.apiUrl}/tag/delete/${id}`,
         {
-          headers: new HttpHeaders({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
           observe: 'response'
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          if (error.status == 401) {
-            this.authService.forcedLogout()
-          }
-          else {
-            console.log("Unexpected error caught when attempting to delete tag");
-          }
+          console.log("Unexpected error caught when attempting to delete tag");
 
           reject();
           return throwError(() => { });

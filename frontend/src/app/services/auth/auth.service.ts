@@ -2,7 +2,7 @@
 // Licensed under the AGPLv3 License. See LICENSE file for details.
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, of, switchMap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -26,13 +26,14 @@ export class AuthService {
     private router : Router,
     private flashMessageService : FlashMessageService
   ) {
-    this.isLoggedInSubject.next(!!localStorage.getItem('token'));
+    this.isLoggedInSubject.next(!!localStorage.getItem('access_token'));
     this.isAdminSubject.next(localStorage.getItem('isAdmin') == 'true');
   }
 
   logout(){
     localStorage.removeItem("isAdmin");
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     this.isLoggedInSubject.next(false);
     this.isAdminSubject.next(false);
   }
@@ -44,10 +45,15 @@ export class AuthService {
     this.router.navigate(["/login"]);
   }
 
+  unauthorizedRedrect(){
+    this.flashMessageService.setFlashMessage("You are not authorized to perform this action.")
+    this.router.navigate(["/home"]);
+  }
+
   login(username: string, password : string): Promise<number> {
     return new Promise((resolve, reject) => {
       this._http.post<HttpResponse<any>>(
-        `${this.apiUrl}/auth/getToken`,
+        `${this.apiUrl}/auth/login`,
         {
           username : username,
           password : password
@@ -57,8 +63,6 @@ export class AuthService {
         }
       ).pipe(
         catchError((error: HttpResponse<any>) => {
-          console.log(error)
-          console.log(`Error caught when attempting to authenticate : ${error}`);
           let code = 1
           if (error.status == 403){
             code = 2
@@ -77,15 +81,15 @@ export class AuthService {
       ).subscribe((response : HttpResponse<any>) => {
         if (response) {
 
-          const body = response.body as { result: string, isAdmin : boolean, token : string }
+          const body = response.body as {isAdmin : boolean, token : string, refresh_token : string}
 
-          if (body.result == "success"){
-            this.isLoggedInSubject.next(true)
-            this.isAdminSubject.next(body.isAdmin)
-            localStorage.setItem("isAdmin", String(body.isAdmin))
-            localStorage.setItem("token", body.token)
-          }
-          resolve(body.result == "success" ? 0 : 1);
+          this.isLoggedInSubject.next(true)
+          this.isAdminSubject.next(body.isAdmin)
+          localStorage.setItem("isAdmin", String(body.isAdmin))
+          localStorage.setItem("refresh_token", body.refresh_token)
+          localStorage.setItem("access_token", body.token)
+
+          resolve(0);
         }
         else {
           console.log("Error caught when attempting to authenticate");
@@ -94,4 +98,32 @@ export class AuthService {
       });
     })
   }
+
+  getAccessToken(){
+    if (!this.isLoggedInSubject.value){
+      return null
+    }
+
+    return localStorage.getItem("access_token")
+  }
+
+  getRefreshToken(){
+    return localStorage.getItem("refresh_token")
+  }
+
+  refreshAccessToken() {
+    const refreshToken = this.getRefreshToken();
+    return this._http.post<{ token: string }>(
+      `${this.apiUrl}/auth/refresh`,
+      { refresh_token: refreshToken },
+      { observe: 'response' }
+    ).pipe(
+      switchMap((response) => {
+        const newToken = response.body!.token;
+        localStorage.setItem('access_token', newToken);
+        return of(newToken);
+      })
+    );
+  }
+
 }

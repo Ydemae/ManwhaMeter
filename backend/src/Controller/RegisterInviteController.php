@@ -13,31 +13,21 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[Route('/registerInvite')]
 final class RegisterInviteController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/getAll', name: 'register_invite_getall', methods: ["GET", "POST"])]
-    public function getAll(Request $request, AuthService $authService, SerializerInterface $serializerInterface, RegisterInviteRepository $registerInviteRepository): Response
+    public function getAll(Request $request, SerializerInterface $serializerInterface, RegisterInviteRepository $registerInviteRepository): Response
     {
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
         $used = null;
 
         $method = $request->getMethod();
@@ -84,23 +74,11 @@ final class RegisterInviteController extends AbstractController
         return $this->json(["result" => "success","used" => $invite->isUsed()]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'invite_create', methods: ["GET"])]
-    public function create(Request $request, AuthService $authService, EntityManagerInterface $em, UserRepository $userRepository, SerializerInterface $serializerInterface){
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        $user = $userRepository->findOneBy(["id" => $userData["user_id"]]);
-
+    public function create(Request $request, EntityManagerInterface $em, UserRepository $userRepository, SerializerInterface $serializerInterface, Security $security){
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
         if ($user == null){
             return $this->json(["result" => "error","error" => "Access denied"], 401);
         }
@@ -122,20 +100,9 @@ final class RegisterInviteController extends AbstractController
         return $this->json(["result" => "success", "invite" => json_decode($jsonResult)]);
     }
 
-    #[Route('/delete/{id}', name: 'invite_delete', methods: ["GET"])]
-    public function delete(int $id, Request $request, AuthService $authService, EntityManagerInterface $em, RegisterInviteRepository $registerInviteRepository, SerializerInterface $serializerInterface){
-        $userData = [];
-
-        try{
-            $userData = $authService->authenticateByToken($request);
-        }
-        catch(Exception){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
-
-        if (!in_array("ROLE_ADMIN", $userData["roles"])){
-            return $this->json(["result" => "error","error" => "Access denied"], 401);
-        }
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/delete/{id}', name: 'invite_delete', methods: ["DELETE"])]
+    public function delete(int $id, Request $request, EntityManagerInterface $em, RegisterInviteRepository $registerInviteRepository, SerializerInterface $serializerInterface){
 
         $invite = $registerInviteRepository->findOneBy(["id" => $id]);
 

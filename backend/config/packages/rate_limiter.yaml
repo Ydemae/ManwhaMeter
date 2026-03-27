@@ -2,9 +2,13 @@ framework:
     rate_limiter:
         anonymous_api:
             policy: 'sliding_window'
-            limit: 1500
-            interval: '15 minutes'
-        authenticated_api:
+            limit: 500
+            interval: '5 minute'
+        login_route:
             policy: 'sliding_window'
-            limit: 1500
-            interval: '15 minutes'
+            limit: 5
+            interval: '5 minute'
+        refresh_route:
+            policy: 'sliding_window'
+            limit: 10
+            interval: '5 minute'
