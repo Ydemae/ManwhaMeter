@@ -14,7 +14,7 @@ COPY ./backend /var/www/symfony
 
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-RUN mkdir -p /var/www/symfony/var && chmod -R 775 /var/www/symfony/var
+RUN mkdir -p /var/www/symfony/var && chown -R www-data:www-data /var/www/symfony/var && chmod -R 775 /var/www/symfony/var
 
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
