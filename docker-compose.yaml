@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.6
     container_name: traefik
     command:
       - "--providers.docker"
@@ -44,6 +44,9 @@ services:
   symfony:
     image: ghcr.io/ydemae/symfony-php:latest
     container_name: symfony
+    volumes:
+      - ./backend/.env.local:/var/www/symfony/.env.local:ro
+      - ./backend/config/jwt:/var/www/symfony/config/jwt:ro
     networks:
       - backend
 
