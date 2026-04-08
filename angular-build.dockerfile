@@ -1,10 +1,12 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /frontend
 
 COPY ./frontend ./
 
-RUN npm install
-RUN npx ng analytics off
+RUN npm install && npx ng analytics off && npx ng build --configuration production
 
-CMD npx ng build --configuration production --output-path=/output
+FROM nginx:alpine
+
+COPY --from=builder /frontend/dist/frontend/browser /usr/share/nginx/html
+COPY ./nginx/angular.conf /etc/nginx/conf.d/default.conf

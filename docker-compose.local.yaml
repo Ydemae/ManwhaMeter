@@ -21,7 +21,9 @@ services:
       - public
 
   nginx-angular:
-    image: ghcr.io/ydemae/nginx-angular:latest
+    build:
+      context: .
+      dockerfile: angular-build.dockerfile
     container_name: nginx-angular
     labels:
       - "traefik.enable=true"
@@ -42,13 +44,15 @@ services:
       - public
 
   symfony:
-    image: ghcr.io/ydemae/symfony-php:latest
+    image: symfony-php:latest
     container_name: symfony
     networks:
-      - backend
+        - backend
 
   nginx-symfony:
-    image: ghcr.io/ydemae/nginx-symfony:latest
+    build:
+      context: .
+      dockerfile: symfony-nginx.dockerfile
     container_name: nginx-symfony
     depends_on:
       - symfony

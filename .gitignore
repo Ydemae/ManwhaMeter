@@ -3,4 +3,5 @@ letsencrypt
 
 .env.local
 db-data
-.*
+.angular
+.env
