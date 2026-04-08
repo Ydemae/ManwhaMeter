@@ -26,12 +26,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=manwhameter_public"
-      - "traefik.http.routers.nginx-angular.rule=Host(`manwhameter.com`)"
+      - "traefik.http.routers.nginx-angular.rule=Host(`manwhameter.eu`)"
       - "traefik.http.routers.nginx-angular.entrypoints=websecure"
       - "traefik.http.routers.nginx-angular.tls=true"
       - "traefik.http.routers.nginx-angular.tls.certresolver=myresolver"
       - "traefik.http.services.nginx-angular.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx-angular-insecure.rule=Host(`manwhameter.com`)"
+      - "traefik.http.routers.nginx-angular-insecure.rule=Host(`manwhameter.eu`)"
       - "traefik.http.routers.nginx-angular-insecure.entrypoints=web"
       - "traefik.http.routers.nginx-angular-insecure.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
@@ -54,13 +54,13 @@ services:
       - symfony
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nginx-symfony.rule=Host(`api.manwhameter.com`)"
+      - "traefik.http.routers.nginx-symfony.rule=Host(`api.manwhameter.eu`)"
       - "traefik.docker.network=manwhameter_public"
       - "traefik.http.routers.nginx-symfony.entrypoints=websecure"
       - "traefik.http.routers.nginx-symfony.tls=true"
       - "traefik.http.routers.nginx-symfony.tls.certresolver=myresolver"
       - "traefik.http.services.nginx-symfony.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx-symfony-insecure.rule=Host(`api.manwhameter.com`)"
+      - "traefik.http.routers.nginx-symfony-insecure.rule=Host(`api.manwhameter.eu`)"
       - "traefik.http.routers.nginx-symfony-insecure.entrypoints=web"
       - "traefik.http.routers.nginx-symfony-insecure.middlewares=redirect-to-https"
     networks:
