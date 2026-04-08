@@ -156,7 +156,7 @@ export class RatingService {
   ): Promise<boolean> {
 
     return new Promise((resolve, reject) => {
-      this._http.get<HttpResponse<any>>(
+      this._http.delete<HttpResponse<any>>(
         `${this.apiUrl}/ratings/delete/${rating_id}`,
         {
           observe: 'response'

@@ -95,7 +95,7 @@ export class InviteService {
 
   delete(id : number): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this._http.get<HttpResponse<any>>(
+      this._http.delete<HttpResponse<any>>(
         `${this.apiUrl}/registerInvite/delete/${id}`,
         {
           observe: 'response'

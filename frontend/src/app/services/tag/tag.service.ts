@@ -80,7 +80,7 @@ export class TagService {
 
   delete( id: number ): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this._http.get<HttpResponse<any>>(
+      this._http.delete<HttpResponse<any>>(
         `${this.apiUrl}/tag/delete/${id}`,
         {
           observe: 'response'
