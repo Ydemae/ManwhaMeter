@@ -47,6 +47,7 @@ services:
     volumes:
       - ./backend/.env.local:/var/www/symfony/.env.local:ro
       - ./backend/config/jwt:/var/www/symfony/config/jwt:ro
+      - symfony_images:/var/www/symfony/public/images
     networks:
       - backend
 
@@ -55,6 +56,8 @@ services:
     container_name: nginx-symfony
     depends_on:
       - symfony
+    volumes:
+      - symfony_images:/var/www/symfony/public/images
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx-symfony.rule=Host(`api.manwhameter.eu`)"
@@ -81,6 +84,9 @@ services:
       - ./db-data:/var/lib/postgresql/data
     networks:
       - backend
+
+volumes:
+  symfony_images:
 
 networks:
   backend:
