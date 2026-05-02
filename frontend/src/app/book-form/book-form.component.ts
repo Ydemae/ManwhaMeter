@@ -7,6 +7,7 @@ import { BookStatus } from '../../enum/bookStatus';
 import { BookType } from '../../enum/bookType';
 import { Book } from '../../types/book';
 import { DetailedBook } from '../../types/detailedBook';
+import { environment } from '../../environments/environments';
 
 @Component({
   selector: 'app-book-form',
@@ -91,11 +92,19 @@ export class BookFormComponent {
   }
 
   onImageUpload(event : Event){
+    this.imageError = "";
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
+
+      const fileSize = Math.round((file.size / (1000 * 1000)) * 100) / 100;
+
+      if (fileSize >= environment.maxImageUploadSizeMB){
+        this.imageError = `Image is over the upload limit (${environment.maxImageUploadSizeMB} MB)`;
+        return;
+      }
 
       reader.readAsDataURL(file);
 

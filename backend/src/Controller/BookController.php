@@ -232,7 +232,7 @@ final class BookController extends AbstractController
                 }
             }
         }
-        else{
+        else {
             return $this->json(["result" => "error","error" => "No book type provided"], 400);
         }
 
@@ -268,7 +268,7 @@ final class BookController extends AbstractController
             return $this->json(["result" => "error", "error" => "The provided image is not a valid base64-encoded image"], 400);
         }
 
-        $imageName =$imageManager->saveBase64ImageInJpegFormat($bookImage);
+        $imageName = $imageManager->saveBase64ImageInSupportedFormat($bookImage);
 
         if ($imageName == null){
             return $this->json(["result" => "error", "error" => "Unknown error occured when saving the image"], 500);
@@ -416,7 +416,7 @@ final class BookController extends AbstractController
             $imageManager->deleteImage($book->getImagePath());
 
             //Creating new image
-            $imageName = $imageManager->saveBase64ImageInJpegFormat($image);
+            $imageName = $imageManager->saveBase64ImageInSupportedFormat($image);
 
             if ($imageName == null){
                 return $this->json(["result" => "error", "error" => "Unknown error occured when saving the image"], 500);

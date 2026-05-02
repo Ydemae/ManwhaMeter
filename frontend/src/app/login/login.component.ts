@@ -131,6 +131,9 @@ export class LoginComponent implements OnInit{
         else if (error == 3){
           this.error.global = "Incorrect credentials";
         }
+        else if (error == 4){
+          this.error.global = "Rate limit exceeded : Try again in a few minutes."
+        }
         else{
           this.showError(
             "Unexpected error occurred",

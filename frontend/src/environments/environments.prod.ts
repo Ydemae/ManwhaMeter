@@ -4,5 +4,6 @@
 export const environment = {
     production: true,
     apiUrl: 'https://api.manwhameter.eu',
-    appUrl: 'https://manwhameter.eu'
+    appUrl: 'https://manwhameter.eu',
+    maxImageUploadSizeMB: 10,
 };
