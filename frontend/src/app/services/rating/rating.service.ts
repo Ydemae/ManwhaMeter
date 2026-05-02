@@ -76,7 +76,8 @@ export class RatingService {
       art_style : ratingData.art_style,
       feeling : ratingData.feeling,
       characters : ratingData.characters,
-      comment : ratingData.comment
+      comment : ratingData.comment,
+      private : ratingData.private
     }
 
     return new Promise((resolve, reject) => {
@@ -119,7 +120,8 @@ export class RatingService {
       art_style : ratingData.art_style,
       feeling : ratingData.feeling,
       characters : ratingData.characters,
-      comment : ratingData.comment
+      comment : ratingData.comment,
+      private : ratingData.private,
     }
 
     return new Promise((resolve, reject) => {

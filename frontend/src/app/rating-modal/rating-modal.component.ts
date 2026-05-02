@@ -36,7 +36,8 @@ export class RatingModalComponent implements OnInit, OnChanges{
         story : null,
         art_style : null,
         characters : null,
-        feeling : null
+        feeling : null,
+        private : false
       }
     }
   }
@@ -48,7 +49,8 @@ export class RatingModalComponent implements OnInit, OnChanges{
         story : null,
         art_style : null,
         characters : null,
-        feeling : null
+        feeling : null,
+        private : false
       }
     }
   }

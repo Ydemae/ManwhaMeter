@@ -60,6 +60,10 @@ class Rating
     #[ORM\OneToMany(targetEntity: RatingReport::class, mappedBy: 'rating', orphanRemoval: true)]
     private Collection $ratingReports;
 
+    #[ORM\Column(options: ['default' => false])]
+    #[Groups(['classic', 'admin', 'unlogged'])]
+    private bool $private = false;
+
     public function __construct()
     {
         $this->ratingReports = new ArrayCollection();
@@ -192,6 +196,18 @@ class Rating
                 $ratingReport->setRating(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isPrivate(): bool
+    {
+        return $this->private;
+    }
+
+    public function setPrivate(bool $private): static
+    {
+        $this->private = $private;
 
         return $this;
     }

@@ -155,18 +155,40 @@ final class BookController extends AbstractController
     }
 
     #[Route('/getOneById/{id}', name: 'book_getonebyid', methods: ["GET"])]
-    public function getOneById(int $id, Request $request, BookRepository $bookRepository, SerializerInterface $serializerInterface): Response
+    public function getOneById(int $id, BookRepository $bookRepository, SerializerInterface $serializerInterface, Security $security, UserRepository $userRepository): Response
     {
+        $securityUser = $security->getUser();
+        $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
+        if ($user == null){
+            return $this->json(["result" => "error","error" => "Access denied"], 401);
+        }
+
         $book = $bookRepository->findOneBy(["id" => $id]);
 
         if ($book == null){
             return $this->json(["result" => "error", "error" => "No book with id : $id"], 400);
         }
 
-        $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "classic"]);
-        
+        $visibleRatings = [];
+        $bookRatings = $book->getRatings();
+        for ($i = 0; $i < Count($bookRatings); $i++){
+            if ($bookRatings[$i]->isPrivate()){
+                if ($bookRatings[$i]->getUser() == $user){
+                    $visibleRatings[] = $bookRatings[$i];
+                }
+            }
+            else{
+                $visibleRatings[] = $bookRatings[$i];
+            }
+        }
 
-        return $this->json(["result" => "success","book" => json_decode($jsonBook)]);
+        $jsonBook = $serializerInterface->serialize($book, 'json', context: ['groups' => "classic"]);
+        $jsonRatings = $serializerInterface->serialize($visibleRatings, 'json', context: ['groups' => "classic"]);
+
+        $bookData = json_decode($jsonBook);
+        $bookData->ratings = json_decode($jsonRatings);
+
+        return $this->json(["result" => "success","book" => $bookData]);
     }
 
     #[IsGranted('ROLE_ADMIN')]

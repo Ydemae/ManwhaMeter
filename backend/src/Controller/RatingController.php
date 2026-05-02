@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class RatingController extends AbstractController
 {
     #[Route('/getOneById/{id}', name: 'rating_getonebyid', methods: ["GET"])]
-    public function getOneById(int $id, Request $request, SerializerInterface $serializerInterface, RatingRepository $ratingRepository): Response
+    public function getOneById(int $id, Request $request, SerializerInterface $serializerInterface, RatingRepository $ratingRepository, UserRepository $userRepository, Security $security): Response
     {
         $rating = $ratingRepository->findOneBy(["id" => $id]);
 
@@ -29,21 +29,22 @@ final class RatingController extends AbstractController
             return $this->json(["result" => "error", "error" => "No rating with id : $id"], 400);
         }
 
+        if ($rating->isPrivate()){
+            $securityUser = $security->getUser();
+            $user = $userRepository->findOneBy(["username" => $securityUser->getUserIdentifier()]);
+            if ($user == null){
+                return $this->json(["result" => "error","error" => "Access denied"], 401);
+            }
+
+            if ($rating->getUser() != $user){
+                return $this->json(["result" => "error","error" => "Access denied"], 401);
+            }
+        }
+
         $jsonRating = $serializerInterface->serialize($rating, 'json', ['groups' => "admin"]);
 
         return $this->json(["result" => "success","rating" => json_decode($jsonRating)]);
     }
-
-    /*#[Route('/getAll', name: 'rating_getall', methods: ["GET"])]
-    public function getAll(Request $request, SerializerInterface $serializerInterface, RatingRepository $ratingRepository): Response
-    {
-        $ratings = $ratingRepository->findAll();
-
-
-        $jsonRatings = $serializerInterface->serialize($ratings, 'json', ['groups' => "admin"]);
-
-        return $this->json(["result" => "success","ratings" => json_decode($jsonRatings)]);
-    }*/
 
     #[Route('/getOneByBookId/{bookId}', name: 'rating_getOneByBookId', methods: ["GET"])]
     public function getOneByBookId(int $bookId, Request $request, SerializerInterface $serializerInterface, RatingRepository $ratingRepository, Security $security, UserRepository $userRepository): Response
@@ -107,7 +108,13 @@ final class RatingController extends AbstractController
         $art_style = $body["art_style"];
         $feeling = $body["feeling"];
         $characters = $body["characters"];
+        $private = array_key_exists("private", $body) ? $body["private"] : false;
 
+        if (is_string($private) && ($private === "" || $private === "1")) {
+            $private = $private === "1";
+        } elseif (!is_bool($private)){
+            return $this->json(["result" => "error", "error" => "'private' field is not a valid boolean value"], 400);
+        }
 
         $book = $bookRepository->findOneBy(["id" => $book_id]);
 
@@ -136,6 +143,7 @@ final class RatingController extends AbstractController
         $rating->setFeeling($feeling);
         $rating->setCharacters($characters);
         $rating->setComment($comment);
+        $rating->setPrivate($private);
 
         $em->persist($rating);
         $em->flush();
@@ -190,6 +198,14 @@ final class RatingController extends AbstractController
             return $this->json(["result" => "error", "error" => "No rating exists with the provided rating id"], 400);
         }
 
+        $private = array_key_exists("private", $body) ? $body["private"] : $rating->isPrivate();
+
+        if (is_string($private) && ($private === "" || $private === "1")) {
+            $private = $private === "1";
+        } elseif (!is_bool($private)){
+            return $this->json(["result" => "error", "error" => "'private' field is not a valid boolean value"], 400);
+        }
+
         $user = $userRepository->findOneBy(["id" => $userId]);
 
         if ($user == null){
@@ -205,6 +221,7 @@ final class RatingController extends AbstractController
         $rating->setFeeling($feeling);
         $rating->setCharacters($characters);
         $rating->setComment($comment);
+        $rating->setPrivate($private);
 
         $em->flush();
 

@@ -7,4 +7,5 @@ export type RatingData = {
     art_style : number | null;
     feeling : number | null;
     characters : number | null;
+    private : boolean;
 }

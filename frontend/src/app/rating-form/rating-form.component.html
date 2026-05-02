@@ -44,5 +44,22 @@
             </div>
         </div>
     </div>
-
+    <div class="row margin-top">
+        <div class="col-12">
+            <div class="d-flex align-items-center p-3 border rounded">
+                <div class="form-check form-switch mb-0 me-3">
+                    <input class="form-check-input padding-5" type="checkbox" role="switch" name="private" id="privateRating" [(ngModel)]="this.formData.private">
+                </div>
+                <div>
+                    <label for="privateRating">
+                        <div class="form-check-label fw-semibold d-block">
+                            Private rating
+                        </div>
+                        <small class="form-text text-muted" *ngIf="this.formData.private">Only you will be able to see this rating</small>
+                        <small class="form-text text-muted" *ngIf="!this.formData.private">Everyone will be able to see this rating</small>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

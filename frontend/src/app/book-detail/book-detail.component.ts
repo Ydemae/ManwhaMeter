@@ -165,6 +165,7 @@ export class BookDetailComponent {
       art_style : this.personalRating.art_style,
       feeling : this.personalRating.feeling,
       characters : this.personalRating.characters,
+      private: this.personalRating.private,
     }
 
     this.bookRatingToUpdate = ratingData;
@@ -231,28 +232,6 @@ export class BookDetailComponent {
       this.updateRating(data)
     }
   }
-
-  /*
-  convertRatingDataFrom20To25(data : RatingData) : RatingData{
-    return {
-      comment : data.comment,
-      art_style : Math.round((data.art_style!/20) * 25 * 100) / 100,
-      story : Math.round((data.story!/20) * 25 * 100) / 100,
-      characters : Math.round((data.characters!/20) * 25 * 100) / 100,
-      feeling : Math.round((data.feeling!/20) * 25 * 100) / 100
-    }
-  }
-
-  convertRatingDataFrom25To20(data : RatingData) : RatingData{
-    return {
-      comment : data.comment,
-      art_style : Math.round((data.art_style!/25) * 20 * 100) / 100,
-      story : Math.round((data.story!/25) * 20 * 100) / 100,
-      characters : Math.round((data.characters!/25) * 20 * 100) / 100,
-      feeling : Math.round((data.feeling!/25) * 20 * 100) / 100
-    }
-  }
-  */
 
   displayError(
     title : string,

@@ -8,6 +8,7 @@ export type Rating = {
     characters : number;
     art_style : number;
     comment : string;
+    private : boolean;
     user : {
         id : number;
         username : string;
