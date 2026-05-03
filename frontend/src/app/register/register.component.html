@@ -1,84 +1,94 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="login-container">
-    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()" aria-label="Close error message"></button>
-        <h4 class="alert-heading">{{ this.errTitle }}</h4>
-        <p class="mb-0">{{ this.errMessage }}</p>
+  @if (this.showError) {
+    <div class="alert alert-dismissible alert-danger" role="alert">
+      <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()" aria-label="Close error message"></button>
+      <h4 class="alert-heading">{{ this.errTitle }}</h4>
+      <p class="mb-0">{{ this.errMessage }}</p>
     </div>
+  }
 
-    <div class="content-wrapper">
-        <div class="login-card">
-            <div class="login-header">
-                <h1 class="login-title">Create Account</h1>
-                <p class="login-subtitle">Sign up to get started</p>
-            </div>
+  <div class="content-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <h1 class="login-title">Create Account</h1>
+        <p class="login-subtitle">Sign up to get started</p>
+      </div>
 
-            <div class="login-form">
-                <div class="form-group">
-                    <label for="register-username" class="form-label">Username</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-user"></i>
-                        </span>
-                        <input type="text" class="form-control" id="register-username" name="username" placeholder="Enter your username" autocomplete="off" [(ngModel)]="this.formData.username" (change)="onUsernameChange()" required [class.is-invalid]="this.formError.username">
-                    </div>
-                    <div class="text-danger text-center" *ngIf="this.formError.username != ''">{{ this.formError.username }}</div>
-                    <div class="text-danger text-center" *ngIf="this.usernameAvailable != null" [ngClass]="{'text-danger' : !this.usernameAvailable, 'text-success' : this.usernameAvailable}">{{ this.usernameAvailableLabel }}</div>
-                </div>
-
-                <div class="form-group">
-                    <app-password [error]="this.formError.password" [password]="this.formData.password" (passwordChangeEvent)="this.onPasswordChange($event)"></app-password>
-                </div>
-                <div class="form-group">
-                    <app-password label="Confirm password" [error]="this.formError.confirmPassword" [password]="this.formData.confirmPassword" (passwordChangeEvent)="this.onConfirmPasswordChange($event)"></app-password>
-                </div>
-
-                <div class="form-group">
-                    <label for="register-invite" class="form-label">Invite</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fa-solid fa-id-badge"></i>
-                        </span>
-                        <input type="text" class="form-control" id="register-invite" name="invite" placeholder="Enter your invite" autocomplete="off" [(ngModel)]="this.inviteUid" required [class.is-invalid]="this.formError.invite">
-                    </div>
-                    <div class="text-danger text-center" *ngIf="this.formError.invite != ''">{{ this.formError.invite }}</div>
-                </div>
-
-                <div class="form-group">
-                    <div class="form-check centered-checkbox mt-3">
-                        <input class="form-check-input register-checkbox" type="checkbox" id="terms" [(ngModel)]="this.formData.terms" (change)="this.validateTerms()">
-                        <label class="form-check-label text-center" for="terms">
-                            I agree to the 
-                            <a routerLink="terms-of-service" class="text-secondary fw-bold">Terms of Service</a> 
-                            and 
-                            <a routerLink="privacy-policy" class="text-secondary fw-bold">Privacy Policy</a>.
-                        </label>
-                    </div>
-                    <div class="text-danger text-center" *ngIf="this.formError.terms != ''">{{ this.formError.terms }}</div>
-                </div>
-
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary w-100" (click)="registerUser()" [disabled]="this.querying">
-                        <span class="btn-text">Sign up</span>
-                        <i class="fas fa-user-plus mx-1"></i>
-                    </button>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-danger w-100" (click)="cancel()">
-                        <span class="btn-text">Cancel</span>
-                        <i class="fas fa-times mx-1"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="text-center">
-                <p class="register-link">
-                    Already have an account?
-                    <a routerLink="/login" class="link-secondary"><strong>sign in here</strong></a>
-                </p>
-            </div>
+      <div class="login-form">
+        <div class="form-group">
+          <label for="register-username" class="form-label">Username</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-user"></i>
+            </span>
+            <input type="text" class="form-control" id="register-username" name="username" placeholder="Enter your username" autocomplete="off" [(ngModel)]="this.formData.username" (change)="onUsernameChange()" required [class.is-invalid]="this.formError.username">
+          </div>
+          @if (this.formError.username != '') {
+            <div class="text-danger text-center">{{ this.formError.username }}</div>
+          }
+          @if (this.usernameAvailable != null) {
+            <div class="text-danger text-center" [ngClass]="{'text-danger' : !this.usernameAvailable, 'text-success' : this.usernameAvailable}">{{ this.usernameAvailableLabel }}</div>
+          }
         </div>
+
+        <div class="form-group">
+          <app-password [error]="this.formError.password" [password]="this.formData.password" (passwordChangeEvent)="this.onPasswordChange($event)"></app-password>
+        </div>
+        <div class="form-group">
+          <app-password label="Confirm password" [error]="this.formError.confirmPassword" [password]="this.formData.confirmPassword" (passwordChangeEvent)="this.onConfirmPasswordChange($event)"></app-password>
+        </div>
+
+        <div class="form-group">
+          <label for="register-invite" class="form-label">Invite</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-id-badge"></i>
+            </span>
+            <input type="text" class="form-control" id="register-invite" name="invite" placeholder="Enter your invite" autocomplete="off" [(ngModel)]="this.inviteUid" required [class.is-invalid]="this.formError.invite">
+          </div>
+          @if (this.formError.invite != '') {
+            <div class="text-danger text-center">{{ this.formError.invite }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <div class="form-check centered-checkbox mt-3">
+            <input class="form-check-input register-checkbox" type="checkbox" id="terms" [(ngModel)]="this.formData.terms" (change)="this.validateTerms()">
+            <label class="form-check-label text-center" for="terms">
+              I agree to the
+              <a routerLink="terms-of-service" class="text-secondary fw-bold">Terms of Service</a>
+              and
+              <a routerLink="privacy-policy" class="text-secondary fw-bold">Privacy Policy</a>.
+            </label>
+          </div>
+          @if (this.formError.terms != '') {
+            <div class="text-danger text-center">{{ this.formError.terms }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <button type="button" class="btn btn-primary w-100" (click)="registerUser()" [disabled]="this.querying">
+            <span class="btn-text">Sign up</span>
+            <i class="fas fa-user-plus mx-1"></i>
+          </button>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-danger w-100" (click)="cancel()">
+            <span class="btn-text">Cancel</span>
+            <i class="fas fa-times mx-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <p class="register-link">
+          Already have an account?
+          <a routerLink="/login" class="link-secondary"><strong>sign in here</strong></a>
+        </p>
+      </div>
     </div>
+  </div>
 </div>

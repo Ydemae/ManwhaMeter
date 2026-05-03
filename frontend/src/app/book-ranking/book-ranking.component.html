@@ -1,34 +1,35 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="margin-top d-flex text-center justify-content-center">
-    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
-        <h4 class="alert-heading">{{ this.errTitle }}</h4>
-        {{ this.errMessage }}
+  @if (this.showError) {
+    <div class="alert alert-dismissible alert-danger">
+      <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+      <h4 class="alert-heading">{{ this.errTitle }}</h4>
+      {{ this.errMessage }}
     </div>
+  }
 
-    <ng-template #NotFetched>
-        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadStartingData()"></app-loader>
-    </ng-template>
 </div>
 
-<div  *ngIf="this.dataWasFetched else NotFetched" class="content-wrapper">
-
-    <a routerLink="/bookcreate" class="btn btn-primary" *ngIf="this.authService.isLoggedInSubject.value">Create a book</a>
+@if (this.dataWasFetched) {
+  <div  class="content-wrapper">
+    @if (this.authService.isLoggedInSubject.value) {
+      <a routerLink="/bookcreate" class="btn btn-primary">Create a book</a>
+    }
     <app-search-filters [tagsList]="tags!" (filterChangeEmitter)="receiveFilterChangeEvent($event)"></app-search-filters>
-
-    <ng-container *ngIf="this.books!.length != 0 else Empty">
-        <app-book-list [books]="this.books!"
+    @if (this.books!.length != 0) {
+      <app-book-list [books]="this.books!"
         [bookIdToReadingListEntry]="this.bookIdToReadingListEntry"
         [logged]="this.authService.isLoggedInSubject.value"
         (bookClickedEventEmitter)="receiveBookClickedEvent($event)"
         (addReadingListEmitter)="onAddReadingListReceived($event)"
         (removeReadingListEmitter)="onRemoveReadingListReceived($event)">
-        </app-book-list>
-    </ng-container>
-
-    <ng-template #Empty>
-        <app-no-result-placeholder title="No Books" subtitle="We couldn't find any book corresponding to your research." icon="fa-solid fa-book" [updates]="true"></app-no-result-placeholder>
-    </ng-template>
-</div>
+      </app-book-list>
+    } @else {
+      <app-no-result-placeholder title="No Books" subtitle="We couldn't find any book corresponding to your research." icon="fa-solid fa-book" [updates]="true"></app-no-result-placeholder>
+    }
+  </div>
+} @else {
+  <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadStartingData()"></app-loader>
+}

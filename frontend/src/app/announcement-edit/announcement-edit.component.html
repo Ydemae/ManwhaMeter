@@ -1,24 +1,25 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="content-wrapper">
 
-    <app-loader *ngIf="!this.dataFetched else Fetched" [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadData()"></app-loader>
+  @if (!this.dataFetched) {
+    <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadData()"></app-loader>
+  } @else {
+    <h1>Announcement edition</h1>
+    @if (this.showError) {
+      <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+        <h4 class="alert-heading">{{ this.errTitle }}</h4>
+        {{ this.errMessage }}
+      </div>
+    }
+    <app-announcement-form [label]="'Create'"
+      (submitEmitter)="this.updateAnnouncement($event)"
+      [id]="this.data?.id!"
+      [message]="this.data?.message!"
+      [title]="this.data?.title!">
+    </app-announcement-form>
+  }
 
-    <ng-template #Fetched>
-        <h1>Announcement edition</h1>
-
-        <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
-            <h4 class="alert-heading">{{ this.errTitle }}</h4>
-            {{ this.errMessage }}
-        </div>
-
-        <app-announcement-form [label]="'Create'"
-        (submitEmitter)="this.updateAnnouncement($event)"
-        [id]="this.data?.id!"
-        [message]="this.data?.message!"
-        [title]="this.data?.title!">
-        </app-announcement-form>
-    </ng-template>
 </div>

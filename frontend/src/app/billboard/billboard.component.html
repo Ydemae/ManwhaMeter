@@ -1,62 +1,67 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="billboard-container">
-    <div class="billboard-header">
-        <h1 class="billboard-title">
-            <i class="fa-solid fa-scroll"></i>
-            Billboard
-        </h1>
-        <p class="billboard-subtitle">Stay updated with the latest announcements and news</p>
-    </div>
+  <div class="billboard-header">
+    <h1 class="billboard-title">
+      <i class="fa-solid fa-scroll"></i>
+      Billboard
+    </h1>
+    <p class="billboard-subtitle">Stay updated with the latest announcements and news</p>
+  </div>
 
-    <div class="admin-actions" *ngIf="this.isAdmin">
-        <a routerLink="/announcement/create" class="btn btn-primary create-announcement-btn">
-            <i class="fas fa-plus me-2"></i>
-            Create Announcement
-        </a>
+  @if (this.isAdmin) {
+    <div class="admin-actions">
+      <a routerLink="/announcement/create" class="btn btn-primary create-announcement-btn">
+        <i class="fas fa-plus me-2"></i>
+        Create Announcement
+      </a>
     </div>
+  }
 
-    <div class="alert alert-dismissible alert-success" *ngIf="this.flashMessage != ''" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlash()" aria-label="Close success message"></button>
-        <div class="alert-content">
-            <i class="fas fa-check-circle me-2"></i>
-            <span>{{ this.flashMessage }}</span>
+  @if (this.flashMessage != '') {
+    <div class="alert alert-dismissible alert-success" role="alert">
+      <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideFlash()" aria-label="Close success message"></button>
+      <div class="alert-content">
+        <i class="fas fa-check-circle me-2"></i>
+        <span>{{ this.flashMessage }}</span>
+      </div>
+    </div>
+  }
+
+  @if (this.showError) {
+    <div class="alert alert-dismissible alert-danger" role="alert">
+      <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()" aria-label="Close error message"></button>
+      <div class="alert-content">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <div>
+          <h4 class="alert-heading">{{ this.errTitle }}</h4>
+          <p class="mb-0">{{ this.errMessage }}</p>
         </div>
+      </div>
     </div>
+  }
 
-    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()" aria-label="Close error message"></button>
-        <div class="alert-content">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            <div>
-                <h4 class="alert-heading">{{ this.errTitle }}</h4>
-                <p class="mb-0">{{ this.errMessage }}</p>
-            </div>
-        </div>
+  @if (!this.dataFetched) {
+    <div class="loading-container">
+      <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="loadAnnouncements()"></app-loader>
     </div>
-
-    <ng-container *ngIf="!this.dataFetched else DataFetched">
-        <div class="loading-container">
-            <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="loadAnnouncements()"></app-loader>
-        </div>
-    </ng-container>
-
-    <ng-template #DataFetched>
-        <div class="announcements-grid" *ngIf="announcements != undefined && announcements!.length > 0; else NoAnnouncements">
-            <app-announcement
+  } @else {
+    @if (announcements != undefined && announcements!.length > 0) {
+      <div class="announcements-grid">
+        @for (announcement of this.announcements; track announcement; let i = $index) {
+          <app-announcement
             class="announcement-item"
-            *ngFor="let announcement of this.announcements; let i = index"
             [announcement]="announcement"
             [arrayIndex]="i"
             [canEdit]="this.isAdmin"
             (deactivateEmitter)="deactivate($event)">
+          </app-announcement>
+        }
+      </div>
+    } @else {
+      <app-no-result-placeholder icon="fas fa-scroll" title="No Announcements" subtitle="There are currently no announcements on the billboard." [updates]="true"></app-no-result-placeholder>
+    }
+  }
 
-            </app-announcement>
-        </div>
-        
-        <ng-template #NoAnnouncements>
-            <app-no-result-placeholder icon="fas fa-scroll" title="No Announcements" subtitle="There are currently no announcements on the billboard." [updates]="true"></app-no-result-placeholder>
-        </ng-template>
-    </ng-template>
 </div>
