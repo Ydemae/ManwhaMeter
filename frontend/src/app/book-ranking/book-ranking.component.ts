@@ -35,7 +35,7 @@ export class BookRankingComponent {
 
   constructor(
     private bookService : BookService,
-    private tagSercice : TagService,
+    private tagService : TagService,
     private router : Router,
     private readingListService : ReadingListService,
     public authService : AuthService
@@ -58,7 +58,7 @@ export class BookRankingComponent {
       booksPromise = this.bookService.getAll(null, null, "", null, true);
     }
 
-    const tagsPromise = this.tagSercice.getAll();
+    const tagsPromise = this.tagService.getAll();
 
     let readingListPromise = null;
     if (this.authService?.isLoggedInSubject.value){

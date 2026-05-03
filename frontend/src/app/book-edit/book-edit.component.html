@@ -1,17 +1,20 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="content-wrapper">
-    <div class="alert alert-dismissible alert-danger" *ngIf="this.showError">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
-        <h4 class="alert-heading">{{ this.errTitle }}</h4>
-        {{ this.errMessage }}
+  @if (this.showError) {
+    <div class="alert alert-dismissible alert-danger">
+      <button type="button" class="btn-close" data-bs-dismiss="alert" (click)="hideError()"></button>
+      <h4 class="alert-heading">{{ this.errTitle }}</h4>
+      {{ this.errMessage }}
     </div>
+  }
 
-    <div *ngIf="dataFetched else NotFetched">
-        <app-book-form [allTagsList]="this.allTagsList" [edition]="true" [initializingBook]="this.book!" [submitLabel]="'edit'" (submitEmitter)="onSubmit($event)" (cancelEmitter)="onCancel()"></app-book-form>
+  @if (dataFetched) {
+    <div>
+      <app-book-form [allTagsList]="this.allTagsList" [edition]="true" [initializingBook]="this.book!" [submitLabel]="'edit'" (submitEmitter)="onSubmit($event)" (cancelEmitter)="onCancel()"></app-book-form>
     </div>
-    <ng-template #NotFetched>
-        <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadData(this.id)"></app-loader>
-    </ng-template>
+  } @else {
+    <app-loader [loadingFailed]="this.loadingFailed" (retryEmitter)="this.loadData(this.id)"></app-loader>
+  }
 </div>

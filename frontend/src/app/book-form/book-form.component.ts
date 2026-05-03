@@ -39,6 +39,7 @@ export class BookFormComponent {
   @Output()
   public submitEmitter = new EventEmitter<Book>();
 
+  public tagsSelectLabel : string = "Select tags..."
 
   public base64Image : string | ArrayBuffer | null = null;
   public selectedTags : number[] = []
@@ -215,5 +216,12 @@ export class BookFormComponent {
   }
   onSelectedTagsChange(){
     this.validateTags();
+
+    if (this.selectedTags.length > 0 ){
+      this.tagsSelectLabel = ""
+    }
+    else{
+      this.tagsSelectLabel = "Select tags..."
+    }
   }
 }

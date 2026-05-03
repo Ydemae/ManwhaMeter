@@ -1,42 +1,45 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="announcement-card card border-primary mb-3">
-    <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="announcement-title mb-0">
-            {{this.announcement.title}}
-        </h5>
-        <div class="announcement-meta">
-            <span class="time-ago">
-                <i class="fas fa-clock me-1"></i>
-                {{this.postedTimeAgo}} {{this.postedLabel}} ago
-            </span>
-        </div>
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <h5 class="announcement-title mb-0">
+      {{this.announcement.title}}
+    </h5>
+    <div class="announcement-meta">
+      <span class="time-ago">
+        <i class="fas fa-clock me-1"></i>
+        {{this.postedTimeAgo}} {{this.postedLabel}} ago
+      </span>
     </div>
-    
-    <div class="card-body">
-        <div class="announcement-content" style="white-space: pre-wrap" [innerHTML]="this.announcement.message"></div>
-    </div>
-    
-    <div class="card-footer" *ngIf="canEdit">
-        <div class="d-flex justify-content-end gap-3">
-            <div class="">
-                <a [routerLink]="['/announcement/edit', this.announcement.id]"
-                class="btn btn-primary" 
-                *ngIf="this.announcement.active == true">
-                <i class="fa-solid fa-pen-to-square"></i>
-                </a>
-            </div>
+  </div>
 
-            <div class="">
-                <button type="button"
-                class="btn btn-danger" 
-                *ngIf="this.announcement.active == true" 
-                (click)="onDeactivateClicked()">
+  <div class="card-body">
+    <div class="announcement-content" style="white-space: pre-wrap" [innerHTML]="this.announcement.message"></div>
+  </div>
 
-                <i class="fas fa-times p-0 m-0"></i>
-                </button>
-            </div>
+  @if (canEdit) {
+    <div class="card-footer">
+      <div class="d-flex justify-content-end gap-3">
+        <div class="">
+          @if (this.announcement.active == true) {
+            <a [routerLink]="['/announcement/edit', this.announcement.id]"
+              class="btn btn-primary"
+              >
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+          }
         </div>
+        <div class="">
+          @if (this.announcement.active == true) {
+            <button type="button"
+              class="btn btn-danger"
+              (click)="onDeactivateClicked()">
+              <i class="fas fa-times p-0 m-0"></i>
+            </button>
+          }
+        </div>
+      </div>
     </div>
+  }
 </div>

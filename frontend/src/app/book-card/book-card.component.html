@@ -1,60 +1,63 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<div class="book-card card text-white border-primary mb-3 cursor-pointer" 
-style="max-width: 20rem; min-width: 14rem" 
-(click)="onBookClicked()"
-role="button"
-tabindex="0"
-(keydown.enter)="onBookClicked()"
-(keydown.space)="onBookClicked()">
-  
+<div class="book-card card text-white border-primary mb-3 cursor-pointer"
+  style="max-width: 20rem; min-width: 14rem"
+  (click)="onBookClicked()"
+  role="button"
+  tabindex="0"
+  (keydown.enter)="onBookClicked()"
+  (keydown.space)="onBookClicked()">
+
   <div class="card-header d-flex align-items-center justify-content-between">
     <h5 class="book-title mb-0" [ngbTooltip]="this.book.name" placement="bottom" tooltipClass="mytooltip" container="body">{{ this.book.name }}</h5>
     <div class="book-actions d-flex align-items-center gap-2">
-      <ng-container *ngIf="this.logged">
-        <button class="btn btn-link p-0 border-0"
-        *ngIf="!this.inReadingList"
-        (click)="this.onAddReadingListClicked($event)"
-        title="Add to reading list"
-        aria-label="Add to reading list">
+      @if (this.logged) {
+        @if (!this.inReadingList) {
+          <button class="btn btn-link p-0 border-0"
+            (click)="this.onAddReadingListClicked($event)"
+            title="Add to reading list"
+            aria-label="Add to reading list">
+            <i class="fa-solid fa-bookmark" style="max-height: 1.5rem;"></i>
+          </button>
+        }
+        @if (this.inReadingList) {
+          <button class="btn btn-link p-0 border-0"
+            (click)="this.onRemoveReadingListClicked($event)"
+            title="Remove from reading list"
+            aria-label="Remove from reading list">
+            <i class="fa-solid fa-minus" style="max-height: 1.5rem;"></i>
+          </button>
+        }
+      }
 
-          <i class="fa-solid fa-bookmark" style="max-height: 1.5rem;"></i>
-        </button>
-        
-        <button class="btn btn-link p-0 border-0"
-        *ngIf="this.inReadingList"
-        (click)="this.onRemoveReadingListClicked($event)"
-        title="Remove from reading list"
-        aria-label="Remove from reading list">
-
-          <i class="fa-solid fa-minus" style="max-height: 1.5rem;"></i>
-        </button>
-      </ng-container>
-      
-      <span class="badge bg-primary rating-badge" *ngIf="this.ranked">
-        {{this.displayedOverallRating}}
-      </span>
+      @if (this.ranked) {
+        <span class="badge bg-primary rating-badge">
+          {{this.displayedOverallRating}}
+        </span>
+      }
     </div>
   </div>
-  
+
   <div class="card-body p-0">
     <div class="book-image-container">
-      <img src="{{this.apiUrl}}/images/{{this.book.image_path}}" 
-      alt="Book cover for {{this.book.name}}" 
-      class="card-img book-cover">
-  
-      <div class="book-overlay">
-        <span class="view-details">View Details</span>
+      <img src="{{this.apiUrl}}/images/{{this.book.image_path}}"
+        alt="Book cover for {{this.book.name}}"
+        class="card-img book-cover">
+
+        <div class="book-overlay">
+          <span class="view-details">View Details</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <div class="book-tags text-center">
+        @for (tag of displayedTags.split(', '); track tag; let i = $index) {
+          <span class="tag-pill">
+            {{ tag }}
+          </span>
+        }
       </div>
     </div>
   </div>
-  
-  <div class="card-footer">
-    <div class="book-tags text-center">
-      <span class="tag-pill" *ngFor="let tag of displayedTags.split(', '); let i = index">
-        {{ tag }}
-      </span>
-    </div>
-  </div>
-</div>

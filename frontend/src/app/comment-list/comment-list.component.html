@@ -1,6 +1,8 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="d-flex justify-content-center w-100">
-    <app-comment class="m-2 w-100" style="max-width:30rem;" *ngFor="let rating of this.ratingsList; let i = index" [rating]="rating" [canDelete]="this.isAdmin()" (deleteButtonClicked)="onDeleteButtonClicked(rating.id, i)"></app-comment>
+  @for (rating of this.ratingsList; track rating; let i = $index) {
+    <app-comment class="m-2 w-100" style="max-width:30rem;" [rating]="rating" [canDelete]="this.isAdmin()" (deleteButtonClicked)="onDeleteButtonClicked(rating.id, i)"></app-comment>
+  }
 </div>

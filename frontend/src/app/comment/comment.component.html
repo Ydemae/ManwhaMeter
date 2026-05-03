@@ -1,29 +1,33 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
 <div class="card border-primary mb-3" style="max-width: 30rem; width: 100%;">
-    <div class="card-header w-100">
-        <div class="row">
-            <span class="col-3 text-truncate text-center" [ngbTooltip]="this.rating.user.username" placement="top" tooltipClass="mytooltip" container="body">{{this.rating.user.username}}</span>
-            <div class="col d-flex">
-                <div class="badge bg-primary ms-auto">{{this.totalRating}}</div>
-            </div>
-        </div>
+  <div class="card-header w-100">
+    <div class="row">
+      <span class="col-3 text-truncate text-center" [ngbTooltip]="this.rating.user.username" placement="top" tooltipClass="mytooltip" container="body">{{this.rating.user.username}}</span>
+      <div class="col d-flex">
+        <div class="badge bg-primary ms-auto">{{this.totalRating}}</div>
+      </div>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-3">
-                <!--
-                <img src="" alt="profile_picture">
-                -->
-            </div>
-            <div class="col-9" style="white-space: pre-wrap">
-                {{this.rating.comment}}
-            </div>
-        </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-3">
+        <!--
+        <img src="" alt="profile_picture">
+        -->
+      </div>
+      <div class="col-9" style="white-space: pre-wrap">
+        {{this.rating.comment}}
+      </div>
     </div>
-    <div class="card-footer text-center">
-        <button type="button" class="btn btn-primary m-1" (click)="onEditClicked()" *ngIf="canEdit">Edit</button>
-        <button type="button" class="btn btn-danger m-1" (click)="onDeleteClicked()" *ngIf="canDelete">Delete</button>
-    </div>
+  </div>
+  <div class="card-footer text-center">
+    @if (canEdit) {
+      <button type="button" class="btn btn-primary m-1" (click)="onEditClicked()">Edit</button>
+    }
+    @if (canDelete) {
+      <button type="button" class="btn btn-danger m-1" (click)="onDeleteClicked()">Delete</button>
+    }
+  </div>
 </div>

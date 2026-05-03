@@ -1,8 +1,10 @@
 <!--Copyright (c) 2025 Ydemae
-    Licensed under the AGPLv3 License. See LICENSE file for details.-->
+Licensed under the AGPLv3 License. See LICENSE file for details.-->
 
-<div class="alert alert-dismissible alert-success" *ngIf="this.flashMessage != null">
+@if (this.flashMessage != null) {
+  <div class="alert alert-dismissible alert-success">
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     {{this.flashMessage}}
-</div>
+  </div>
+}
 <app-book-ranking></app-book-ranking>
