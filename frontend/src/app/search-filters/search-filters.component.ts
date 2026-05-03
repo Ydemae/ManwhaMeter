@@ -19,6 +19,8 @@ export class SearchFiltersComponent {
   @Input()
   public tagsList! : Array<Tag>;
 
+  public tagsSelectLabel : string = "Select tags..."
+
   @Output()
   private filterChangeEmitter = new EventEmitter<{
     name : string,
@@ -51,6 +53,13 @@ export class SearchFiltersComponent {
   }
 
   onSelectedTagsChange(){
+    if (this.filtersValues.tags.length > 0){
+      this.tagsSelectLabel = ""
+    }
+    else {
+      this.tagsSelectLabel = "Select tags..."
+    }
+
     this.emitFilterChanges()
   }
 
